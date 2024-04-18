@@ -6,6 +6,7 @@
 #include "QUrl"
 #include "QFileInfo"
 #include "QFileDialog"
+#include "operexcel.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -110,5 +111,19 @@ void MainWindow::on_ac_openFiles_triggered() //打开文件
         // 在这里可以进行文件的处理，比如读取文件内容等
         handleFile(selectedFile);
     }
+}
+
+
+void MainWindow::on_ac_creatFiles_triggered()
+{//新建文件
+    operExcel = new OperExcel();
+    bool ret;
+    operExcel->creat_New_Excel("./1.xlsx",ret);
+    if(ret){
+        qInfo()<<"创建成功";
+    }else{
+        qWarning()<<"创建失败!";
+    }
+
 }
 

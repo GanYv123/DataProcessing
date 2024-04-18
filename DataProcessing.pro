@@ -13,6 +13,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     major.cpp \
+    operexcel.cpp \
     student.cpp \
     teacher.cpp
 
@@ -20,6 +21,7 @@ HEADERS += \
     course.h \
     mainwindow.h \
     major.h \
+    operexcel.h \
     student.h \
     teacher.h
 

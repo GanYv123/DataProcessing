@@ -7,6 +7,7 @@
 //声明类
 class QLabel;
 class QUrl;
+class OperExcel;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -35,7 +36,11 @@ public:
 private slots:
     void on_ac_openFiles_triggered();
 
+    void on_ac_creatFiles_triggered();
+
 private:
     Ui::MainWindow *ui;
+
+    OperExcel*operExcel;
 };
 #endif // MAINWINDOW_H
