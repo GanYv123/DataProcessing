@@ -78,7 +78,7 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *event) //拖拽进入
 void MainWindow::dropEvent(QDropEvent *event) //放入时
 {
     //显示表格到tableView
-    handleFile(event->mimeData()->urls().at(0).toString());
+    handleFile(event->mimeData()->urls().at(0).toString().mid(8));
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event) //尺寸改变
@@ -92,7 +92,18 @@ void MainWindow::resizeEvent(QResizeEvent *event) //尺寸改变
 void MainWindow::handleFile(const QString &filePath)
 {//处理文件
     // 在这里实现对文件的具体处理逻辑
-    qDebug() << "Handling file: " << filePath;
+    QString path = filePath;
+    qDebug() << "Handling file: " << path;
+    bool ret;
+    operExcel->open_Excel(path,ret);
+    if(ret){
+        this->label_tips->setText("文件打开成功!");
+        qInfo()<<"文件打开成功！";
+    }else{
+        this->label_tips->setText("文件未打开");
+        qWarning()<<"文件未打开!";
+    }
+
 }
 
 void MainWindow::on_ac_openFiles_triggered() //打开文件
@@ -104,7 +115,7 @@ void MainWindow::on_ac_openFiles_triggered() //打开文件
     // 显示文件选择对话框
     if (dialog.exec()) {
         // 获取选中的文件路径（只有一个文件）
-        QString selectedFile = dialog.selectedFiles().first();
+        QString selectedFile = dialog.selectedFiles().at(0);
 
         qDebug() << "Selected file: " << selectedFile;
 
@@ -114,11 +125,12 @@ void MainWindow::on_ac_openFiles_triggered() //打开文件
 }
 
 
-void MainWindow::on_ac_creatFiles_triggered()
+//增加try catch 日志记录功能
+void MainWindow::on_ac_creatFiles_triggered() //demo function BETA 1
 {//新建文件
     operExcel = new OperExcel();
     bool ret;
-    operExcel->creat_New_Excel("./1.xlsx",ret);
+    operExcel->creat_New_Excel("./1.xlsx",ret); //修改未 可自己选择文件位置的 函数
     if(ret){
         qInfo()<<"创建成功";
     }else{

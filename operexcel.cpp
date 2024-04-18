@@ -14,3 +14,13 @@ void OperExcel::creat_New_Excel(QString path, bool &ret)
     Document xlsx;
     ret = xlsx.saveAs(path);
 }
+
+void OperExcel::open_Excel(QString path, bool &ret)
+{//打开文件
+    if(!m_xlsx)
+    {
+        m_xlsx = new Document(path);
+    }
+    ret = m_xlsx->load();//判断文件是否打开
+
+}

@@ -7,7 +7,8 @@ class OperExcel
 {
 public:
     OperExcel();
-    void creat_New_Excel(QString path,bool& ret);
+    void creat_New_Excel(QString path,bool& ret); //新建表格
+    void open_Excel(QString path,bool& ret); //打开文件
 
 private:
     QXlsx::Document* m_xlsx = nullptr;
