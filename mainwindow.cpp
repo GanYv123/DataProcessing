@@ -5,6 +5,7 @@
 #include "QSize"
 #include "QUrl"
 #include "QFileInfo"
+#include "QFileDialog"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -75,14 +76,10 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *event) //拖拽进入
     }
 }
 
-void MainWindow::dragMoveEvent(QDragMoveEvent *event) //进入移动时
-{
-
-}
-
 void MainWindow::dropEvent(QDropEvent *event) //放入时
 {
-
+    //显示表格到tableView
+    handleFile(event->mimeData()->urls().at(0).toString());
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event) //尺寸改变
@@ -93,8 +90,27 @@ void MainWindow::resizeEvent(QResizeEvent *event) //尺寸改变
     event->accept();//事件接收
 }
 
+void MainWindow::handleFile(const QString &filePath)
+{//处理文件
+    // 在这里实现对文件的具体处理逻辑
+    qDebug() << "Handling file: " << filePath;
+}
+
 void MainWindow::on_ac_openFiles_triggered() //打开文件
 {
+    //创建文件选择对话框
+    QFileDialog dialog(this);
+    dialog.setFileMode(QFileDialog::ExistingFile);
+    dialog.setNameFilter("Excel Files (*.xlsx *.xls)");
+    // 显示文件选择对话框
+    if (dialog.exec()) {
+        // 获取选中的文件路径（只有一个文件）
+        QString selectedFile = dialog.selectedFiles().first();
 
+        qDebug() << "Selected file: " << selectedFile;
+
+        // 在这里可以进行文件的处理，比如读取文件内容等
+        handleFile(selectedFile);
+    }
 }
 

@@ -27,9 +27,10 @@ public:
     void initMainWindow();
 
     void dragEnterEvent(QDragEnterEvent* event) override;
-    void dragMoveEvent(QDragMoveEvent* event) override;
     void dropEvent(QDropEvent* event) override;
     void resizeEvent(QResizeEvent* event) override;
+
+    void handleFile(const QString &filePath);
 
 private slots:
     void on_ac_openFiles_triggered();

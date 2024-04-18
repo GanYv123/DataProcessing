@@ -17,10 +17,10 @@
    <widget class="QTableView" name="tableView">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>180</y>
-      <width>256</width>
-      <height>192</height>
+      <x>10</x>
+      <y>10</y>
+      <width>771</width>
+      <height>481</height>
      </rect>
     </property>
    </widget>
@@ -41,6 +41,7 @@
     <addaction name="ac_creatFiles"/>
     <addaction name="separator"/>
     <addaction name="separator"/>
+    <addaction name="ac_creatSheet"/>
     <addaction name="ac_openFiles"/>
     <addaction name="separator"/>
     <addaction name="ac_saveFiles"/>
@@ -271,6 +272,18 @@
    </property>
    <property name="toolTip">
     <string>查看考勤信息</string>
+   </property>
+  </action>
+  <action name="ac_creatSheet">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/114.bmp</normaloff>:/images/114.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>创建表</string>
+   </property>
+   <property name="toolTip">
+    <string>创建表</string>
    </property>
   </action>
  </widget>
