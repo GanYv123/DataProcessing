@@ -6,6 +6,7 @@
 
 //声明类
 class QLabel;
+class QUrl;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -17,6 +18,7 @@ class MainWindow : public QMainWindow
 
 private:
     QLabel *label_size,*label_tips;
+    QUrl filePath; //打开文件的地址
 
 public:
     MainWindow(QWidget *parent = nullptr);
@@ -28,7 +30,6 @@ public:
     void dragMoveEvent(QDragMoveEvent* event) override;
     void dropEvent(QDropEvent* event) override;
     void resizeEvent(QResizeEvent* event) override;
-
 
 private slots:
     void on_ac_openFiles_triggered();

@@ -3,6 +3,8 @@
 #include "QLabel"
 #include "QFile"
 #include "QSize"
+#include "QUrl"
+#include "QFileInfo"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -11,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     initMainWindow();
     this->setAcceptDrops(true);
-
+    ui->tableView->setAcceptDrops(false);
 }
 
 MainWindow::~MainWindow()
@@ -27,7 +29,7 @@ void MainWindow::initMainWindow()
     label_size = new QLabel("size: x , y",this);
     ui->statusbar->addWidget(new QWidget(),1);
     ui->statusbar->addPermanentWidget(label_size);
-    ui->tableView->setAcceptDrops(false);
+
     ui->tableView->move(20,20);
     ui->tableView->resize(this->width()-40,this->height()-50);
     this->setMinimumSize(500,400);
@@ -36,7 +38,41 @@ void MainWindow::initMainWindow()
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event) //拖拽进入
 {
+    qDebug()<<event->mimeData()->urls();
+    if(event->mimeData()->hasUrls()){
+        filePath = event->mimeData()->urls().at(0);
+        QString path = filePath.path();
+        QFileInfo fileInfo(path);
+        QString suffix = fileInfo.suffix();
+        this->label_tips->setText(QString("file type : %1").arg(suffix));
+        // 根据文件后缀名执行不同的操作
 
+        if (!suffix.isEmpty()) {
+            if (suffix == "txt" || suffix == "csv") {
+                qDebug() << "Text file or CSV file detected.";
+
+                // TODO: 处理文本文件或 CSV 文件的逻辑
+                event->acceptProposedAction();
+            } else if (suffix == "xlsx" || suffix == "xls" || suffix == "xlsm") {
+                qDebug() << "Excel file detected.";
+
+                event->acceptProposedAction();
+            } else if (suffix == "pdf") {
+                qDebug() << "PDF file detected.";
+
+                event->acceptProposedAction();
+            } else {
+
+                // TODO: 处理其他不支持的文件类型的逻辑
+                event->ignore();
+            }
+        } else {
+            qDebug() << "No file extension detected.";
+
+
+            // TODO: 处理没有文件扩展名的情况的逻辑
+        }
+    }
 }
 
 void MainWindow::dragMoveEvent(QDragMoveEvent *event) //进入移动时
