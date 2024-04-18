@@ -33,3 +33,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     icons.qrc
+
+include($$PWD/QXlsx/QXlsx.pri)
+INCLUDEPATH += $$PWD/QXlsx
+

@@ -70,8 +70,6 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *event) //拖拽进入
         } else {
             qDebug() << "No file extension detected.";
 
-
-            // TODO: 处理没有文件扩展名的情况的逻辑
         }
     }
 }
