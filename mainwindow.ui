@@ -13,7 +13,18 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QTableView" name="tableView">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>180</y>
+      <width>256</width>
+      <height>192</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -33,14 +44,63 @@
     <addaction name="ac_openFiles"/>
     <addaction name="separator"/>
     <addaction name="ac_saveFiles"/>
+    <addaction name="separator"/>
+    <addaction name="ac_Save_as"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>学生</string>
+    </property>
+    <addaction name="ac_addStu"/>
+    <addaction name="separator"/>
+    <addaction name="ac_deleteStu"/>
+   </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>教师</string>
+    </property>
+    <addaction name="ac_addTec"/>
+    <addaction name="separator"/>
+    <addaction name="ac_deleteTec"/>
+   </widget>
+   <widget class="QMenu" name="menu_4">
+    <property name="title">
+     <string>课程</string>
+    </property>
+    <addaction name="ac_addLesson"/>
+    <addaction name="ac_deleteLesson"/>
+   </widget>
+   <widget class="QMenu" name="menu_5">
+    <property name="title">
+     <string>考勤</string>
+    </property>
+    <addaction name="ac_Attendance"/>
+   </widget>
+   <widget class="QMenu" name="menu_6">
+    <property name="title">
+     <string>学年</string>
+    </property>
+    <addaction name="ac_choose_school_year"/>
+   </widget>
+   <widget class="QMenu" name="menu_7">
+    <property name="title">
+     <string>专业 班级</string>
+    </property>
    </widget>
    <addaction name="menu"/>
+   <addaction name="menu_6"/>
+   <addaction name="menu_4"/>
+   <addaction name="menu_3"/>
+   <addaction name="menu_7"/>
+   <addaction name="menu_2"/>
+   <addaction name="menu_5"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
    <property name="font">
     <font>
      <bold>false</bold>
+     <underline>false</underline>
     </font>
    </property>
    <property name="windowTitle">
@@ -58,6 +118,7 @@
    <addaction name="ac_openFiles"/>
    <addaction name="separator"/>
    <addaction name="ac_saveFiles"/>
+   <addaction name="ac_addStu"/>
   </widget>
   <action name="ac_openFiles">
    <property name="icon">
@@ -102,6 +163,114 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="ac_addStu">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/212.bmp</normaloff>:/images/212.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>添加学生</string>
+   </property>
+   <property name="toolTip">
+    <string>添加学生</string>
+   </property>
+  </action>
+  <action name="ac_addLesson">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/718.bmp</normaloff>:/images/718.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>添加课程</string>
+   </property>
+   <property name="toolTip">
+    <string>添加课程</string>
+   </property>
+  </action>
+  <action name="ac_addTec">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/200.bmp</normaloff>:/images/200.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>添加老师</string>
+   </property>
+   <property name="toolTip">
+    <string>添加老师</string>
+   </property>
+  </action>
+  <action name="ac_Save_as">
+   <property name="icon">
+    <iconset theme="applications-utilities" resource="icons.qrc">
+     <normaloff>:/images/106.bmp</normaloff>:/images/106.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>文件另存为</string>
+   </property>
+   <property name="toolTip">
+    <string>文件另存为</string>
+   </property>
+  </action>
+  <action name="ac_deleteTec">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/208.bmp</normaloff>:/images/208.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>删除老师</string>
+   </property>
+   <property name="toolTip">
+    <string>删除老师</string>
+   </property>
+  </action>
+  <action name="ac_choose_school_year">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/322.bmp</normaloff>:/images/322.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>选择学年</string>
+   </property>
+   <property name="toolTip">
+    <string>选择学年</string>
+   </property>
+  </action>
+  <action name="ac_deleteStu">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/324.bmp</normaloff>:/images/324.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>删除学生</string>
+   </property>
+   <property name="toolTip">
+    <string>删除学生</string>
+   </property>
+  </action>
+  <action name="ac_deleteLesson">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/324.bmp</normaloff>:/images/324.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>删除课程</string>
+   </property>
+   <property name="toolTip">
+    <string>删除课程</string>
+   </property>
+  </action>
+  <action name="ac_Attendance">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/508.bmp</normaloff>:/images/508.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>查看考勤信息</string>
+   </property>
+   <property name="toolTip">
+    <string>查看考勤信息</string>
    </property>
   </action>
  </widget>
