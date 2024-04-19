@@ -44,7 +44,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
-    OperExcel*operExcel;
-    CustomDialog*customDialog;
+    OperExcel*operExcel = nullptr;
+    CustomDialog*customDialog = nullptr;
 };
 #endif // MAINWINDOW_H

@@ -19,6 +19,8 @@ MainWindow::MainWindow(QWidget *parent)
     initMainWindow();
     this->setAcceptDrops(true);
     ui->tableView->setAcceptDrops(false);
+    this->customDialog = new CustomDialog(this);
+    this->customDialog->setAcceptDrops(false);
 }
 
 MainWindow::~MainWindow()
