@@ -19,7 +19,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>771</width>
+      <width>781</width>
       <height>481</height>
      </rect>
     </property>
@@ -52,9 +52,10 @@
     <property name="title">
      <string>学生</string>
     </property>
-    <addaction name="ac_addStu"/>
     <addaction name="separator"/>
+    <addaction name="ac_addStu"/>
     <addaction name="ac_deleteStu"/>
+    <addaction name="ac_checkStu"/>
    </widget>
    <widget class="QMenu" name="menu_3">
     <property name="title">
@@ -63,6 +64,7 @@
     <addaction name="ac_addTec"/>
     <addaction name="separator"/>
     <addaction name="ac_deleteTec"/>
+    <addaction name="ac_checkTec"/>
    </widget>
    <widget class="QMenu" name="menu_4">
     <property name="title">
@@ -70,6 +72,7 @@
     </property>
     <addaction name="ac_addLesson"/>
     <addaction name="ac_deleteLesson"/>
+    <addaction name="ac_checkLesson"/>
    </widget>
    <widget class="QMenu" name="menu_5">
     <property name="title">
@@ -118,8 +121,12 @@
    </attribute>
    <addaction name="ac_openFiles"/>
    <addaction name="separator"/>
+   <addaction name="ac_creatSheet"/>
+   <addaction name="ac_Save_as"/>
    <addaction name="ac_saveFiles"/>
    <addaction name="ac_addStu"/>
+   <addaction name="ac_checkTec"/>
+   <addaction name="ac_checkStu"/>
   </widget>
   <action name="ac_openFiles">
    <property name="icon">
@@ -284,6 +291,42 @@
    </property>
    <property name="toolTip">
     <string>创建表</string>
+   </property>
+  </action>
+  <action name="ac_checkStu">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/app.ico</normaloff>:/images/app.ico</iconset>
+   </property>
+   <property name="text">
+    <string>查看学生</string>
+   </property>
+   <property name="toolTip">
+    <string>查看学生</string>
+   </property>
+  </action>
+  <action name="ac_checkTec">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/app.ico</normaloff>:/images/app.ico</iconset>
+   </property>
+   <property name="text">
+    <string>查看老师</string>
+   </property>
+   <property name="toolTip">
+    <string>查看老师</string>
+   </property>
+  </action>
+  <action name="ac_checkLesson">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/app.ico</normaloff>:/images/app.ico</iconset>
+   </property>
+   <property name="text">
+    <string>查看课程</string>
+   </property>
+   <property name="toolTip">
+    <string>查看课程</string>
    </property>
   </action>
  </widget>

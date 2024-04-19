@@ -7,6 +7,9 @@
 #include "QFileInfo"
 #include "QFileDialog"
 #include "operexcel.h"
+#include "QComboBox"
+#include "QAction"
+#include "QWidgetAction"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -35,7 +38,6 @@ void MainWindow::initMainWindow()
     ui->tableView->move(20,20);
     ui->tableView->resize(this->width()-40,this->height()-50);
     this->setMinimumSize(500,400);
-
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event) //拖拽进入
@@ -136,6 +138,16 @@ void MainWindow::on_ac_creatFiles_triggered() //demo function BETA 1
     }else{
         qWarning()<<"创建失败!";
     }
+
+}
+
+void MainWindow::on_ac_choose_school_year_triggered()
+{//下拉框选择学年
+    if(customDialog)
+        this->customDialog = new CustomDialog(this);
+    customDialog->move(this->width()/2-150,this->height()/2-100);
+    customDialog->resize(300,200);
+    customDialog->show_choose_schoolYears();
 
 }
 

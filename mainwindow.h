@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "file_operations.h"
+#include "customdialog.h"
 
 //声明类
 class QLabel;
@@ -38,9 +39,12 @@ private slots:
 
     void on_ac_creatFiles_triggered();
 
+    void on_ac_choose_school_year_triggered();
+
 private:
     Ui::MainWindow *ui;
 
     OperExcel*operExcel;
+    CustomDialog*customDialog;
 };
 #endif // MAINWINDOW_H

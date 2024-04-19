@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     course.cpp \
+    customdialog.cpp \
     main.cpp \
     mainwindow.cpp \
     major.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
 
 HEADERS += \
     course.h \
+    customdialog.h \
     mainwindow.h \
     major.h \
     operexcel.h \
