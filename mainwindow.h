@@ -9,6 +9,7 @@
 class QLabel;
 class QUrl;
 class OperExcel;
+class QStandardItemModel;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -41,10 +42,17 @@ private slots:
 
     void on_ac_choose_school_year_triggered();
 
+    void on_tableView_doubleClicked(const QModelIndex &index);
+
+    void on_ac_saveFiles_triggered();
+
 private:
     Ui::MainWindow *ui;
 
-    OperExcel*operExcel = nullptr;
-    CustomDialog*customDialog = nullptr;
+    OperExcel *operExcel = nullptr;
+    CustomDialog *customDialog = nullptr;
+    QStandardItemModel *table_model;
+
+    QString path;
 };
 #endif // MAINWINDOW_H

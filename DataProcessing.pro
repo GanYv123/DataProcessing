@@ -15,8 +15,7 @@ SOURCES += \
     mainwindow.cpp \
     major.cpp \
     operexcel.cpp \
-    student.cpp \
-    teacher.cpp
+    student.cpp
 
 HEADERS += \
     course.h \
@@ -24,8 +23,7 @@ HEADERS += \
     mainwindow.h \
     major.h \
     operexcel.h \
-    student.h \
-    teacher.h
+    student.h
 
 FORMS += \
     mainwindow.ui
