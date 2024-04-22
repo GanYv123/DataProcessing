@@ -3,16 +3,41 @@
 #include "QStandardItemModel"
 #include "QVariant"
 #include "QFile"
+#include "finalsheet.h"
+#include "customdialog.h"
 #include "QTemporaryFile"
+#include "mainwindow.h"
 
 QXLSX_USE_NAMESPACE            // 添加Xlsx命名空间
 
 #define EXCEL_NAME "./1.xlsx"  // 本demo中用到的excel文件路径文件名
 
-OperExcel::OperExcel()
+void OperExcel::fillData(Document& xlsx)
 {
+    //A2 学年 学期
+    QString schoolYear = m_parent_mainWindow->customDialog->get_select_data();
+
+
+    xlsx.selectSheet(0);  // 设置表 1 既 一班的成绩
+    xlsx.write("A2",schoolYear);
+    //课程名称：操作系统  专业：物联网工程  班级： 物联网：21-1  任课老师：xxx,xxx A3
+    QString course_info = QString("课程名称：%1 专业：%2 班级：%3 任课老师：%4")
+                              .arg((*course_information)["课程名称"].toString())
+                              .arg((*course_information)["适用专业"].toString())
+                              .arg((*course_information)["班级1"].toString())
+                              .arg((*course_information)["授课老师"].toString());
+    xlsx.write("A3", course_info);
+    //D F H ~5 考勤 作业 实验 占比 B11 C11 D11
+    xlsx.write("D5",(*course_information)["rate_kaoqing"].toString().append("%"));
+    xlsx.write("F5",(*course_information)["rate_zuoye"].toString().append("%"));
+    xlsx.write("H5",(*course_information)["rate_shiyan"].toString().append("%"));
+
 
 }
+
+OperExcel::OperExcel(){}
+
+OperExcel::OperExcel(MainWindow *parent_mainWindow) : m_parent_mainWindow(parent_mainWindow){}
 
 void textDemoUnit1(Document& x){
 }
@@ -84,6 +109,9 @@ void OperExcel::export_Excel(QString &path, bool &ret, QObject *parent)
         return;
     }
 
+    //填充数据
+    fillData(xlsx);
+
     // 保存 Excel 文件到指定路径
     if (!xlsx.saveAs("111test.xlsx")) {
         qDebug() << "Failed to save Excel file";
@@ -128,6 +156,12 @@ course_information = new QVariantMap(); // 创建 QVariantMap 对象
         QVariant course_id = m_xlsx->read("B5");
         QVariant credit = m_xlsx->read("E5");
         QVariant hours = m_xlsx->read("D5");
+        QVariant class_1 = m_xlsx->read("D2");
+        QVariant class_2 = m_xlsx->read("F2");
+        //考勤 作业 实验 占比 B11 C11 D11
+        QVariant rate_kaoqing = m_xlsx->read("B11");
+        QVariant rate_zuoye = m_xlsx->read("C11");
+        QVariant rate_shiyan = m_xlsx->read("D11");
 
         // 将课程信息插入到 QVariantMap 中
         course_information->insert("课程名称", course_name.toString());
@@ -136,14 +170,12 @@ course_information = new QVariantMap(); // 创建 QVariantMap 对象
         course_information->insert("课程编号", course_id.toString());
         course_information->insert("学分", credit.toString());
         course_information->insert("课时", hours.toString());
+        course_information->insert("班级1",class_1.toString());
+        course_information->insert("班级2",class_2.toString());
 
-        // 打印课程名称，用于调试
-        qDebug() << "课程名称：" << course_information->value("课程名称").toString();
-        qDebug() << "授课老师" << course_information->value("授课老师").toString();
-        qDebug() << "适用专业" << course_information->value("适用专业").toString();
-        qDebug() << "课程编号" << course_information->value("课程编号").toString();
-        qDebug() << "学分" << course_information->value("学分").toString();
-        qDebug() << "课时" << course_information->value("课时").toString();
+        course_information->insert("rate_kaoqing",rate_kaoqing);
+        course_information->insert("rate_zuoye",rate_zuoye);
+        course_information->insert("rate_shiyan",rate_shiyan);
 
     }
 

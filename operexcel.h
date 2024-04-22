@@ -6,11 +6,18 @@
 #include "QVariantMap"
 
 class QStandardItemModel;
+class FinalSheet;
+class MainWindow;
 
 class OperExcel
 {
+
+protected:
+    void fillData(QXlsx::Document& xlsx);
+
 public:
     OperExcel();
+    OperExcel(MainWindow*parent_mainWindow);
     void creat_New_Excel(QString &path,bool& ret); //新建表格
     void open_Excel(QString &path,bool& ret,QObject *parent);//打开文件
     QStandardItemModel* getQStandardItemModelPoint();
@@ -21,14 +28,16 @@ public:
     void read_course_information();
 
 
-
-
 private:
+    MainWindow *m_parent_mainWindow = nullptr;
+
     QXlsx::Document *m_xlsx = nullptr;
 
     QStandardItemModel *model = nullptr;
 
     QVariantMap *course_information = nullptr;
+
+    FinalSheet *finalSheet;
 };
 
 #endif // OPEREXCEL_H

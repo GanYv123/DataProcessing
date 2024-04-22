@@ -121,6 +121,8 @@
    <addaction name="ac_saveFiles"/>
    <addaction name="ac_addStu"/>
    <addaction name="ac_checkStu"/>
+   <addaction name="ac_saveSettings"/>
+   <addaction name="ac_loadSettings"/>
   </widget>
   <action name="ac_openFiles">
    <property name="icon">
@@ -321,6 +323,30 @@
    </property>
    <property name="toolTip">
     <string>导出表格</string>
+   </property>
+  </action>
+  <action name="ac_saveSettings">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/114.bmp</normaloff>:/images/114.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>保存配置</string>
+   </property>
+   <property name="toolTip">
+    <string>保存配置</string>
+   </property>
+  </action>
+  <action name="ac_loadSettings">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/218.bmp</normaloff>:/images/218.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>加载配置</string>
+   </property>
+   <property name="toolTip">
+    <string>加载配置</string>
    </property>
   </action>
  </widget>

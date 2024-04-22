@@ -49,11 +49,15 @@ private slots:
 
     void on_ac_exportExcel_triggered();
 
+    void on_ac_Save_as_triggered();
+
+public:
+     CustomDialog *customDialog = nullptr;
+
 private:
     Ui::MainWindow *ui;
 
     OperExcel *operExcel = nullptr;
-    CustomDialog *customDialog = nullptr;
     QStandardItemModel *table_model;
 
     QString path;

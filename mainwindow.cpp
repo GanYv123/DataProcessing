@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->customDialog = new CustomDialog(this);
     this->customDialog->setAcceptDrops(false);
     customDialog->close();
+    operExcel = new OperExcel(this);
 }
 
 MainWindow::~MainWindow()
@@ -100,7 +101,7 @@ void MainWindow::handleFile(const QString &filePath)
 {//处理文件
     // 在这里实现对文件的具体处理逻辑
     if(!operExcel)
-        operExcel = new OperExcel();
+        operExcel = new OperExcel(this);
 
     path = filePath;
     //path.replace("\\","/");
@@ -219,5 +220,11 @@ void MainWindow::on_ac_exportExcel_triggered()
     }else{
         qDebug()<<"导出失败";
     }
+}
+
+
+void MainWindow::on_ac_Save_as_triggered()
+{//文件另存为
+
 }
 
