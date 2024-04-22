@@ -2,6 +2,8 @@
 #include "QStandardItem"
 #include "QStandardItemModel"
 #include "QVariant"
+#include "QFile"
+#include "QTemporaryFile"
 
 QXLSX_USE_NAMESPACE            // 添加Xlsx命名空间
 
@@ -43,42 +45,54 @@ QStandardItemModel* OperExcel::getQStandardItemModelPoint()
 
 
 void OperExcel::save_Excel(QString &path, bool &ret, QObject *parent)
-{//保存文件
-    // 创建一个新的文档对象
-    Document xlsx;
-    // 获取要保存的模型数据
-    QStandardItemModel *model = getQStandardItemModelPoint();
-    if (!model) {
-        qWarning() << "Model pointer is null.";
-        ret = false;
-        return;
-    }
+{//保存文件 将数据序列化
 
-    // 获取模型的行数和列数
-    int rowCount = model->rowCount();
-    int colCount = model->columnCount();
-
-    // 遍历模型中的数据，并将数据写入到 Excel 文件中
-    for (int row = 0; row < rowCount; ++row) {
-        for (int col = 0; col < colCount; ++col) {
-            // 获取模型中的数据项
-            QModelIndex index = model->index(row, col);
-            QVariant value = model->data(index, Qt::DisplayRole);
-
-            // 将数据写入到 Excel 文件中对应的单元格
-            xlsx.write(row + 1, col + 1, value.toString());
-        }
-    }
-
-    // 保存 Excel 文件
-    ret = xlsx.saveAs(path);
-    if (!ret) {
-        qWarning() << "Failed to save Excel file.";
-    }
 }
 
 void OperExcel::export_Excel(QString &path, bool &ret, QObject *parent)
 {//导出表格
+    //读取资源文件中的excel表格到临时文件中
+    QByteArray fileData;
+    QString resourcePath = ":/excel_formwork/formwork.xlsx";//qrc:/excel_formwork/formwork.xlsx
+    QTemporaryFile tempFile;
+
+    if(!tempFile.open()){
+        qWarning()<<"failed to create temporary file";
+        ret = false;
+        return;
+    }
+
+    //创建好了临时文件 从资源文件中读取文件并写入到临时文件
+    QFile resourceFile(resourcePath);
+    if(resourceFile.open(QIODevice::ReadOnly)){
+        fileData = resourceFile.readAll();
+        tempFile.write(fileData);
+        resourceFile.close();
+    }else{
+        qWarning()<<"failed to read resource file";
+        tempFile.close();
+        ret = false;
+        return;
+    }
+    tempFile.close();
+    //关闭临时文件 使用 qxslx加载临时文件
+    QString tempFilePath = tempFile.fileName();
+    Document xlsx(tempFilePath,parent);
+    if (!xlsx.load()) {
+        qDebug() << "Failed to load Excel file";
+        ret = false;
+        return;
+    }
+
+    // 保存 Excel 文件到指定路径
+    if (!xlsx.saveAs("111test.xlsx")) {
+        qDebug() << "Failed to save Excel file";
+        ret = false;
+        return;
+    }
+
+    // 设置成功状态
+    ret = true;
 
 }
 

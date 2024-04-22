@@ -212,6 +212,12 @@ void MainWindow::on_ac_saveFiles_triggered()
 
 void MainWindow::on_ac_exportExcel_triggered()
 {//导出表格
-
+    bool ret;
+    this->operExcel->export_Excel(path,ret,this);
+    if(ret){
+        qDebug()<<"导出成功";
+    }else{
+        qDebug()<<"导出失败";
+    }
 }
 

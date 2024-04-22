@@ -10,6 +10,7 @@ class QLabel;
 class QUrl;
 class OperExcel;
 class QStandardItemModel;
+class FinalSheet;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -56,5 +57,7 @@ private:
     QStandardItemModel *table_model;
 
     QString path;
+    //最终表单
+    FinalSheet *finalSheet = nullptr;
 };
 #endif // MAINWINDOW_H

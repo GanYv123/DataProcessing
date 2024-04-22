@@ -15,7 +15,8 @@ CustomDialog::CustomDialog(QWidget *parent) : QDialog(parent)
     pb_confirm = new QPushButton("确认",this);
 
     for (int year = 2000; year <= 2050; ++year) {
-        comboBox_selectYear->addItem(QString::number(year) + " - "+ QString::number(year+1));
+        comboBox_selectYear->addItem(QString::number(year) + " - "+ QString::number(year+1) +" 学年第 1 学期");
+        comboBox_selectYear->addItem(QString::number(year) + " - "+ QString::number(year+1) +" 学年第 2 学期");
     }
     this->comboBox_selectYear->setCurrentIndex(23);
     QVBoxLayout *vb_layout = new QVBoxLayout(this);
