@@ -9,11 +9,23 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    course.cpp \
+    customdialog.cpp \
+    finalsheet.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    major.cpp \
+    operexcel.cpp \
+    student.cpp
 
 HEADERS += \
-    mainwindow.h
+    course.h \
+    customdialog.h \
+    finalsheet.h \
+    mainwindow.h \
+    major.h \
+    operexcel.h \
+    student.h
 
 FORMS += \
     mainwindow.ui
@@ -25,3 +37,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     icons.qrc
+
+include($$PWD/QXlsx/QXlsx.pri)
+INCLUDEPATH += $$PWD/QXlsx
+

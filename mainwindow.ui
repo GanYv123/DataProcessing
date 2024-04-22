@@ -17,10 +17,10 @@
    <widget class="QTableView" name="tableView">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>180</y>
-      <width>256</width>
-      <height>192</height>
+      <x>10</x>
+      <y>10</y>
+      <width>781</width>
+      <height>481</height>
      </rect>
     </property>
    </widget>
@@ -41,6 +41,8 @@
     <addaction name="ac_creatFiles"/>
     <addaction name="separator"/>
     <addaction name="separator"/>
+    <addaction name="ac_exportExcel"/>
+    <addaction name="ac_creatSheet"/>
     <addaction name="ac_openFiles"/>
     <addaction name="separator"/>
     <addaction name="ac_saveFiles"/>
@@ -51,17 +53,10 @@
     <property name="title">
      <string>学生</string>
     </property>
+    <addaction name="separator"/>
     <addaction name="ac_addStu"/>
-    <addaction name="separator"/>
     <addaction name="ac_deleteStu"/>
-   </widget>
-   <widget class="QMenu" name="menu_3">
-    <property name="title">
-     <string>教师</string>
-    </property>
-    <addaction name="ac_addTec"/>
-    <addaction name="separator"/>
-    <addaction name="ac_deleteTec"/>
+    <addaction name="ac_checkStu"/>
    </widget>
    <widget class="QMenu" name="menu_4">
     <property name="title">
@@ -69,6 +64,7 @@
     </property>
     <addaction name="ac_addLesson"/>
     <addaction name="ac_deleteLesson"/>
+    <addaction name="ac_checkLesson"/>
    </widget>
    <widget class="QMenu" name="menu_5">
     <property name="title">
@@ -86,11 +82,13 @@
     <property name="title">
      <string>专业 班级</string>
     </property>
+    <addaction name="ac_addMajor"/>
+    <addaction name="separator"/>
+    <addaction name="ac_checkMajor"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_6"/>
    <addaction name="menu_4"/>
-   <addaction name="menu_3"/>
    <addaction name="menu_7"/>
    <addaction name="menu_2"/>
    <addaction name="menu_5"/>
@@ -117,8 +115,12 @@
    </attribute>
    <addaction name="ac_openFiles"/>
    <addaction name="separator"/>
+   <addaction name="ac_exportExcel"/>
+   <addaction name="ac_creatSheet"/>
+   <addaction name="ac_Save_as"/>
    <addaction name="ac_saveFiles"/>
    <addaction name="ac_addStu"/>
+   <addaction name="ac_checkStu"/>
   </widget>
   <action name="ac_openFiles">
    <property name="icon">
@@ -189,18 +191,6 @@
     <string>添加课程</string>
    </property>
   </action>
-  <action name="ac_addTec">
-   <property name="icon">
-    <iconset resource="icons.qrc">
-     <normaloff>:/images/200.bmp</normaloff>:/images/200.bmp</iconset>
-   </property>
-   <property name="text">
-    <string>添加老师</string>
-   </property>
-   <property name="toolTip">
-    <string>添加老师</string>
-   </property>
-  </action>
   <action name="ac_Save_as">
    <property name="icon">
     <iconset theme="applications-utilities" resource="icons.qrc">
@@ -211,18 +201,6 @@
    </property>
    <property name="toolTip">
     <string>文件另存为</string>
-   </property>
-  </action>
-  <action name="ac_deleteTec">
-   <property name="icon">
-    <iconset resource="icons.qrc">
-     <normaloff>:/images/208.bmp</normaloff>:/images/208.bmp</iconset>
-   </property>
-   <property name="text">
-    <string>删除老师</string>
-   </property>
-   <property name="toolTip">
-    <string>删除老师</string>
    </property>
   </action>
   <action name="ac_choose_school_year">
@@ -271,6 +249,78 @@
    </property>
    <property name="toolTip">
     <string>查看考勤信息</string>
+   </property>
+  </action>
+  <action name="ac_creatSheet">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/114.bmp</normaloff>:/images/114.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>创建表</string>
+   </property>
+   <property name="toolTip">
+    <string>创建表</string>
+   </property>
+  </action>
+  <action name="ac_checkStu">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/app.ico</normaloff>:/images/app.ico</iconset>
+   </property>
+   <property name="text">
+    <string>查看学生</string>
+   </property>
+   <property name="toolTip">
+    <string>查看学生</string>
+   </property>
+  </action>
+  <action name="ac_checkLesson">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/app.ico</normaloff>:/images/app.ico</iconset>
+   </property>
+   <property name="text">
+    <string>查看课程</string>
+   </property>
+   <property name="toolTip">
+    <string>查看课程</string>
+   </property>
+  </action>
+  <action name="ac_addMajor">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/212.bmp</normaloff>:/images/212.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>添加专业班级</string>
+   </property>
+   <property name="toolTip">
+    <string>添加专业班级</string>
+   </property>
+  </action>
+  <action name="ac_checkMajor">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/app.ico</normaloff>:/images/app.ico</iconset>
+   </property>
+   <property name="text">
+    <string>查看专业班级</string>
+   </property>
+   <property name="toolTip">
+    <string>查看专业班级</string>
+   </property>
+  </action>
+  <action name="ac_exportExcel">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/322.bmp</normaloff>:/images/322.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>导出表格</string>
+   </property>
+   <property name="toolTip">
+    <string>导出表格</string>
    </property>
   </action>
  </widget>
