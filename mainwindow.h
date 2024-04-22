@@ -46,6 +46,8 @@ private slots:
 
     void on_ac_saveFiles_triggered();
 
+    void on_ac_exportExcel_triggered();
+
 private:
     Ui::MainWindow *ui;
 

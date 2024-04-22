@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableView->setAcceptDrops(false);
     this->customDialog = new CustomDialog(this);
     this->customDialog->setAcceptDrops(false);
+    customDialog->close();
 }
 
 MainWindow::~MainWindow()
@@ -169,9 +170,6 @@ void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
 {
     // 检查索引的有效性
     if (index.isValid()) {
-        // 获取选定的行和列
-        int row = index.row();
-        int col = index.column();
 
         // 获取选定单元格的数据
         QVariant currentValue = index.data(Qt::DisplayRole);
@@ -181,14 +179,15 @@ void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
         QString newValue = QInputDialog::getText(this, tr("Edit Data"),
                                                  tr("Enter new value:"), QLineEdit::Normal,
                                                  currentValue.toString(), &ok);
+        QVariant newValue_copy = QVariant(newValue);
 
         // 如果用户点击了 OK 按钮并且输入了新值，则更新数据模型中的数据
-        if (ok && !newValue.isEmpty()) {
+        if (ok && !newValue_copy.isNull()) {
             // 获取模型对象
             QStandardItemModel *model = qobject_cast<QStandardItemModel *>(ui->tableView->model());
             if (model) {
                 // 修改数据模型中的数据
-                model->setData(index, newValue, Qt::EditRole);
+                model->setData(index, newValue_copy, Qt::EditRole);
 
                 // 刷新视图，以显示更新后的数据
                 ui->tableView->viewport()->update();
@@ -209,5 +208,10 @@ void MainWindow::on_ac_saveFiles_triggered()
         qDebug()<<"保存失败";
         this->label_tips->setText("保存失败");
     }
+}
+
+void MainWindow::on_ac_exportExcel_triggered()
+{//导出表格
+
 }
 

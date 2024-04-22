@@ -13,21 +13,6 @@ OperExcel::OperExcel()
 }
 
 void textDemoUnit1(Document& x){
-    x.write(1,1,"学期起");
-    x.write(1,2,"学期末");
-    x.write(1,3,"学期");
-    x.write(1,4,"班级1");
-    x.write(1,5,"人数1");
-    x.write(1,6,"班级2");
-    x.write(1,7,"人数2");
-
-    x.write(2,1,2023);
-    x.write(2,2,2024);
-    x.write(2,3,1);
-    x.write(2,4,"物联网21-1"); x.setColumnWidth(4,15);
-    x.write(2,5,42);
-    x.write(2,6,"物联网21-2"); x.setColumnWidth(6,15);
-    x.write(2,7,40);
 }
 
 void OperExcel::creat_New_Excel(QString &path, bool &ret)
@@ -45,15 +30,9 @@ void OperExcel::open_Excel(QString &path, bool &ret,QObject *parent)
     ret = m_xlsx->load();
     if(ret)//打开成功则将数据保存到 model 中
     {
-        if(model == nullptr)
-            model = new QStandardItemModel(parent);
-        for(int row = 1;row <= m_xlsx->dimension().rowCount();++ row){
-            for(int col = 1;col <= m_xlsx->dimension().columnCount();++ col){
-                QVariant value = m_xlsx->read(row,col);
-                QStandardItem* item = new QStandardItem(value.toString());
-                model->setItem(row-1,col-1,item);
-            }
-        }
+        //如果打开成功则读取文件里面的 基本课程信息
+        this->read_course_information();
+
     }
 }
 
@@ -96,4 +75,62 @@ void OperExcel::save_Excel(QString &path, bool &ret, QObject *parent)
     if (!ret) {
         qWarning() << "Failed to save Excel file.";
     }
+}
+
+void OperExcel::export_Excel(QString &path, bool &ret, QObject *parent)
+{//导出表格
+
+}
+
+QVariantMap *OperExcel::get_course_information()
+{//返回课程的信息
+    return this->course_information;
+}
+
+/*
+// 课程名称 a5
+// 授课老师 b8
+// 适用专业 f5
+// 课程编号 b5
+// 学分    e5
+// 课时    d5
+// 过程性考试比例
+   考勤    10
+   作业    30
+   实验    60
+//总评比例：
+
+*/
+
+void OperExcel::read_course_information()
+{//读取课程信息
+course_information = new QVariantMap(); // 创建 QVariantMap 对象
+
+    if (m_xlsx->selectSheet("概述")) { // 选择指定的工作表
+        // 从指定单元格读取课程信息
+        QVariant course_name = m_xlsx->read("A5");
+        QVariant teacher_name = m_xlsx->read("B8");
+        QVariant major = m_xlsx->read("F5");
+        QVariant course_id = m_xlsx->read("B5");
+        QVariant credit = m_xlsx->read("E5");
+        QVariant hours = m_xlsx->read("D5");
+
+        // 将课程信息插入到 QVariantMap 中
+        course_information->insert("课程名称", course_name.toString());
+        course_information->insert("授课老师", teacher_name.toString());
+        course_information->insert("适用专业", major.toString());
+        course_information->insert("课程编号", course_id.toString());
+        course_information->insert("学分", credit.toString());
+        course_information->insert("课时", hours.toString());
+
+        // 打印课程名称，用于调试
+        qDebug() << "课程名称：" << course_information->value("课程名称").toString();
+        qDebug() << "授课老师" << course_information->value("授课老师").toString();
+        qDebug() << "适用专业" << course_information->value("适用专业").toString();
+        qDebug() << "课程编号" << course_information->value("课程编号").toString();
+        qDebug() << "学分" << course_information->value("学分").toString();
+        qDebug() << "课时" << course_information->value("课时").toString();
+
+    }
+
 }

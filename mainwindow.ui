@@ -41,6 +41,7 @@
     <addaction name="ac_creatFiles"/>
     <addaction name="separator"/>
     <addaction name="separator"/>
+    <addaction name="ac_exportExcel"/>
     <addaction name="ac_creatSheet"/>
     <addaction name="ac_openFiles"/>
     <addaction name="separator"/>
@@ -114,6 +115,7 @@
    </attribute>
    <addaction name="ac_openFiles"/>
    <addaction name="separator"/>
+   <addaction name="ac_exportExcel"/>
    <addaction name="ac_creatSheet"/>
    <addaction name="ac_Save_as"/>
    <addaction name="ac_saveFiles"/>
@@ -307,6 +309,18 @@
    </property>
    <property name="toolTip">
     <string>查看专业班级</string>
+   </property>
+  </action>
+  <action name="ac_exportExcel">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/322.bmp</normaloff>:/images/322.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>导出表格</string>
+   </property>
+   <property name="toolTip">
+    <string>导出表格</string>
    </property>
   </action>
  </widget>
