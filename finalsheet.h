@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QString>
 #include <QVector>
+#include <QVariant>
 
 class FinalSheet : public QObject
 {
@@ -12,13 +13,13 @@ class FinalSheet : public QObject
 public:
     // 内部结构定义
     struct StudentData {
-        QString studentID;
-        QString studentName;
-        double attendance;  // 考勤成绩
-        double homework;    // 作业成绩
-        double experiment;  // 实验成绩
-        double totalScore;  // 总成绩
-        QString remark;
+        QVariant studentID;
+        QVariant studentName;
+        QVariant attendance;  // 考勤成绩
+        QVariant homework;    // 作业成绩
+        QVariant experiment;  // 实验成绩
+        QVariant totalScore;  // 总成绩
+        QVariant remark;
     };
     const int start_row_pos = 6;
     const int start_col_pos = 0;
@@ -27,6 +28,7 @@ public:
 
     // 设置学生数据
     void setStudentData(const QVector<StudentData>& students);
+
 
     // 获取学生数据
     QVector<StudentData> getStudentData() const;

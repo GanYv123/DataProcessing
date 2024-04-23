@@ -3,14 +3,18 @@
 
 #include <QMainWindow>
 #include "file_operations.h"
+#include "QList"
 #include "customdialog.h"
+#include <QStandardItemModel>
+#include <QStandardItem>
+
 
 //声明类
 class QLabel;
 class QUrl;
 class OperExcel;
-class QStandardItemModel;
 class FinalSheet;
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -36,6 +40,10 @@ public:
 
     void handleFile(const QString &filePath);
 
+
+signals:
+    void student_added(QList<QStandardItem*>);
+
 private slots:
     void on_ac_openFiles_triggered();
 
@@ -50,6 +58,12 @@ private slots:
     void on_ac_exportExcel_triggered();
 
     void on_ac_Save_as_triggered();
+
+    void on_ac_addStu_triggered();
+
+    void slots_student_added(QList<QStandardItem*> itemList);
+
+    void on_tableView_clicked(const QModelIndex &index);
 
 public:
      CustomDialog *customDialog = nullptr;

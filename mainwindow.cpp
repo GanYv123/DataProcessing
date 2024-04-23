@@ -11,11 +11,13 @@
 #include "QAction"
 #include "QWidgetAction"
 #include "QStandardItemModel"
+#include "QStandardItem"
 #include "QInputDialog"
+#include "finalsheet.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    , ui(new Ui::MainWindow),finalSheet(new FinalSheet)
 {
     ui->setupUi(this);
     initMainWindow();
@@ -25,6 +27,8 @@ MainWindow::MainWindow(QWidget *parent)
     this->customDialog->setAcceptDrops(false);
     customDialog->close();
     operExcel = new OperExcel(this);
+
+    connect(this,&MainWindow::student_added,this,&MainWindow::slots_student_added);
 }
 
 MainWindow::~MainWindow()
@@ -44,6 +48,15 @@ void MainWindow::initMainWindow()
     ui->tableView->move(20,20);
     ui->tableView->resize(this->width()-40,this->height()-50);
     this->setMinimumSize(500,400);
+    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);  // 初始状态下禁止编辑
+
+    //初始化tableView
+    table_model = new QStandardItemModel(this);
+    QStringList heardLabels;
+    heardLabels<<"学号"<<"姓名"<<"考勤"<<"实验"<<"作业"<<"总成绩"<<"备注";
+    table_model->setHorizontalHeaderLabels(heardLabels);
+
+    ui->tableView->setModel(table_model);
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event) //拖拽进入
@@ -173,7 +186,8 @@ void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
 {
     // 检查索引的有效性
     if (index.isValid()) {
-
+        ui->tableView->setEditTriggers(QAbstractItemView::DoubleClicked
+                                       | QAbstractItemView::SelectedClicked);  // 双击时允许编辑
         // 获取选定单元格的数据
         QVariant currentValue = index.data(Qt::DisplayRole);
 
@@ -228,5 +242,53 @@ void MainWindow::on_ac_exportExcel_triggered()
 void MainWindow::on_ac_Save_as_triggered()
 {//文件另存为
 
+}
+
+
+void MainWindow::on_ac_addStu_triggered()
+{//添加学生
+    QVector<FinalSheet::StudentData> studentData = finalSheet->getStudentData();
+
+    FinalSheet::StudentData t_studentData;
+
+    QVariant t_studentID = QVariant("学号");
+    QVariant t_studentName =QVariant("姓名");
+    QVariant t_attendance = QVariant(0.00);
+    QVariant t_homework = QVariant(0.00);
+    QVariant t_experiment = QVariant(0.00);
+
+    t_studentData.studentID = t_studentID;
+    t_studentData.attendance = t_attendance;
+    t_studentData.studentName = t_studentName;
+    t_studentData.homework = t_homework;
+    t_studentData.experiment = t_experiment;
+
+    studentData.push_back(t_studentData);
+
+    finalSheet->setStudentData(studentData);
+
+    QList<QStandardItem*> itemList;
+    itemList.append(new QStandardItem(t_studentData.studentID.toString()));
+    itemList.append(new QStandardItem(t_studentData.studentName.toString()));
+    itemList.append(new QStandardItem(QString::number(t_studentData.attendance.toDouble())));
+    itemList.append(new QStandardItem(QString::number(t_studentData.homework.toDouble())));
+    itemList.append(new QStandardItem(QString::number(t_studentData.experiment.toDouble())));
+
+    emit student_added(itemList);
+}
+
+void MainWindow::slots_student_added(QList<QStandardItem*> itemList)
+{//添加完学生更新视图
+
+    table_model->appendRow(itemList);
+    ui->tableView->setModel(table_model);
+}
+
+
+void MainWindow::on_tableView_clicked(const QModelIndex &index)
+{
+    if (index.isValid()) {
+        ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);  // 单击时禁止编辑
+    }
 }
 
