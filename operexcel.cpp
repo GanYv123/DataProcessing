@@ -50,6 +50,7 @@ void OperExcel::oper_data_class1(QXlsx::Document &xlsx)
         xlsx.write(row,7,"35",xlsx_foramt);
         xlsx.write(row,8,"32",xlsx_foramt);
         xlsx.write(row,9,"99",xlsx_foramt);
+        xlsx.write(row,10,"备注",xlsx_foramt);
     }
 
 }
@@ -65,7 +66,7 @@ void OperExcel::oper_data_class2(QXlsx::Document &xlsx)
 
     //将 表格数定为各班级人数
     int sourceRow = 7;
-    int targetRow = (*course_information)["班级1人数"].toInt()+7-1;
+    int targetRow = (*course_information)["班级2人数"].toInt()+7-1;
     xlsx.write("A2",schoolYear);
 
     //课程名称：操作系统  专业：物联网工程  班级： 物联网：21-2  任课老师：xxx,xxx A3
@@ -91,6 +92,7 @@ void OperExcel::oper_data_class2(QXlsx::Document &xlsx)
         xlsx.write(row,7,"35",xlsx_foramt);
         xlsx.write(row,8,"32",xlsx_foramt);
         xlsx.write(row,9,"99",xlsx_foramt);
+        xlsx.write(row,10,"备注",xlsx_foramt);
     }
 }
 

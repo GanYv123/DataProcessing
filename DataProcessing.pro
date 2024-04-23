@@ -14,7 +14,6 @@ SOURCES += \
     finalsheet.cpp \
     main.cpp \
     mainwindow.cpp \
-    major.cpp \
     mysettings.cpp \
     operexcel.cpp \
     student.cpp
@@ -24,7 +23,6 @@ HEADERS += \
     customdialog.h \
     finalsheet.h \
     mainwindow.h \
-    major.h \
     mysettings.h \
     operexcel.h \
     student.h

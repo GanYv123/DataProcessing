@@ -1,53 +1,76 @@
 #include "student.h"
 
-
-Student::Student(const QString &name
-                 , const QString &studentId
-                 , const QString &major
-                 , const QString &teacherName) :
-    m_name(name),m_studentId(studentId),m_major(major)
-    ,m_teacherName(teacherName)
+Student::Student(const QString& name, const QString& studentId, const QString& major, const QString& className)
+    : m_name(name), m_studentId(studentId), m_major(major), m_className(className)
 {
-
 }
 
 QString Student::getName() const
 {
-    return this->m_name;
+    return m_name;
 }
 
 QString Student::getStudentId() const
 {
-    return this->m_studentId;
+    return m_studentId;
 }
 
 QString Student::getMajor() const
 {
-    return this->m_major;
+    return m_major;
 }
 
-QString Student::getTeacher() const
+QString Student::getClassName() const
 {
-    return this->m_teacherName;
+    return m_className;
 }
 
-QSet<QString> Student::getAllCourse() const
+void Student::addCourse(const QString& courseName)
 {
-    return this->m_course;
+    m_courses.insert(courseName);
 }
 
-void Student::addCourse(const QString &courseName)
+bool Student::hasCourse(const QString& courseName) const
 {
-    if(courseName != "" || courseName != nullptr)
-        this->m_course.insert(courseName);
+    return m_courses.contains(courseName);
 }
 
-bool Student::hasCourse(const QString &courseName) const
+void Student::setExperimentScore(const QString& courseName, const QVariant& score)
 {
-    return m_course.contains(courseName);
+    m_experimentScores[courseName] = score;
 }
 
-double Student::getGrade(const QString &courseName) const
+void Student::setAttendanceScore(const QString& courseName, const QVariant& score)
 {
-    return this->m_courseGrades[courseName];
+    m_attendanceScores[courseName] = score;
+}
+
+void Student::setHomeworkScore(const QString& courseName, const QVariant& score)
+{
+    m_homeworkScores[courseName] = score;
+}
+
+QVariant Student::getExperimentScore(const QString& courseName) const
+{
+    return m_experimentScores.value(courseName, QVariant());
+}
+
+QVariant Student::getAttendanceScore(const QString& courseName) const
+{
+    return m_attendanceScores.value(courseName, QVariant());
+}
+
+QVariant Student::getHomeworkScore(const QString& courseName) const
+{
+    return m_homeworkScores.value(courseName, QVariant());
+}
+
+QVariant Student::getTotalScore(const QString& courseName) const
+{
+    QVariant experimentScore = getExperimentScore(courseName);
+    QVariant attendanceScore = getAttendanceScore(courseName);
+    QVariant homeworkScore = getHomeworkScore(courseName);
+
+    // 这里可以根据需要计算总分，这里只是简单示例
+    return experimentScore.toDouble() + attendanceScore.toDouble() + homeworkScore.toDouble();
 }
