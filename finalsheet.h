@@ -20,7 +20,8 @@ public:
         double totalScore;  // 总成绩
         QString remark;
     };
-
+    const int start_row_pos = 6;
+    const int start_col_pos = 0;
     // 构造函数
     explicit FinalSheet(QObject *parent = nullptr);
 

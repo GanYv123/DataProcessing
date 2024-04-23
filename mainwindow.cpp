@@ -99,6 +99,8 @@ void MainWindow::resizeEvent(QResizeEvent *event) //尺寸改变
 
 void MainWindow::handleFile(const QString &filePath)
 {//处理文件
+    this->setWindowTitle("已打开文件");
+    this->setAcceptDrops(false);
     // 在这里实现对文件的具体处理逻辑
     if(!operExcel)
         operExcel = new OperExcel(this);

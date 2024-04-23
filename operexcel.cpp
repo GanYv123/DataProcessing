@@ -12,14 +12,21 @@ QXLSX_USE_NAMESPACE            // 添加Xlsx命名空间
 
 #define EXCEL_NAME "./1.xlsx"  // 本demo中用到的excel文件路径文件名
 
-void OperExcel::fillData(Document& xlsx)
+
+void OperExcel::oper_data_class1(QXlsx::Document &xlsx)
 {
     //A2 学年 学期
     QString schoolYear = m_parent_mainWindow->customDialog->get_select_data();
 
-
     xlsx.selectSheet(0);  // 设置表 1 既 一班的成绩
+    QXlsx::Format xlsx_foramt = xlsx.cellAt(7,1)->format();
+
+
+    //将 表格数定为各班级人数
+    int sourceRow = 7;
+    int targetRow = (*course_information)["班级1人数"].toInt()+7-1;
     xlsx.write("A2",schoolYear);
+
     //课程名称：操作系统  专业：物联网工程  班级： 物联网：21-1  任课老师：xxx,xxx A3
     QString course_info = QString("课程名称：%1 专业：%2 班级：%3 任课老师：%4")
                               .arg((*course_information)["课程名称"].toString())
@@ -33,7 +40,70 @@ void OperExcel::fillData(Document& xlsx)
     xlsx.write("H5",(*course_information)["rate_shiyan"].toString().append("%"));
 
 
+    for(int row = sourceRow;row <= targetRow;++ row){
+        xlsx.write(row,1,"202105030141",xlsx_foramt);
+        xlsx.write(row,2,"姓名",xlsx_foramt);
+        xlsx.write(row,3,"90",xlsx_foramt);
+        xlsx.write(row,4,"9",xlsx_foramt);
+        xlsx.write(row,5,"40",xlsx_foramt);
+        xlsx.write(row,6,"4",xlsx_foramt);
+        xlsx.write(row,7,"35",xlsx_foramt);
+        xlsx.write(row,8,"32",xlsx_foramt);
+        xlsx.write(row,9,"99",xlsx_foramt);
+    }
+
 }
+
+void OperExcel::oper_data_class2(QXlsx::Document &xlsx)
+{
+    //A2 学年 学期
+    QString schoolYear = m_parent_mainWindow->customDialog->get_select_data();
+
+    xlsx.selectSheet(1);  // 设置表 2 既 2班的成绩
+    QXlsx::Format xlsx_foramt = xlsx.cellAt(7,1)->format();
+
+
+    //将 表格数定为各班级人数
+    int sourceRow = 7;
+    int targetRow = (*course_information)["班级1人数"].toInt()+7-1;
+    xlsx.write("A2",schoolYear);
+
+    //课程名称：操作系统  专业：物联网工程  班级： 物联网：21-2  任课老师：xxx,xxx A3
+    QString course_info = QString("课程名称：%1 专业：%2 班级：%3 任课老师：%4")
+                              .arg((*course_information)["课程名称"].toString())
+                              .arg((*course_information)["适用专业"].toString())
+                              .arg((*course_information)["班级2"].toString())
+                              .arg((*course_information)["授课老师"].toString());
+    xlsx.write("A3", course_info);
+    //D F H ~5 考勤 作业 实验 占比 B11 C11 D11
+    xlsx.write("D5",(*course_information)["rate_kaoqing"].toString().append("%"));
+    xlsx.write("F5",(*course_information)["rate_zuoye"].toString().append("%"));
+    xlsx.write("H5",(*course_information)["rate_shiyan"].toString().append("%"));
+
+
+    for(int row = sourceRow;row <= targetRow;++ row){
+        xlsx.write(row,1,"202105030241",xlsx_foramt);
+        xlsx.write(row,2,"2姓名",xlsx_foramt);
+        xlsx.write(row,3,"90",xlsx_foramt);
+        xlsx.write(row,4,"9",xlsx_foramt);
+        xlsx.write(row,5,"40",xlsx_foramt);
+        xlsx.write(row,6,"4",xlsx_foramt);
+        xlsx.write(row,7,"35",xlsx_foramt);
+        xlsx.write(row,8,"32",xlsx_foramt);
+        xlsx.write(row,9,"99",xlsx_foramt);
+    }
+}
+
+/*
+    一班二班分表操作
+*/
+void OperExcel::fillData(Document& xlsx)
+{
+    oper_data_class1(xlsx);
+    oper_data_class2(xlsx);
+
+}
+
 
 OperExcel::OperExcel(){}
 
@@ -162,6 +232,8 @@ course_information = new QVariantMap(); // 创建 QVariantMap 对象
         QVariant rate_kaoqing = m_xlsx->read("B11");
         QVariant rate_zuoye = m_xlsx->read("C11");
         QVariant rate_shiyan = m_xlsx->read("D11");
+        QVariant students_num1 = m_xlsx->read("E2");
+        QVariant students_num2 = m_xlsx->read("G2");
 
         // 将课程信息插入到 QVariantMap 中
         course_information->insert("课程名称", course_name.toString());
@@ -172,6 +244,9 @@ course_information = new QVariantMap(); // 创建 QVariantMap 对象
         course_information->insert("课时", hours.toString());
         course_information->insert("班级1",class_1.toString());
         course_information->insert("班级2",class_2.toString());
+
+        course_information->insert("班级1人数",students_num1);
+         course_information->insert("班级2人数",students_num2);
 
         course_information->insert("rate_kaoqing",rate_kaoqing);
         course_information->insert("rate_zuoye",rate_zuoye);
