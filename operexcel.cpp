@@ -109,7 +109,8 @@ void OperExcel::fillData(Document& xlsx)
 
 OperExcel::OperExcel(){}
 
-OperExcel::OperExcel(MainWindow *parent_mainWindow) : m_parent_mainWindow(parent_mainWindow){}
+OperExcel::OperExcel(MainWindow *parent_mainWindow,FinalSheet* finalSheet)
+    : m_parent_mainWindow(parent_mainWindow),m_finalSheet(finalSheet){}
 
 void textDemoUnit1(Document& x){
 }
@@ -130,14 +131,23 @@ void OperExcel::open_Excel(QString &path, bool &ret,QObject *parent)
     if(ret)//打开成功则将数据保存到 model 中
     {
         //如果打开成功则读取文件里面的 基本课程信息
+
         this->read_course_information();
+        //显示课程信息
+        m_model->setItem(1,1,new QStandardItem(m_finalSheet->getCourseData().classID.toString()));
+        m_model->setItem(2,1,new QStandardItem(m_finalSheet->getCourseData().shoolDays.toString()));
+        m_model->setItem(3,1,new QStandardItem(m_finalSheet->getCourseData().teacher_name.toString()));
+        m_model->setItem(4,1,new QStandardItem(m_finalSheet->getCourseData().rate_attendance.toString()));
+        m_model->setItem(5,1,new QStandardItem(m_finalSheet->getCourseData().rate_experiment.toString()));
+        //读取学生信息
+
 
     }
 }
 
 QStandardItemModel* OperExcel::getQStandardItemModelPoint()
 {
-    return model;
+    return m_model;
 }
 
 
@@ -254,6 +264,23 @@ course_information = new QVariantMap(); // 创建 QVariantMap 对象
         course_information->insert("rate_zuoye",rate_zuoye);
         course_information->insert("rate_shiyan",rate_shiyan);
 
+        FinalSheet::CourseData course;
+
+        course.classID = course_name;
+        course.teacher_name = teacher_name;
+        course.shoolDays = QVariant(m_parent_mainWindow->customDialog->get_select_data());
+        course.rate_attendance = rate_kaoqing;
+        course.rate_experiment = rate_shiyan;
+        course.rate_homework = rate_zuoye;
+        m_finalSheet->setCourseData(course);
+
+
     }
 
+}
+
+void OperExcel::setViewModel(QStandardItemModel *o_model)
+{
+    if(o_model)
+        m_model = o_model;
 }

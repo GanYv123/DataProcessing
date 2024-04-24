@@ -4,6 +4,7 @@
 #include "xlsxdocument.h"
 #include "QObject"
 #include "QVariantMap"
+#include "finalsheet.h"
 
 class QStandardItemModel;
 class FinalSheet;
@@ -19,7 +20,7 @@ protected:
 
 public:
     OperExcel();
-    OperExcel(MainWindow*parent_mainWindow);
+    OperExcel(MainWindow*parent_mainWindow,FinalSheet* finalSheet = nullptr);
     void creat_New_Excel(QString &path,bool& ret); //新建表格
     void open_Excel(QString &path,bool& ret,QObject *parent);//打开文件
     QStandardItemModel* getQStandardItemModelPoint();
@@ -28,6 +29,7 @@ public:
 
     QVariantMap* get_course_information();
     void read_course_information();
+    void setViewModel(QStandardItemModel* o_model);
 
 
 private:
@@ -35,11 +37,11 @@ private:
 
     QXlsx::Document *m_xlsx = nullptr;
 
-    QStandardItemModel *model = nullptr;
+    QStandardItemModel *m_model = nullptr;
 
     QVariantMap *course_information = nullptr;
 
-    FinalSheet *finalSheet;
+    FinalSheet *m_finalSheet = nullptr;
 };
 
 #endif // OPEREXCEL_H

@@ -16,10 +16,21 @@ void FinalSheet::setStudentData(const QVector<StudentData>& students)
     emit dataChanged();
 }
 
+void FinalSheet::setCourseData(const CourseData &course)
+{
+    m_courseData = course;
+    emit dataChanged();
+}
+
 // 获取学生数据
 QVector<FinalSheet::StudentData> FinalSheet::getStudentData() const
 {
     return m_students;
+}
+
+FinalSheet::CourseData FinalSheet::getCourseData() const
+{
+    return m_courseData;
 }
 
 /*

@@ -41,6 +41,7 @@ public:
     void handleFile(const QString &filePath);
 
 
+
 signals:
     void student_added(QList<QStandardItem*>);
 
@@ -72,7 +73,7 @@ private:
     Ui::MainWindow *ui;
 
     OperExcel *operExcel = nullptr;
-    QStandardItemModel *table_model;
+    QStandardItemModel *table_model = nullptr;
 
     QString path;
     //最终表单

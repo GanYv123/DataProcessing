@@ -21,6 +21,17 @@ public:
         QVariant totalScore;  // 总成绩
         QVariant remark;
     };
+
+    struct CourseData{
+        QVariant teacher_name;
+        QVariant shoolDays;
+        QVariant classID;
+        QVariant rate_attendance;
+        QVariant rate_homework;
+        QVariant rate_experiment;
+    };
+
+
     const int start_row_pos = 6;
     const int start_col_pos = 0;
     // 构造函数
@@ -28,10 +39,14 @@ public:
 
     // 设置学生数据
     void setStudentData(const QVector<StudentData>& students);
+    //设置课程信息
+    void setCourseData(const CourseData& course);
 
 
     // 获取学生数据
     QVector<StudentData> getStudentData() const;
+    //获取课程信息
+    CourseData getCourseData() const;
 
 signals:
     // 定义信号（可根据需要添加）
@@ -39,6 +54,7 @@ signals:
 
 private:
     QVector<StudentData> m_students;
+    CourseData m_courseData;
 };
 
 #endif // FINALSHEET_H

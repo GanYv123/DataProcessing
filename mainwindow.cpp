@@ -17,17 +17,18 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow),finalSheet(new FinalSheet)
+    , ui(new Ui::MainWindow),finalSheet(new FinalSheet(this))
 {
     ui->setupUi(this);
-    initMainWindow();
+
     this->setAcceptDrops(true);
     ui->tableView->setAcceptDrops(false);
     this->customDialog = new CustomDialog(this);
     this->customDialog->setAcceptDrops(false);
     customDialog->close();
-    operExcel = new OperExcel(this);
+    operExcel = new OperExcel(this,finalSheet);
 
+    initMainWindow();
     connect(this,&MainWindow::student_added,this,&MainWindow::slots_student_added);
 }
 
@@ -51,12 +52,23 @@ void MainWindow::initMainWindow()
     ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);  // 初始状态下禁止编辑
 
     //初始化tableView
-    table_model = new QStandardItemModel(this);
+    if(table_model == nullptr)
+        table_model = new QStandardItemModel(this);
     QStringList heardLabels;
     heardLabels<<"学号"<<"姓名"<<"考勤"<<"实验"<<"作业"<<"总成绩"<<"备注";
+
     table_model->setHorizontalHeaderLabels(heardLabels);
 
+
     ui->tableView->setModel(table_model);
+    // 获取表格模型并尝试转换为 QStandardItemModel
+    QStandardItemModel *tableModel = qobject_cast<QStandardItemModel *>(ui->tableView->model());
+    if (tableModel) {
+        operExcel->setViewModel(tableModel); // 如果转换成功，则传递给 OperExcel
+    } else {
+        // 处理转换失败的情况
+        qDebug() << "Failed to cast table model to QStandardItemModel";
+    }
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event) //拖拽进入
@@ -128,8 +140,8 @@ void MainWindow::handleFile(const QString &filePath)
         this->label_tips->setText("文件打开成功!");
         qInfo()<<"文件打开成功！";
         //文件打开成功就返回加到好数据的模型
-        table_model = operExcel->getQStandardItemModelPoint();
-        ui->tableView->setModel(table_model);
+        //table_model = operExcel->getQStandardItemModelPoint();
+        //ui->tableView->setModel(table_model);
     }else{
         this->label_tips->setText("文件未打开");
         qWarning()<<"文件未打开!";
