@@ -51,3 +51,42 @@ QString CustomDialog::get_select_data()
 {
     return this->select_data;
 }
+
+CustomDialog_chooseClassID::CustomDialog_chooseClassID(QString classID1, QString classID2, QWidget *parent):
+    m_classID1(classID1),m_classID2(classID2),QDialog(parent)
+{
+    setWindowTitle("选择班级");
+    comboBox_selectClassID = new QComboBox(this);
+    pb_cancel = new QPushButton("取消",this);
+    pb_confirm = new QPushButton("确认",this);
+
+    comboBox_selectClassID->addItem(QString("通信工程21-1"));
+    comboBox_selectClassID->addItem(QString("通信工程21-2"));
+
+    QVBoxLayout *vb_layout = new QVBoxLayout(this);
+    QHBoxLayout *hb_layout = new QHBoxLayout();
+
+
+    hb_layout->addWidget(pb_cancel);
+    hb_layout->addWidget(pb_confirm);
+    vb_layout->addWidget(comboBox_selectClassID);
+    vb_layout->addLayout(hb_layout);
+    this->setLayout(vb_layout);
+
+    this->setWindowFlags(Qt::FramelessWindowHint); // 设置无边框
+
+    connect(pb_cancel,&QPushButton::clicked,this,&QDialog::close);
+    connect(pb_confirm,&QPushButton::clicked,this,[this](){
+        currentSelectData = this->comboBox_selectClassID->currentText();
+        qInfo()<<"select data : "+currentSelectData;
+        this->accept();
+    });
+
+
+}
+
+void CustomDialog_chooseClassID::show_chooseClassID()
+{
+    this->show();
+    this->exec();
+}

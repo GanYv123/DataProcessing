@@ -22,11 +22,18 @@ void FinalSheet::setCourseData(const CourseData &course)
     emit dataChanged();
 }
 
-// 获取学生数据
-QVector<FinalSheet::StudentData> FinalSheet::getStudentData() const
+QVector<FinalSheet::StudentData> FinalSheet::getStudentData(QString classID) const
 {
-    return m_students;
+    return m_StudentDataForClass[classID];
 }
+
+QMap<QString, QVector<FinalSheet::StudentData> > FinalSheet::getStudentData() const
+{
+    return m_StudentDataForClass;
+}
+
+
+
 
 FinalSheet::CourseData FinalSheet::getCourseData() const
 {

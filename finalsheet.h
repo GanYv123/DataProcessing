@@ -5,6 +5,7 @@
 #include <QString>
 #include <QVector>
 #include <QVariant>
+#include <QMap>
 
 class FinalSheet : public QObject
 {
@@ -44,7 +45,9 @@ public:
 
 
     // 获取学生数据
-    QVector<StudentData> getStudentData() const;
+    QVector<StudentData> getStudentData(QString classID) const;
+    QMap<QString,QVector<FinalSheet::StudentData>> getStudentData() const;
+
     //获取课程信息
     CourseData getCourseData() const;
 
@@ -55,6 +58,8 @@ signals:
 private:
     QVector<StudentData> m_students;
     CourseData m_courseData;
+    QMap<QString,QVector<FinalSheet::StudentData>> m_StudentDataForClass;
+    //studentDataForClass["通信工程21-1"](QVector<FinalSheet::StudentData>)
 };
 
 #endif // FINALSHEET_H

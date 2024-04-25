@@ -28,6 +28,8 @@ public:
     void export_Excel(QString &path,bool& ret,QObject *parent = nullptr);
 
     QVariantMap* get_course_information();
+
+    void read_StudentInformation();
     void read_course_information();
     void setViewModel(QStandardItemModel* o_model);
 

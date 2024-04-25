@@ -15,6 +15,7 @@
 #include "QInputDialog"
 #include "finalsheet.h"
 
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow),finalSheet(new FinalSheet(this))
@@ -26,6 +27,8 @@ MainWindow::MainWindow(QWidget *parent)
     this->customDialog = new CustomDialog(this);
     this->customDialog->setAcceptDrops(false);
     customDialog->close();
+
+
     operExcel = new OperExcel(this,finalSheet);
 
     initMainWindow();
@@ -43,7 +46,9 @@ void MainWindow::initMainWindow()
     ui->statusbar->addWidget(label_tips);
     ui->toolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     label_size = new QLabel("size: x , y",this);
+    label_CourseInfo = new QLabel(" Null");
     ui->statusbar->addWidget(new QWidget(),1);
+    ui->statusbar->addPermanentWidget(label_CourseInfo);
     ui->statusbar->addPermanentWidget(label_size);
 
     ui->tableView->move(20,20);
@@ -52,15 +57,21 @@ void MainWindow::initMainWindow()
     ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);  // 初始状态下禁止编辑
 
     //初始化tableView
-    if(table_model == nullptr)
-        table_model = new QStandardItemModel(this);
+    if(table_model1 == nullptr)
+        table_model1 = new QStandardItemModel(this);
+    if(table_model2 == nullptr)
+        table_model2 = new QStandardItemModel(this);
+
     QStringList heardLabels;
-    heardLabels<<"学号"<<"姓名"<<"考勤"<<"实验"<<"作业"<<"总成绩"<<"备注";
+    heardLabels<<"班级"<<"学号"<<"姓名"<<"考勤"<<"实验"<<"作业"<<"总成绩"<<"备注";
 
-    table_model->setHorizontalHeaderLabels(heardLabels);
+    table_model1->setHorizontalHeaderLabels(heardLabels);
+    table_model2->setHorizontalHeaderLabels(heardLabels);
 
 
-    ui->tableView->setModel(table_model);
+
+    //需要有优化逻辑
+    ui->tableView->setModel(table_model1);
     // 获取表格模型并尝试转换为 QStandardItemModel
     QStandardItemModel *tableModel = qobject_cast<QStandardItemModel *>(ui->tableView->model());
     if (tableModel) {
@@ -147,6 +158,11 @@ void MainWindow::handleFile(const QString &filePath)
         qWarning()<<"文件未打开!";
     }
 
+}
+
+void MainWindow::setLabel_CourseInfo(const QString &text)
+{
+    this->label_CourseInfo->setText(text);
 }
 
 void MainWindow::on_ac_openFiles_triggered() //打开文件
@@ -256,14 +272,18 @@ void MainWindow::on_ac_Save_as_triggered()
 
 }
 
-
+/**
+@test 待修改函数
+@title 演示函数
+*/
 void MainWindow::on_ac_addStu_triggered()
 {//添加学生
-    QVector<FinalSheet::StudentData> studentData = finalSheet->getStudentData();
+    QVector<FinalSheet::StudentData> studentData = finalSheet->getStudentData("通信工程21-1");
 
     FinalSheet::StudentData t_studentData;
 
-    QVariant t_studentID = QVariant("学号");
+    QVariant t_classID = QVariant("通信工程21-1");
+    QVariant t_studentID = QVariant("2021050301xx");
     QVariant t_studentName =QVariant("姓名");
     QVariant t_attendance = QVariant(0.00);
     QVariant t_homework = QVariant(0.00);
@@ -277,23 +297,29 @@ void MainWindow::on_ac_addStu_triggered()
 
     studentData.push_back(t_studentData);
 
-    finalSheet->setStudentData(studentData);
+
 
     QList<QStandardItem*> itemList;
+    itemList.append(new QStandardItem(t_classID.toString()));
     itemList.append(new QStandardItem(t_studentData.studentID.toString()));
     itemList.append(new QStandardItem(t_studentData.studentName.toString()));
     itemList.append(new QStandardItem(QString::number(t_studentData.attendance.toDouble())));
     itemList.append(new QStandardItem(QString::number(t_studentData.homework.toDouble())));
     itemList.append(new QStandardItem(QString::number(t_studentData.experiment.toDouble())));
 
+    finalSheet->setStudentData(studentData); //从修改完成的模型添加
     emit student_added(itemList);
 }
 
 void MainWindow::slots_student_added(QList<QStandardItem*> itemList)
 {//添加完学生更新视图
 
-    table_model->appendRow(itemList);
-    ui->tableView->setModel(table_model);
+    //后期添加 选择班级的判断
+
+
+    table_model1->appendRow(itemList);
+    ui->tableView->setModel(table_model1);
+    ui->tableView->resizeColumnsToContents();
 }
 
 
@@ -302,5 +328,16 @@ void MainWindow::on_tableView_clicked(const QModelIndex &index)
     if (index.isValid()) {
         ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);  // 单击时禁止编辑
     }
+}
+
+
+void MainWindow::on_ac_checkMajor_triggered()
+{//点击选择的班级 切换 不同班级的 model
+
+    this->customDialog_chooseClassID = new CustomDialog_chooseClassID("txgc 21-1 ","txgc 21-2 ",this);
+    customDialog_chooseClassID->move(this->width()/2-150,this->height()/2-100);
+    customDialog_chooseClassID->resize(300,200);
+    customDialog_chooseClassID->show_chooseClassID();
+    //根据选择班级切换模型
 }
 

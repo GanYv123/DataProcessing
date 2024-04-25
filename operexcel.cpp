@@ -134,11 +134,9 @@ void OperExcel::open_Excel(QString &path, bool &ret,QObject *parent)
 
         this->read_course_information();
         //显示课程信息
-        m_model->setItem(1,1,new QStandardItem(m_finalSheet->getCourseData().classID.toString()));
-        m_model->setItem(2,1,new QStandardItem(m_finalSheet->getCourseData().shoolDays.toString()));
-        m_model->setItem(3,1,new QStandardItem(m_finalSheet->getCourseData().teacher_name.toString()));
-        m_model->setItem(4,1,new QStandardItem(m_finalSheet->getCourseData().rate_attendance.toString()));
-        m_model->setItem(5,1,new QStandardItem(m_finalSheet->getCourseData().rate_experiment.toString()));
+        FinalSheet::CourseData t_course = m_finalSheet->getCourseData();
+        QString courseInfoText = t_course.teacher_name.toString() + t_course.classID.toString();
+        m_parent_mainWindow->setLabel_CourseInfo(courseInfoText);
         //读取学生信息
 
 
@@ -209,6 +207,17 @@ void OperExcel::export_Excel(QString &path, bool &ret, QObject *parent)
 QVariantMap *OperExcel::get_course_information()
 {//返回课程的信息
     return this->course_information;
+}
+
+/*
+    读取表 sheet1 读取到班级1 和 班级 2的 学生信息
+*/
+
+void OperExcel::read_StudentInformation()
+{
+    if(m_xlsx->selectSheet("sheet1")){
+
+    }
 }
 
 /*
