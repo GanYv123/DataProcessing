@@ -79,9 +79,9 @@ private:
     OperExcel *operExcel = nullptr;
     QStandardItemModel *table_model1 = nullptr; //班级 1
     QStandardItemModel *table_model2 = nullptr; //班级 2
-    QString currentChooseClassID = "";
+    qint8 currentChooseClassID = -1;
 
-    QString path;
+    QString path = "NullPath";
     //最终表单
     FinalSheet *finalSheet = nullptr;
 

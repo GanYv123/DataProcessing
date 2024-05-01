@@ -26,6 +26,7 @@ public:
     struct CourseData{
         QVariant teacher_name;
         QVariant shoolDays;
+        QVariant major;
         QVariant classID;
         QVariant rate_attendance;
         QVariant rate_homework;

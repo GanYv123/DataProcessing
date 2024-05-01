@@ -60,8 +60,8 @@ CustomDialog_chooseClassID::CustomDialog_chooseClassID(QString classID1, QString
     pb_cancel = new QPushButton("取消",this);
     pb_confirm = new QPushButton("确认",this);
 
-    comboBox_selectClassID->addItem(QString("通信工程21-1"));
-    comboBox_selectClassID->addItem(QString("通信工程21-2"));
+    comboBox_selectClassID->addItem(classID1);
+    comboBox_selectClassID->addItem(QString(classID2));
 
     QVBoxLayout *vb_layout = new QVBoxLayout(this);
     QHBoxLayout *hb_layout = new QHBoxLayout();
@@ -89,4 +89,9 @@ void CustomDialog_chooseClassID::show_chooseClassID()
 {
     this->show();
     this->exec();
+}
+
+QString CustomDialog_chooseClassID::get_select_data()
+{
+    return currentSelectData;
 }

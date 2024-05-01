@@ -138,6 +138,8 @@ void OperExcel::open_Excel(QString &path, bool &ret,QObject *parent)
         QString courseInfoText = t_course.teacher_name.toString() + t_course.classID.toString();
         m_parent_mainWindow->setLabel_CourseInfo(courseInfoText);
         //读取学生信息
+        read_StudentInformation();
+        //设置学生信息到tableview
 
 
     }
@@ -215,8 +217,24 @@ QVariantMap *OperExcel::get_course_information()
 
 void OperExcel::read_StudentInformation()
 {
-    if(m_xlsx->selectSheet("sheet1")){
+    if(m_xlsx->selectSheet("Sheet1")){
+        int col,row;
+        QVector<FinalSheet::StudentData> studentdatas;
+        //col = m_xlsx->dimension().columnCount();
+        row = m_xlsx->dimension().rowCount();
 
+        QVariant t_studentId,t_studentName;
+        FinalSheet::StudentData t_studentdata;
+
+        for(int i = 1;i <= row;++ i){
+            t_studentName = m_xlsx->read(row,1);
+            t_studentId = m_xlsx->read(row,2);
+
+            t_studentdata.studentID = t_studentId;
+            t_studentdata.studentName = t_studentName;
+            studentdatas.append(t_studentdata);
+        }
+        m_finalSheet->setStudentData(studentdatas);
     }
 }
 
@@ -280,6 +298,7 @@ course_information = new QVariantMap(); // 创建 QVariantMap 对象
         course.shoolDays = QVariant(m_parent_mainWindow->customDialog->get_select_data());
         course.rate_attendance = rate_kaoqing;
         course.rate_experiment = rate_shiyan;
+        course.major = major;
         course.rate_homework = rate_zuoye;
         m_finalSheet->setCourseData(course);
 

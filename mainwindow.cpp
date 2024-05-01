@@ -257,6 +257,11 @@ void MainWindow::on_ac_saveFiles_triggered()
 
 void MainWindow::on_ac_exportExcel_triggered()
 {//导出表格
+    if(this->operExcel == nullptr || this->path == "NullPath")
+    {
+        qWarning()<<"未导入文件";
+        return;
+    }
     bool ret;
     this->operExcel->export_Excel(path,ret,this);
     if(ret){
@@ -316,10 +321,17 @@ void MainWindow::slots_student_added(QList<QStandardItem*> itemList)
 
     //后期添加 选择班级的判断
 
-
-    table_model1->appendRow(itemList);
-    ui->tableView->setModel(table_model1);
-    ui->tableView->resizeColumnsToContents();
+    if(this->currentChooseClassID == 1){
+        table_model1->appendRow(itemList);
+        ui->tableView->setModel(table_model1);
+        ui->tableView->resizeColumnsToContents();
+    }else if(this->currentChooseClassID == 2){
+        table_model2->appendRow(itemList);
+        ui->tableView->setModel(table_model2);
+        ui->tableView->resizeColumnsToContents();
+    }else{
+        qDebug()<<"没有选择正确的班级";
+    }
 }
 
 
@@ -334,10 +346,29 @@ void MainWindow::on_tableView_clicked(const QModelIndex &index)
 void MainWindow::on_ac_checkMajor_triggered()
 {//点击选择的班级 切换 不同班级的 model
 
-    this->customDialog_chooseClassID = new CustomDialog_chooseClassID("txgc 21-1 ","txgc 21-2 ",this);
+    FinalSheet::CourseData t_courseData = finalSheet->getCourseData();
+    if(t_courseData.classID.isNull())
+    {
+        qWarning()<<"未导入文件\\未读取到信息";
+        return;
+    }
+    this->customDialog_chooseClassID =
+        new CustomDialog_chooseClassID(t_courseData.major.toString().append(" - 1"),
+                                       t_courseData.major.toString().append(" - 2"),this);
     customDialog_chooseClassID->move(this->width()/2-150,this->height()/2-100);
     customDialog_chooseClassID->resize(300,200);
     customDialog_chooseClassID->show_chooseClassID();
     //根据选择班级切换模型
+    if(customDialog_chooseClassID->get_select_data().contains("- 1")){
+        qDebug()<<"选择了班级1";
+        this->currentChooseClassID = 1;
+        ui->tableView->setModel(this->table_model1);
+    }else if(customDialog_chooseClassID->get_select_data().contains("- 2")){
+         qDebug()<<"选择了班级2";
+         this->currentChooseClassID = 2;
+        ui->tableView->setModel(this->table_model2);
+    }else{
+        qDebug()<<"unknow class";
+    }
 }
 
