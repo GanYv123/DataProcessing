@@ -78,18 +78,9 @@
     </property>
     <addaction name="ac_choose_school_year"/>
    </widget>
-   <widget class="QMenu" name="menu_7">
-    <property name="title">
-     <string>专业 班级</string>
-    </property>
-    <addaction name="ac_addMajor"/>
-    <addaction name="separator"/>
-    <addaction name="ac_checkMajor"/>
-   </widget>
    <addaction name="menu"/>
    <addaction name="menu_6"/>
    <addaction name="menu_4"/>
-   <addaction name="menu_7"/>
    <addaction name="menu_2"/>
    <addaction name="menu_5"/>
   </widget>
@@ -116,11 +107,10 @@
    <addaction name="ac_openFiles"/>
    <addaction name="separator"/>
    <addaction name="ac_exportExcel"/>
-   <addaction name="ac_creatSheet"/>
+   <addaction name="ac_checkMajor"/>
    <addaction name="ac_Save_as"/>
    <addaction name="ac_saveFiles"/>
    <addaction name="ac_addStu"/>
-   <addaction name="ac_checkStu"/>
    <addaction name="ac_saveSettings"/>
    <addaction name="ac_loadSettings"/>
   </widget>
@@ -287,18 +277,6 @@
    </property>
    <property name="toolTip">
     <string>查看课程</string>
-   </property>
-  </action>
-  <action name="ac_addMajor">
-   <property name="icon">
-    <iconset resource="icons.qrc">
-     <normaloff>:/images/212.bmp</normaloff>:/images/212.bmp</iconset>
-   </property>
-   <property name="text">
-    <string>添加专业班级</string>
-   </property>
-   <property name="toolTip">
-    <string>添加专业班级</string>
    </property>
   </action>
   <action name="ac_checkMajor">

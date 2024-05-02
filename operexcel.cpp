@@ -13,6 +13,7 @@ QXLSX_USE_NAMESPACE            // 添加Xlsx命名空间
 #define EXCEL_NAME "./1.xlsx"  // 本demo中用到的excel文件路径文件名
 
 
+//往表中写入基本信息
 void OperExcel::oper_data_class1(QXlsx::Document &xlsx)
 {
     //A2 学年 学期
@@ -96,6 +97,38 @@ void OperExcel::oper_data_class2(QXlsx::Document &xlsx)
     }
 }
 
+void OperExcel::setClassTableViewModel(QStandardItemModel* &model, int classID)
+{
+    if (classID == 1) {
+        QVector<FinalSheet::StudentData> class1Students = m_finalSheet->class1_students();
+        for (const auto& a : class1Students) {
+            QList<QStandardItem*> items; // 创建一个新的items列表
+            QStandardItem* item_studentName = new QStandardItem(a.studentName.toString());
+            QStandardItem* item_studentID = new QStandardItem(a.studentID.toString());
+
+            items.append(item_studentID);
+            items.append(item_studentName);
+
+            model->appendRow(items);
+        }
+    }
+
+    if (classID == 2) {
+        QVector<FinalSheet::StudentData> class2Students = m_finalSheet->class2_students();
+        for (const auto& a : class2Students) {
+            QList<QStandardItem*> items; // 创建一个新的items列表
+            QStandardItem* item_studentName = new QStandardItem(a.studentName.toString());
+            QStandardItem* item_studentID = new QStandardItem(a.studentID.toString());
+
+            items.append(item_studentID);
+            items.append(item_studentName);
+
+            model->appendRow(items);
+        }
+    }
+}
+
+
 /*
     一班二班分表操作
 */
@@ -139,7 +172,17 @@ void OperExcel::open_Excel(QString &path, bool &ret,QObject *parent)
         m_parent_mainWindow->setLabel_CourseInfo(courseInfoText);
         //读取学生信息
         read_StudentInformation();
+        //分班学生
+        m_finalSheet->splitTableOperation();
         //设置学生信息到tableview
+        QStandardItemModel* model1 =  m_parent_mainWindow->getClass1Model();
+        QStandardItemModel* model2 =  m_parent_mainWindow->getClass2Model();
+
+        qDebug()<<"一班 信息已导入";
+        setClassTableViewModel(model1,1);
+
+        qDebug()<<"二班 信息已导入";
+         setClassTableViewModel(model2,2);
 
 
     }
@@ -227,12 +270,13 @@ void OperExcel::read_StudentInformation()
         FinalSheet::StudentData t_studentdata;
 
         for(int i = 1;i <= row;++ i){
-            t_studentName = m_xlsx->read(row,1);
-            t_studentId = m_xlsx->read(row,2);
+            t_studentName = m_xlsx->read(i,1);
+            t_studentId = m_xlsx->read(i,2);
 
             t_studentdata.studentID = t_studentId;
             t_studentdata.studentName = t_studentName;
             studentdatas.append(t_studentdata);
+            //qDebug()<<t_studentdata.studentID<<t_studentdata.studentName;
         }
         m_finalSheet->setStudentData(studentdatas);
     }
@@ -285,7 +329,7 @@ course_information = new QVariantMap(); // 创建 QVariantMap 对象
         course_information->insert("班级2",class_2.toString());
 
         course_information->insert("班级1人数",students_num1);
-         course_information->insert("班级2人数",students_num2);
+        course_information->insert("班级2人数",students_num2);
 
         course_information->insert("rate_kaoqing",rate_kaoqing);
         course_information->insert("rate_zuoye",rate_zuoye);

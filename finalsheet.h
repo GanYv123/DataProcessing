@@ -52,6 +52,12 @@ public:
     //获取课程信息
     CourseData getCourseData() const;
 
+    //分表操作
+    void splitTableOperation();
+
+    QVector<FinalSheet::StudentData> class1_students() const;
+    QVector<FinalSheet::StudentData> class2_students() const;
+
 signals:
     // 定义信号（可根据需要添加）
     void dataChanged();
@@ -61,6 +67,9 @@ private:
     CourseData m_courseData;
     QMap<QString,QVector<FinalSheet::StudentData>> m_StudentDataForClass;
     //studentDataForClass["通信工程21-1"](QVector<FinalSheet::StudentData>)
+
+    QVector<FinalSheet::StudentData> m_class1_students;
+    QVector<FinalSheet::StudentData> m_class2_students;
 };
 
 #endif // FINALSHEET_H

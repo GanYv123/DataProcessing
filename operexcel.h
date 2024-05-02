@@ -17,6 +17,7 @@ protected:
     void fillData(QXlsx::Document& xlsx);
     void oper_data_class1(QXlsx::Document& xlsx);
     void oper_data_class2(QXlsx::Document& xlsx);
+    void setClassTableViewModel(QStandardItemModel* &model,int classID);
 
 public:
     OperExcel();

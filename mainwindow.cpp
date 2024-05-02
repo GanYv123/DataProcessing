@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->customDialog->setAcceptDrops(false);
     customDialog->close();
 
+    ui->tableView->setTabKeyNavigation(false);//取消tab导航
 
     operExcel = new OperExcel(this,finalSheet);
 
@@ -37,7 +38,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    delete ui;
+    if(ui)
+        delete ui;
 }
 
 void MainWindow::initMainWindow()
@@ -52,7 +54,7 @@ void MainWindow::initMainWindow()
     ui->statusbar->addPermanentWidget(label_size);
 
     ui->tableView->move(20,20);
-    ui->tableView->resize(this->width()-40,this->height()-50);
+    ui->tableView->resize(this->width()-40,this->height()-120);
     this->setMinimumSize(500,400);
     ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);  // 初始状态下禁止编辑
 
@@ -63,7 +65,7 @@ void MainWindow::initMainWindow()
         table_model2 = new QStandardItemModel(this);
 
     QStringList heardLabels;
-    heardLabels<<"班级"<<"学号"<<"姓名"<<"考勤"<<"实验"<<"作业"<<"总成绩"<<"备注";
+    heardLabels<<"学号"<<"姓名"<<"考勤"<<"实验"<<"作业"<<"总成绩"<<"备注";
 
     table_model1->setHorizontalHeaderLabels(heardLabels);
     table_model2->setHorizontalHeaderLabels(heardLabels);
@@ -128,7 +130,7 @@ void MainWindow::dropEvent(QDropEvent *event) //放入时
 void MainWindow::resizeEvent(QResizeEvent *event) //尺寸改变
 {
     QSize sz = this->size();
-    ui->tableView->resize(sz.width()-40,sz.height()-50);
+    ui->tableView->resize(sz.width()-40,sz.height()-120);
     this->label_size->setText(QString("size: %1 , %2").arg(sz.width()).arg(sz.height()));
     event->accept();//事件接收
 }
@@ -163,6 +165,16 @@ void MainWindow::handleFile(const QString &filePath)
 void MainWindow::setLabel_CourseInfo(const QString &text)
 {
     this->label_CourseInfo->setText(text);
+}
+
+QStandardItemModel *MainWindow::getClass1Model()
+{
+    return this->table_model1;
+}
+
+QStandardItemModel *MainWindow::getClass2Model()
+{
+    return this->table_model2;
 }
 
 void MainWindow::on_ac_openFiles_triggered() //打开文件
@@ -211,7 +223,7 @@ void MainWindow::on_ac_choose_school_year_triggered()
 }
 
 void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
-{
+{//双击编辑
     // 检查索引的有效性
     if (index.isValid()) {
         ui->tableView->setEditTriggers(QAbstractItemView::DoubleClicked
@@ -283,6 +295,12 @@ void MainWindow::on_ac_Save_as_triggered()
 */
 void MainWindow::on_ac_addStu_triggered()
 {//添加学生
+    if(this->operExcel == nullptr || this->path == "NullPath")
+    {
+        qWarning()<<"未导入文件";
+        this->label_tips->setText("未导入文件");
+        return;
+    }
     QVector<FinalSheet::StudentData> studentData = finalSheet->getStudentData("通信工程21-1");
 
     FinalSheet::StudentData t_studentData;
@@ -350,6 +368,7 @@ void MainWindow::on_ac_checkMajor_triggered()
     if(t_courseData.classID.isNull())
     {
         qWarning()<<"未导入文件\\未读取到信息";
+        this->label_tips->setText("未导入文件");
         return;
     }
     this->customDialog_chooseClassID =

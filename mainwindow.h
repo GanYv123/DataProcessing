@@ -42,6 +42,9 @@ public:
     void handleFile(const QString &filePath);
     void setLabel_CourseInfo(const QString &text);
 
+    QStandardItemModel* getClass1Model();
+    QStandardItemModel* getClass2Model();
+
 
 signals:
     void student_added(QList<QStandardItem*>);
@@ -72,6 +75,7 @@ private slots:
 public:
     CustomDialog *customDialog = nullptr;
     CustomDialog_chooseClassID *customDialog_chooseClassID = nullptr;
+    qint8 currentChooseClassID = -1;
 
 private:
     Ui::MainWindow *ui;
@@ -79,7 +83,6 @@ private:
     OperExcel *operExcel = nullptr;
     QStandardItemModel *table_model1 = nullptr; //班级 1
     QStandardItemModel *table_model2 = nullptr; //班级 2
-    qint8 currentChooseClassID = -1;
 
     QString path = "NullPath";
     //最终表单

@@ -8,6 +8,10 @@
 
 CustomDialog::CustomDialog(QWidget *parent) : QDialog(parent)
 {
+    QFont font = this->font();
+    font.setBold(true);
+    this->setFont(font);
+
     setWindowTitle("填写信息");
 
     comboBox_selectYear = new QComboBox(this);
@@ -55,6 +59,10 @@ QString CustomDialog::get_select_data()
 CustomDialog_chooseClassID::CustomDialog_chooseClassID(QString classID1, QString classID2, QWidget *parent):
     m_classID1(classID1),m_classID2(classID2),QDialog(parent)
 {
+    QFont font = this->font();
+    font.setBold(true);
+    this->setFont(font);
+
     setWindowTitle("选择班级");
     comboBox_selectClassID = new QComboBox(this);
     pb_cancel = new QPushButton("取消",this);
@@ -72,7 +80,6 @@ CustomDialog_chooseClassID::CustomDialog_chooseClassID(QString classID1, QString
     vb_layout->addWidget(comboBox_selectClassID);
     vb_layout->addLayout(hb_layout);
     this->setLayout(vb_layout);
-
     this->setWindowFlags(Qt::FramelessWindowHint); // 设置无边框
 
     connect(pb_cancel,&QPushButton::clicked,this,&QDialog::close);
