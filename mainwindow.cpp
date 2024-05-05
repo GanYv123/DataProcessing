@@ -70,8 +70,6 @@ void MainWindow::initMainWindow()
     table_model1->setHorizontalHeaderLabels(heardLabels);
     table_model2->setHorizontalHeaderLabels(heardLabels);
 
-
-
     //需要有优化逻辑
     ui->tableView->setModel(table_model1);
     // 获取表格模型并尝试转换为 QStandardItemModel
@@ -305,15 +303,14 @@ void MainWindow::on_ac_addStu_triggered()
 
     FinalSheet::StudentData t_studentData;
 
-    QVariant t_classID = QVariant("通信工程21-1");
     QVariant t_studentID = QVariant("2021050301xx");
     QVariant t_studentName =QVariant("姓名");
-    QVariant t_attendance = QVariant(0.00);
+    QVariant t_attendanceScore = QVariant(0);
     QVariant t_homework = QVariant(0.00);
     QVariant t_experiment = QVariant(0.00);
 
     t_studentData.studentID = t_studentID;
-    t_studentData.attendance = t_attendance;
+    t_studentData.attendanceScore = t_attendanceScore;
     t_studentData.studentName = t_studentName;
     t_studentData.homework = t_homework;
     t_studentData.experiment = t_experiment;
@@ -323,10 +320,9 @@ void MainWindow::on_ac_addStu_triggered()
 
 
     QList<QStandardItem*> itemList;
-    itemList.append(new QStandardItem(t_classID.toString()));
     itemList.append(new QStandardItem(t_studentData.studentID.toString()));
     itemList.append(new QStandardItem(t_studentData.studentName.toString()));
-    itemList.append(new QStandardItem(QString::number(t_studentData.attendance.toDouble())));
+    itemList.append(new QStandardItem(QString::number(t_studentData.attendanceScore.toDouble())));
     itemList.append(new QStandardItem(QString::number(t_studentData.homework.toDouble())));
     itemList.append(new QStandardItem(QString::number(t_studentData.experiment.toDouble())));
 
@@ -342,11 +338,11 @@ void MainWindow::slots_student_added(QList<QStandardItem*> itemList)
     if(this->currentChooseClassID == 1){
         table_model1->appendRow(itemList);
         ui->tableView->setModel(table_model1);
-        ui->tableView->resizeColumnsToContents();
+        //ui->tableView->resizeColumnsToContents();
     }else if(this->currentChooseClassID == 2){
         table_model2->appendRow(itemList);
         ui->tableView->setModel(table_model2);
-        ui->tableView->resizeColumnsToContents();
+        //ui->tableView->resizeColumnsToContents();
     }else{
         qDebug()<<"没有选择正确的班级";
     }
@@ -389,5 +385,21 @@ void MainWindow::on_ac_checkMajor_triggered()
     }else{
         qDebug()<<"unknow class";
     }
+}
+
+//查看考勤信息
+void MainWindow::on_ac_Attendance_triggered()
+{//需要单独创建一个model来存储考勤信息
+    if(table_attdendance == nullptr)
+        table_attdendance = new QStandardItemModel;
+
+    QStringList heardLabels;
+    heardLabels<<"学号"<<"姓名"<<"考勤次数"<<"备注";
+
+    table_attdendance->setHorizontalHeaderLabels(heardLabels);
+
+    operExcel->setAttdendanceViewModel(table_attdendance);
+    ui->tableView->setModel(table_attdendance);
+
 }
 

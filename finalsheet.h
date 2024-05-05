@@ -14,23 +14,24 @@ class FinalSheet : public QObject
 public:
     // 内部结构定义
     struct StudentData {
-        QVariant studentID;
-        QVariant studentName;
-        QVariant attendance;  // 考勤成绩
-        QVariant homework;    // 作业成绩
-        QVariant experiment;  // 实验成绩
-        QVariant totalScore;  // 总成绩
-        QVariant remark;
+        QVariant studentID = QVariant("0");
+        QVariant studentName = QVariant("Null");
+        QVariant attendance = QVariant(0);  // 考勤次数
+        QVariant attendanceScore = QVariant(0);  // 考勤成绩
+        QVariant homework = QVariant(0);    // 作业成绩
+        QVariant experiment = QVariant(0);  // 实验成绩
+        QVariant totalScore = QVariant(0);  // 总成绩
+        QVariant remark = QVariant("Null");
     };
 
     struct CourseData{
-        QVariant teacher_name;
-        QVariant shoolDays;
-        QVariant major;
-        QVariant classID;
-        QVariant rate_attendance;
-        QVariant rate_homework;
-        QVariant rate_experiment;
+        QVariant teacher_name = QVariant();
+        QVariant shoolDays = QVariant();
+        QVariant major = QVariant();
+        QVariant classID = QVariant();
+        QVariant rate_attendance = QVariant();
+        QVariant rate_homework = QVariant();
+        QVariant rate_experiment = QVariant();
     };
 
 
@@ -57,6 +58,9 @@ public:
 
     QVector<FinalSheet::StudentData> class1_students() const;
     QVector<FinalSheet::StudentData> class2_students() const;
+    void setClass1Students(const QVector<FinalSheet::StudentData> &students);
+    void setClass2Students(const QVector<FinalSheet::StudentData> &students);
+
 
 signals:
     // 定义信号（可根据需要添加）

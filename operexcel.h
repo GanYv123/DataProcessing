@@ -18,6 +18,7 @@ protected:
     void oper_data_class1(QXlsx::Document& xlsx);
     void oper_data_class2(QXlsx::Document& xlsx);
     void setClassTableViewModel(QStandardItemModel* &model,int classID);
+    void setAttendance();
 
 public:
     OperExcel();
@@ -33,7 +34,7 @@ public:
     void read_StudentInformation();
     void read_course_information();
     void setViewModel(QStandardItemModel* o_model);
-
+    void setAttdendanceViewModel(QStandardItemModel* &model);
 
 private:
     MainWindow *m_parent_mainWindow = nullptr;

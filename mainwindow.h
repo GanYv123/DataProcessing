@@ -72,6 +72,8 @@ private slots:
 
     void on_ac_checkMajor_triggered();
 
+    void on_ac_Attendance_triggered();
+
 public:
     CustomDialog *customDialog = nullptr;
     CustomDialog_chooseClassID *customDialog_chooseClassID = nullptr;
@@ -83,7 +85,7 @@ private:
     OperExcel *operExcel = nullptr;
     QStandardItemModel *table_model1 = nullptr; //班级 1
     QStandardItemModel *table_model2 = nullptr; //班级 2
-
+    QStandardItemModel *table_attdendance = nullptr; //考勤表
     QString path = "NullPath";
     //最终表单
     FinalSheet *finalSheet = nullptr;

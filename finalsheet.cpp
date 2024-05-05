@@ -73,6 +73,17 @@ QVector<FinalSheet::StudentData> FinalSheet::class2_students() const
     return m_class2_students;
 }
 
+void FinalSheet::setClass1Students(const QVector<FinalSheet::StudentData> &students)
+{
+    m_class1_students = students;
+}
+
+void FinalSheet::setClass2Students(const QVector<FinalSheet::StudentData> &students)
+{
+    m_class2_students = students;
+}
+
+
 
 
 /*
