@@ -34,6 +34,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     initMainWindow();
     connect(this,&MainWindow::student_added,this,&MainWindow::slots_student_added);
+    connect(table_model1,&QStandardItemModel::itemChanged,this,&MainWindow::handleItemChanged1);
+    connect(table_model2,&QStandardItemModel::itemChanged,this,&MainWindow::handleItemChanged2);
 }
 
 MainWindow::~MainWindow()
@@ -65,7 +67,7 @@ void MainWindow::initMainWindow()
         table_model2 = new QStandardItemModel(this);
 
     QStringList heardLabels;
-    heardLabels<<"学号"<<"姓名"<<"考勤"<<"实验"<<"作业"<<"总成绩"<<"备注";
+    heardLabels<<"学号"<<"姓名"<<"考勤"<<"作业"<<"实验"<<"总成绩"<<"备注";
 
     table_model1->setHorizontalHeaderLabels(heardLabels);
     table_model2->setHorizontalHeaderLabels(heardLabels);
@@ -299,7 +301,7 @@ void MainWindow::on_ac_addStu_triggered()
         this->label_tips->setText("未导入文件");
         return;
     }
-    QVector<FinalSheet::StudentData> studentData = finalSheet->getStudentData("通信工程21-1");
+    QVector<FinalSheet::StudentData> studentData = finalSheet->getStudentData("");
 
     FinalSheet::StudentData t_studentData;
 
@@ -394,7 +396,7 @@ void MainWindow::on_ac_Attendance_triggered()
         table_attdendance = new QStandardItemModel;
 
     QStringList heardLabels;
-    heardLabels<<"学号"<<"姓名"<<"考勤次数"<<"备注";
+    heardLabels<<"学号1"<<"姓名1"<<"1考勤次数"<<"学号2"<<"姓名2"<<"2考勤次数";
 
     table_attdendance->setHorizontalHeaderLabels(heardLabels);
 
@@ -402,4 +404,102 @@ void MainWindow::on_ac_Attendance_triggered()
     ui->tableView->setModel(table_attdendance);
 
 }
+
+
+void MainWindow::handleItemChanged1(QStandardItem *item)
+{
+    // 获取发生更改的项的索引
+    QModelIndex changedIndex = item->index();
+    int row = changedIndex.row();
+
+    // 获取对应的数据项
+    QVector<FinalSheet::StudentData> class1Students = finalSheet->class1_students();
+    FinalSheet::StudentData studentData = class1Students[row];
+
+    // 根据列号修改对应的数据
+    if (item->column() == 0) { // 学生ID
+        studentData.studentID = item->text();
+    } else if (item->column() == 1) { // 学生姓名
+        studentData.studentName = item->text();
+    } else if (item->column() == 2) { // 考勤成绩
+        studentData.attendance = item->text();
+    } else if (item->column() == 3) { // 作业成绩
+        studentData.homework = item->text();
+    } else if (item->column() == 4) { // 实验成绩
+        studentData.experiment = item->text();
+    } // 继续根据需要处理其他列
+
+    // 更新对应的数据项
+
+    FinalSheet::CourseData courseData = finalSheet->getCourseData();
+
+    QVariant attdance = QVariant((table_model1->item(row,2)->text()));
+    QVariant homework =  QVariant((table_model1->item(row,3)->text()));
+    QVariant experiment =  QVariant((table_model1->item(row,4)->text()));
+
+    QVariant total = ( (attdance.toDouble() * courseData.rate_attendance.toDouble()/100.0) +
+                      (homework.toDouble() * courseData.rate_homework.toDouble()/100.0) +
+                      (experiment.toDouble() * courseData.rate_experiment.toDouble()/100.0));
+
+    QStandardItem* t_item = table_model1->item(row,5);
+    t_item->setText(total.toString());
+
+    class1Students[row] = studentData;
+
+    // 通过 FinalSheet 更新数据
+    finalSheet->setClass1Students(class1Students);
+    //刷新model1
+    operExcel->countTotalScore();
+    ui->tableView->viewport()->update();
+}
+
+
+void MainWindow::handleItemChanged2(QStandardItem *item)
+{
+    // 获取发生更改的项的索引
+    QModelIndex changedIndex = item->index();
+    int row = changedIndex.row();
+
+    // 获取对应的数据项
+    QVector<FinalSheet::StudentData> class2Students = finalSheet->class2_students();
+    FinalSheet::StudentData studentData = class2Students[row];
+
+    // 根据列号修改对应的数据
+    if (item->column() == 0) { // 学生ID
+        studentData.studentID = item->text();
+    } else if (item->column() == 1) { // 学生姓名
+        studentData.studentName = item->text();
+    } else if (item->column() == 2) { // 考勤成绩
+        studentData.attendance = item->text();
+    } else if (item->column() == 3) { // 作业成绩
+        studentData.homework = item->text();
+    } else if (item->column() == 4) { // 实验成绩
+        studentData.experiment = item->text();
+    } // 继续根据需要处理其他列
+
+    // 更新对应的数据项
+
+    FinalSheet::CourseData courseData = finalSheet->getCourseData();
+
+    QVariant attdance = QVariant((table_model2->item(row,2)->text()));
+    QVariant homework =  QVariant((table_model2->item(row,3)->text()));
+    QVariant experiment =  QVariant((table_model2->item(row,4)->text()));
+
+    QVariant total = ( (attdance.toDouble() * courseData.rate_attendance.toDouble()/100.0) +
+                      (homework.toDouble() * courseData.rate_homework.toDouble()/100.0) +
+                      (experiment.toDouble() * courseData.rate_experiment.toDouble()/100.0));
+
+    QStandardItem* t_item = table_model2->item(row,5);
+    t_item->setText(total.toString());
+
+    class2Students[row] = studentData;
+
+    // 通过 FinalSheet 更新数据
+    finalSheet->setClass2Students(class2Students);
+    //刷新model2
+    operExcel->countTotalScore();
+    ui->tableView->viewport()->update();
+}
+
+
 

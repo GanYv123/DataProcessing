@@ -32,7 +32,10 @@ public:
         QVariant rate_attendance = QVariant();
         QVariant rate_homework = QVariant();
         QVariant rate_experiment = QVariant();
+        QVariant attendance_reduce_fractions = QVariant(); //考勤扣分
+        QVariant lessonTime = QVariant();//课时
     };
+
 
 
     const int start_row_pos = 6;

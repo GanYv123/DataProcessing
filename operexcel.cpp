@@ -48,7 +48,7 @@ void OperExcel::oper_data_class1(QXlsx::Document &xlsx)
         xlsx.write(row, 2, m_finalSheet->class1_students().at(index).studentName.toString(), xlsx_foramt);
 
         // 写入原始考勤成绩
-        double attendanceScore = m_finalSheet->class1_students().at(index).attendance.toDouble();
+        double attendanceScore = m_finalSheet->class1_students().at(index).attendanceScore.toDouble();
         xlsx.write(row, 3, attendanceScore, xlsx_foramt);
 
         // 计算并写入考勤加权成绩
@@ -116,7 +116,7 @@ void OperExcel::oper_data_class2(QXlsx::Document &xlsx)
         xlsx.write(row, 2, m_finalSheet->class2_students().at(index).studentName.toString(), xlsx_foramt);
 
         // 写入原始考勤成绩
-        double attendanceScore = m_finalSheet->class2_students().at(index).attendance.toDouble();
+        double attendanceScore = m_finalSheet->class2_students().at(index).attendanceScore.toDouble();
         xlsx.write(row, 3, attendanceScore, xlsx_foramt);
 
         // 计算并写入考勤加权成绩
@@ -216,6 +216,10 @@ void OperExcel::setAttendance()
                 attdendance += m_xlsx->read(i,j).toInt();
             }
             class1[index].attendance = attdendance;
+            int attScore = (m_finalSheet->getCourseData().attendance_reduce_fractions.toInt()*
+                            (m_finalSheet->getCourseData().lessonTime.toInt()/2 -
+                             class1.at(index).attendance.toInt()));
+            class1[index].attendanceScore = 100-attScore;
         }
 
         m_finalSheet->setClass1Students(class1);
@@ -231,12 +235,65 @@ void OperExcel::setAttendance()
                 attdendance += m_xlsx->read(i,j).toInt();
             }
             class2[index].attendance = attdendance;
+            int attScore = 100-(m_finalSheet->getCourseData().attendance_reduce_fractions.toInt()*
+                                (m_finalSheet->getCourseData().lessonTime.toInt()/2 -
+                                                                                                       class2.at(index).attendance.toInt()));
+            class2[index].attendanceScore = attScore;
         }
 
         m_finalSheet->setClass2Students(class2);
     }
 
 }
+
+//加载平时/作业成绩  index(6,19)
+void OperExcel::loadHomeworkScore()
+{
+    //要从sheet2中导入平时成绩
+//    if(m_xlsx->selectSheet("1平时")){
+
+//    }
+
+
+//    if(m_xlsx->selectSheet("平时2")){
+
+    //    }
+}
+
+
+//计算总成绩 保存到fin
+void OperExcel::countTotalScore()
+{
+    QVector<FinalSheet::StudentData> class1 = m_finalSheet->class1_students();
+    QVector<FinalSheet::StudentData> class2 = m_finalSheet->class2_students();
+    // 计算班级一的学生总成绩
+    for(auto& student : class1){
+        double weightedAttendanceScore = student.attendanceScore.toDouble()
+                                         * (*course_information)["rate_kaoqing"].toDouble() / 100.0;
+        double weightedHomeworkScore = student.homework.toDouble()
+                                       * (*course_information)["rate_zuoye"].toDouble() / 100.0;
+        double weightedExperimentScore = student.experiment.toDouble()
+                                         * (*course_information)["rate_shiyan"].toDouble() / 100.0;
+        double totalScore = weightedAttendanceScore + weightedHomeworkScore + weightedExperimentScore;
+        student.totalScore = totalScore;
+    }
+
+    // 计算班级二的学生总成绩
+    for(auto& student : class2){
+        double weightedAttendanceScore = student.attendanceScore.toDouble()
+                                         * (*course_information)["rate_kaoqing"].toDouble() / 100.0;
+        double weightedHomeworkScore = student.homework.toDouble()
+                                       * (*course_information)["rate_zuoye"].toDouble() / 100.0;
+        double weightedExperimentScore = student.experiment.toDouble()
+                                         * (*course_information)["rate_shiyan"].toDouble() / 100.0;
+        double totalScore = weightedAttendanceScore + weightedHomeworkScore + weightedExperimentScore;
+        student.totalScore = totalScore;
+    }
+    // 更新班级一和班级二的学生信息
+    m_finalSheet->setClass1Students(class1);
+    m_finalSheet->setClass2Students(class2);
+}
+
 
 
 /*
@@ -288,6 +345,12 @@ void OperExcel::open_Excel(QString &path, bool &ret,QObject *parent)
 
         qDebug()<<"考勤成绩已导入";
         setAttendance();
+
+        qDebug()<<"平时成绩已录入";
+        loadHomeworkScore();
+
+        //计算总成绩
+        countTotalScore();
 
         //设置学生信息到tableview
         QStandardItemModel* model1 =  m_parent_mainWindow->getClass1Model();
@@ -377,6 +440,7 @@ QVariantMap *OperExcel::get_course_information()
 //读取学生学号及其姓名
 void OperExcel::read_StudentInformation()
 {
+
     if(m_xlsx->selectSheet("Sheet1")){
         int col,row;
         QVector<FinalSheet::StudentData> studentdatas;
@@ -461,8 +525,9 @@ course_information = new QVariantMap(); // 创建 QVariantMap 对象
         course.rate_experiment = rate_shiyan;
         course.major = major;
         course.rate_homework = rate_zuoye;
+        course.attendance_reduce_fractions = m_xlsx->read("B12"); //读取考勤扣分
+        course.lessonTime = m_xlsx->read("D5"); //学时
         m_finalSheet->setCourseData(course);
-
 
     }
 
@@ -477,21 +542,20 @@ void OperExcel::setViewModel(QStandardItemModel *o_model)
 //设置考勤的模型
 void OperExcel::setAttdendanceViewModel(QStandardItemModel *&model)
 {
+    int maxSize = -1;
+    maxSize = qMax(m_finalSheet->class1_students().size(),m_finalSheet->class2_students().size());
 
-
-    foreach (auto a, m_finalSheet->class1_students()) {
-        QList<QStandardItem*> list;
-        list.append(new QStandardItem(a.studentID.toString()));
-        list.append(new QStandardItem(a.studentName.toString()));
-        list.append(new QStandardItem(a.attendance.toString()));
-        model->appendRow(list);
-    }
-    foreach (auto a, m_finalSheet->class2_students()) {
-        QList<QStandardItem*> list;
-        list.append(new QStandardItem(a.studentID.toString()));
-        list.append(new QStandardItem(a.studentName.toString()));
-        list.append(new QStandardItem(a.attendance.toString()));
-        model->appendRow(list);
+    for(int i = 0;i < maxSize;++ i){
+        if(i < m_finalSheet->class1_students().size()){
+            model->setItem(i,0,new QStandardItem(m_finalSheet->class1_students().at(i).studentID.toString()));
+            model->setItem(i,1,new QStandardItem(m_finalSheet->class1_students().at(i).studentName.toString()));
+            model->setItem(i,2,new QStandardItem(m_finalSheet->class1_students().at(i).attendance.toString()));
+        }
+        if(i < m_finalSheet->class2_students().size()){
+            model->setItem(i,3,new QStandardItem(m_finalSheet->class2_students().at(i).studentID.toString()));
+            model->setItem(i,4,new QStandardItem(m_finalSheet->class2_students().at(i).studentName.toString()));
+            model->setItem(i,5,new QStandardItem(m_finalSheet->class2_students().at(i).attendance.toString()));
+        }
     }
 
 }

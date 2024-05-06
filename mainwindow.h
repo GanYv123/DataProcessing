@@ -29,6 +29,8 @@ private:
     QUrl filePath; //打开文件的地址
     QLabel *label_CourseInfo;
 
+
+
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
@@ -73,6 +75,9 @@ private slots:
     void on_ac_checkMajor_triggered();
 
     void on_ac_Attendance_triggered();
+
+    void handleItemChanged1(QStandardItem *item);
+    void handleItemChanged2(QStandardItem *item);
 
 public:
     CustomDialog *customDialog = nullptr;

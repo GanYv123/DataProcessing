@@ -17,8 +17,9 @@ protected:
     void fillData(QXlsx::Document& xlsx);
     void oper_data_class1(QXlsx::Document& xlsx);
     void oper_data_class2(QXlsx::Document& xlsx);
-    void setClassTableViewModel(QStandardItemModel* &model,int classID);
     void setAttendance();
+    void loadHomeworkScore();
+
 
 public:
     OperExcel();
@@ -29,12 +30,16 @@ public:
     void save_Excel(QString &path,bool& ret,QObject *parent = nullptr);
     void export_Excel(QString &path,bool& ret,QObject *parent = nullptr);
 
+
     QVariantMap* get_course_information();
 
     void read_StudentInformation();
     void read_course_information();
     void setViewModel(QStandardItemModel* o_model);
     void setAttdendanceViewModel(QStandardItemModel* &model);
+    void countTotalScore(); //计算总成绩
+    void setClassTableViewModel(QStandardItemModel* &model,int classID);
+
 
 private:
     MainWindow *m_parent_mainWindow = nullptr;
