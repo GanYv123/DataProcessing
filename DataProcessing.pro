@@ -42,3 +42,5 @@ RESOURCES += \
 include($$PWD/QXlsx/QXlsx.pri)
 INCLUDEPATH += $$PWD/QXlsx
 
+RC_ICONS = myico.ico
+

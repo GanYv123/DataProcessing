@@ -37,5 +37,6 @@
         <file>images/CN.jpg</file>
         <file>images/CN2.jpg</file>
         <file>images/timg2.jpg</file>
+        <file>images/winIcon.jpg</file>
     </qresource>
 </RCC>

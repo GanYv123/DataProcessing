@@ -78,9 +78,6 @@ void OperExcel::oper_data_class1(QXlsx::Document &xlsx)
         // 写入备注
         xlsx.write(row, 10, "备注", xlsx_foramt);
     }
-
-
-
 }
 
 void OperExcel::oper_data_class2(QXlsx::Document &xlsx)
