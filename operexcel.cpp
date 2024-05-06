@@ -76,7 +76,7 @@ void OperExcel::oper_data_class1(QXlsx::Document &xlsx)
         xlsx.write(row, 9, QString::number(totalScore, 'f', 2), xlsx_foramt);
 
         // 写入备注
-        xlsx.write(row, 10, "备注", xlsx_foramt);
+        xlsx.write(row, 10, m_finalSheet->class1_students().at(index).remark, xlsx_foramt);
     }
 }
 
@@ -141,7 +141,7 @@ void OperExcel::oper_data_class2(QXlsx::Document &xlsx)
         xlsx.write(row, 9, QString::number(totalScore, 'f', 2), xlsx_foramt);
 
         // 写入备注
-        xlsx.write(row, 10, "备注", xlsx_foramt);
+        xlsx.write(row, 10, m_finalSheet->class2_students().at(index).remark, xlsx_foramt);
     }
 
 }

@@ -427,7 +427,10 @@ void MainWindow::handleItemChanged1(QStandardItem *item)
         studentData.homework = item->text();
     } else if (item->column() == 4) { // 实验成绩
         studentData.experiment = item->text();
-    } // 继续根据需要处理其他列
+    } else if (item->column() == 6) { // 备注
+        studentData.remark = item->text();
+    }
+    // 继续根据需要处理其他列
 
     // 更新对应的数据项
 
@@ -475,7 +478,11 @@ void MainWindow::handleItemChanged2(QStandardItem *item)
         studentData.homework = item->text();
     } else if (item->column() == 4) { // 实验成绩
         studentData.experiment = item->text();
-    } // 继续根据需要处理其他列
+    } else if (item->column() == 6) { // 备注
+        studentData.remark = item->text();
+    }
+
+    // 继续根据需要处理其他列
 
     // 更新对应的数据项
 
