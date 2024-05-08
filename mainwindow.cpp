@@ -27,9 +27,6 @@ MainWindow::MainWindow(QWidget *parent)
     this->customDialog = new CustomDialog(this);
     this->customDialog->setAcceptDrops(false);
     customDialog->close();
-
-    ui->tableView->setTabKeyNavigation(false);//取消tab导航
-
     operExcel = new OperExcel(this,finalSheet);
 
     initMainWindow();
@@ -58,7 +55,6 @@ void MainWindow::initMainWindow()
     ui->tableView->move(20,20);
     ui->tableView->resize(this->width()-40,this->height()-120);
     this->setMinimumSize(500,400);
-    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);  // 初始状态下禁止编辑
 
     //初始化tableView
     if(table_model1 == nullptr)
@@ -223,34 +219,10 @@ void MainWindow::on_ac_choose_school_year_triggered()
 }
 
 void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
-{//双击编辑
-    // 检查索引的有效性
-    if (index.isValid()) {
-        ui->tableView->setEditTriggers(QAbstractItemView::DoubleClicked
-                                       | QAbstractItemView::SelectedClicked);  // 双击时允许编辑
-        // 获取选定单元格的数据
-        QVariant currentValue = index.data(Qt::DisplayRole);
-
-        // 弹出对话框或其他方式让用户编辑数据
-        bool ok;
-        QString newValue = QInputDialog::getText(this, tr("Edit Data"),
-                                                 tr("Enter new value:"), QLineEdit::Normal,
-                                                 currentValue.toString(), &ok);
-        QVariant newValue_copy = QVariant(newValue);
-
-        // 如果用户点击了 OK 按钮并且输入了新值，则更新数据模型中的数据
-        if (ok && !newValue_copy.isNull()) {
-            // 获取模型对象
-            QStandardItemModel *model = qobject_cast<QStandardItemModel *>(ui->tableView->model());
-            if (model) {
-                // 修改数据模型中的数据
-                model->setData(index, newValue_copy, Qt::EditRole);
-
-                // 刷新视图，以显示更新后的数据
-                ui->tableView->viewport()->update();
-            }
-        }
-    }
+{
+    //禁用函数
+    Q_UNUSED(index);
+    return;
 }
 
 
@@ -329,8 +301,6 @@ void MainWindow::on_ac_addStu_triggered()
 
     studentData.push_back(t_studentData);
 
-
-
     QList<QStandardItem*> itemList;
     itemList.append(new QStandardItem(t_studentData.studentID.toString()));
     itemList.append(new QStandardItem(t_studentData.studentName.toString()));
@@ -364,7 +334,16 @@ void MainWindow::slots_student_added(QList<QStandardItem*> itemList)
 void MainWindow::on_tableView_clicked(const QModelIndex &index)
 {
     if (index.isValid()) {
-        ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);  // 单击时禁止编辑
+        // 获取单击的单元格的行和列索引
+        int row = index.row();
+        int column = index.column();
+
+        // 获取单击的单元格的数据
+        QVariant cellData = index.data(Qt::DisplayRole);
+
+        // 根据需要执行其他操作，例如显示信息
+        qDebug() << "Clicked cell at row:" << row << ", column:" << column << ", data:" << cellData.toString();
+
     }
 }
 
@@ -440,7 +419,7 @@ void MainWindow::handleItemChanged1(QStandardItem *item)
     } else if (item->column() == 1) { // 学生姓名
         studentData.studentName = item->text();
     } else if (item->column() == 2) { // 考勤成绩
-        studentData.attendance = item->text();
+        studentData.attendanceScore = item->text();
     } else if (item->column() == 3) { // 作业成绩
         studentData.homework = item->text();
     } else if (item->column() == 4) { // 实验成绩
@@ -491,7 +470,7 @@ void MainWindow::handleItemChanged2(QStandardItem *item)
     } else if (item->column() == 1) { // 学生姓名
         studentData.studentName = item->text();
     } else if (item->column() == 2) { // 考勤成绩
-        studentData.attendance = item->text();
+        studentData.attendanceScore = item->text();
     } else if (item->column() == 3) { // 作业成绩
         studentData.homework = item->text();
     } else if (item->column() == 4) { // 实验成绩
