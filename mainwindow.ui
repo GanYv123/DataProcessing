@@ -111,12 +111,14 @@
    <addaction name="ac_openFiles"/>
    <addaction name="separator"/>
    <addaction name="ac_exportExcel"/>
-   <addaction name="ac_checkMajor"/>
    <addaction name="ac_Save_as"/>
    <addaction name="ac_saveFiles"/>
-   <addaction name="ac_addStu"/>
    <addaction name="ac_saveSettings"/>
    <addaction name="ac_loadSettings"/>
+   <addaction name="separator"/>
+   <addaction name="ac_checkMajor"/>
+   <addaction name="separator"/>
+   <addaction name="ac_addStu"/>
   </widget>
   <action name="ac_openFiles">
    <property name="icon">

@@ -83,14 +83,9 @@ void FinalSheet::setClass2Students(const QVector<FinalSheet::StudentData> &stude
     m_class2_students = students;
 }
 
-
-
-
 /*
     考勤 C4 -> B10 rate D5
     作业 rate F5
     实验 rate H5
-
-
 
 */
