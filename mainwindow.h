@@ -24,12 +24,13 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+protected:
+    void showMessageBox(const QString &message);
+
 private:
     QLabel *label_size,*label_tips;
     QUrl filePath; //打开文件的地址
     QLabel *label_CourseInfo;
-
-
 
 public:
     MainWindow(QWidget *parent = nullptr);

@@ -17,7 +17,11 @@ QXLSX_USE_NAMESPACE            // 添加Xlsx命名空间
 void OperExcel::oper_data_class1(QXlsx::Document &xlsx)
 {
     //A2 学年 学期
-    QString schoolYear = m_parent_mainWindow->customDialog->get_select_data();
+    QString schoolYear;
+    if(m_parent_mainWindow->customDialog->get_select_data() != "")
+        schoolYear = m_parent_mainWindow->customDialog->get_select_data();
+    else
+        schoolYear = m_finalSheet->getCourseData().schoolYears.toString();
 
     xlsx.selectSheet(0);  // 设置表 1 既 一班的成绩
     QXlsx::Format xlsx_foramt = xlsx.cellAt(7,1)->format();
@@ -83,7 +87,11 @@ void OperExcel::oper_data_class1(QXlsx::Document &xlsx)
 void OperExcel::oper_data_class2(QXlsx::Document &xlsx)
 {
     //A2 学年 学期
-    QString schoolYear = m_parent_mainWindow->customDialog->get_select_data();
+    QString schoolYear;
+    if(m_parent_mainWindow->customDialog->get_select_data() != "")
+        schoolYear = m_parent_mainWindow->customDialog->get_select_data();
+    else
+        schoolYear = m_finalSheet->getCourseData().schoolYears.toString();
 
     xlsx.selectSheet(1);  // 设置表 2 既 2班的成绩
     QXlsx::Format xlsx_foramt = xlsx.cellAt(7,1)->format();
@@ -414,7 +422,7 @@ void OperExcel::export_Excel(QString &path, bool &ret, QObject *parent)
     fillData(xlsx);
 
     // 保存 Excel 文件到指定路径
-    if (!xlsx.saveAs("111test.xlsx")) {
+    if (!xlsx.saveAs(path)) {
         qDebug() << "Failed to save Excel file";
         ret = false;
         return;
@@ -524,6 +532,13 @@ course_information = new QVariantMap(); // 创建 QVariantMap 对象
         course.rate_homework = rate_zuoye;
         course.attendance_reduce_fractions = m_xlsx->read("B12"); //读取考勤扣分
         course.lessonTime = m_xlsx->read("D5"); //学时
+        // A2 B2 C2 2023 - 2024 学年第 1 学期
+        int _1 = m_xlsx->read("A2").toInt(),
+            _2 = m_xlsx->read("B2").toInt(),
+            _3 = m_xlsx->read("C2").toInt();
+        QString schoolYears = QString("%1 - %2 学年第 %3 学期").arg(_1).arg(_2).arg(_3);
+        course.schoolYears = QVariant(schoolYears);
+
         m_finalSheet->setCourseData(course);
 
     }

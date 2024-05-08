@@ -21,7 +21,7 @@ public:
         QVariant homework = QVariant(0);    // 作业成绩
         QVariant experiment = QVariant(0);  // 实验成绩
         QVariant totalScore = QVariant(0);  // 总成绩
-        QVariant remark = QVariant("Null");
+        QVariant remark = QVariant(" ");
     };
 
     struct CourseData{
@@ -34,6 +34,7 @@ public:
         QVariant rate_experiment = QVariant();
         QVariant attendance_reduce_fractions = QVariant(); //考勤扣分
         QVariant lessonTime = QVariant();//课时
+        QVariant schoolYears = QVariant();
     };
 
 

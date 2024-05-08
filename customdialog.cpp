@@ -22,7 +22,7 @@ CustomDialog::CustomDialog(QWidget *parent) : QDialog(parent)
         comboBox_selectYear->addItem(QString::number(year) + " - "+ QString::number(year+1) +" 学年第 1 学期");
         comboBox_selectYear->addItem(QString::number(year) + " - "+ QString::number(year+1) +" 学年第 2 学期");
     }
-    this->comboBox_selectYear->setCurrentIndex(23);
+    this->comboBox_selectYear->setCurrentIndex(23*2);
     QVBoxLayout *vb_layout = new QVBoxLayout(this);
     QHBoxLayout *hb_layout = new QHBoxLayout();
 
@@ -41,7 +41,6 @@ CustomDialog::CustomDialog(QWidget *parent) : QDialog(parent)
         qInfo()<<"select data : "+select_data;
         this->accept();
     });
-
 
 }
 
@@ -74,7 +73,6 @@ CustomDialog_chooseClassID::CustomDialog_chooseClassID(QString classID1, QString
     QVBoxLayout *vb_layout = new QVBoxLayout(this);
     QHBoxLayout *hb_layout = new QHBoxLayout();
 
-
     hb_layout->addWidget(pb_cancel);
     hb_layout->addWidget(pb_confirm);
     vb_layout->addWidget(comboBox_selectClassID);
@@ -88,7 +86,6 @@ CustomDialog_chooseClassID::CustomDialog_chooseClassID(QString classID1, QString
         qInfo()<<"select data : "+currentSelectData;
         this->accept();
     });
-
 
 }
 

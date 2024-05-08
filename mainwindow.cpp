@@ -14,7 +14,7 @@
 #include "QStandardItem"
 #include "QInputDialog"
 #include "finalsheet.h"
-
+#include "QMessageBox"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -103,7 +103,7 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *event) //拖拽进入
                 event->acceptProposedAction();
             } else if (suffix == "xlsx" || suffix == "xls" || suffix == "xlsm") {
                 qDebug() << "Excel file detected.";
-
+                this->label_tips->setText("可接收拖入文件");
                 event->acceptProposedAction();
             } else if (suffix == "pdf") {
                 qDebug() << "PDF file detected.";
@@ -272,14 +272,24 @@ void MainWindow::on_ac_exportExcel_triggered()
     if(this->operExcel == nullptr || this->path == "NullPath")
     {
         qWarning()<<"未导入文件";
+        showMessageBox("未导入文件!");
         return;
     }
+
+    QString saveFilePath = QFileDialog::getSaveFileName
+        (this, tr("选择保存位置和文件名"), QDir::currentPath(), tr("Excel files (*.xlsx)"));
+    if (saveFilePath.isEmpty()) {
+        return;
+    }
+
     bool ret;
-    this->operExcel->export_Excel(path,ret,this);
+    this->operExcel->export_Excel(saveFilePath, ret, this);
     if(ret){
         qDebug()<<"导出成功";
-    }else{
+        showMessageBox("导出成功! ");
+    } else {
         qDebug()<<"导出失败";
+        showMessageBox("导出失败，请查看是在打开"+saveFilePath+"时操作! ");
     }
 }
 
@@ -367,6 +377,7 @@ void MainWindow::on_ac_checkMajor_triggered()
     {
         qWarning()<<"未导入文件\\未读取到信息";
         this->label_tips->setText("未导入文件");
+        showMessageBox("请先导入文件");
         return;
     }
     this->customDialog_chooseClassID =
@@ -380,10 +391,12 @@ void MainWindow::on_ac_checkMajor_triggered()
         qDebug()<<"选择了班级1";
         this->currentChooseClassID = 1;
         ui->tableView->setModel(this->table_model1);
+        this->label_tips->setText(finalSheet->getCourseData().major.toString().append(" 1 班"));
     }else if(customDialog_chooseClassID->get_select_data().contains("- 2")){
-         qDebug()<<"选择了班级2";
-         this->currentChooseClassID = 2;
+        qDebug()<<"选择了班级2";
+        this->currentChooseClassID = 2;
         ui->tableView->setModel(this->table_model2);
+        this->label_tips->setText(finalSheet->getCourseData().major.toString().append(" 2 班"));
     }else{
         qDebug()<<"unknow class";
     }
@@ -392,6 +405,11 @@ void MainWindow::on_ac_checkMajor_triggered()
 //查看考勤信息
 void MainWindow::on_ac_Attendance_triggered()
 {//需要单独创建一个model来存储考勤信息
+    if(path == "NullPath")
+    {
+        showMessageBox("请先导入文件");
+        return;
+    }
     if(table_attdendance == nullptr)
         table_attdendance = new QStandardItemModel;
 
@@ -509,4 +527,12 @@ void MainWindow::handleItemChanged2(QStandardItem *item)
 }
 
 
+void MainWindow::showMessageBox(const QString &message)
+{//消息框
+    QMessageBox msgBox;
+    msgBox.setStyleSheet("QLabel { color: red; font-weight: bold; letter-spacing: 2px; text-align: center; }");
+    msgBox.setText(message);
+    msgBox.exec();
+}
 
+//# end MainWindow.cpp

@@ -53,40 +53,26 @@
     <addaction name="separator"/>
     <addaction name="ac_Save_as"/>
    </widget>
-   <widget class="QMenu" name="menu_2">
+   <widget class="QMenu" name="menu_3">
     <property name="title">
-     <string>学生</string>
+     <string>系统</string>
     </property>
-    <addaction name="separator"/>
-    <addaction name="ac_addStu"/>
-    <addaction name="ac_deleteStu"/>
-    <addaction name="ac_checkStu"/>
-   </widget>
-   <widget class="QMenu" name="menu_4">
-    <property name="title">
-     <string>课程</string>
-    </property>
-    <addaction name="ac_addLesson"/>
-    <addaction name="ac_deleteLesson"/>
-    <addaction name="ac_checkLesson"/>
-   </widget>
-   <widget class="QMenu" name="menu_5">
-    <property name="title">
-     <string>考勤</string>
-    </property>
-    <addaction name="ac_Attendance"/>
-   </widget>
-   <widget class="QMenu" name="menu_6">
-    <property name="title">
-     <string>学年</string>
-    </property>
+    <addaction name="ac_saveSettings"/>
+    <addaction name="ac_loadSettings"/>
     <addaction name="ac_choose_school_year"/>
    </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>成绩</string>
+    </property>
+    <addaction name="ac_homework"/>
+    <addaction name="ac_experimentScore"/>
+    <addaction name="ac_Attendance"/>
+    <addaction name="ac_checkMajor"/>
+   </widget>
    <addaction name="menu"/>
-   <addaction name="menu_6"/>
-   <addaction name="menu_4"/>
+   <addaction name="menu_3"/>
    <addaction name="menu_2"/>
-   <addaction name="menu_5"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
@@ -111,14 +97,17 @@
    <addaction name="ac_openFiles"/>
    <addaction name="separator"/>
    <addaction name="ac_exportExcel"/>
-   <addaction name="ac_Save_as"/>
-   <addaction name="ac_saveFiles"/>
+   <addaction name="separator"/>
    <addaction name="ac_saveSettings"/>
    <addaction name="ac_loadSettings"/>
    <addaction name="separator"/>
    <addaction name="ac_checkMajor"/>
+   <addaction name="ac_Attendance"/>
+   <addaction name="ac_homework"/>
+   <addaction name="ac_experimentScore"/>
    <addaction name="separator"/>
    <addaction name="ac_addStu"/>
+   <addaction name="ac_deleteStu"/>
   </widget>
   <action name="ac_openFiles">
    <property name="icon">
@@ -261,18 +250,6 @@
     <string>创建表</string>
    </property>
   </action>
-  <action name="ac_checkStu">
-   <property name="icon">
-    <iconset resource="icons.qrc">
-     <normaloff>:/images/app.ico</normaloff>:/images/app.ico</iconset>
-   </property>
-   <property name="text">
-    <string>查看学生</string>
-   </property>
-   <property name="toolTip">
-    <string>查看学生</string>
-   </property>
-  </action>
   <action name="ac_checkLesson">
    <property name="icon">
     <iconset resource="icons.qrc">
@@ -331,6 +308,30 @@
    </property>
    <property name="toolTip">
     <string>加载配置</string>
+   </property>
+  </action>
+  <action name="ac_experimentScore">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/516.bmp</normaloff>:/images/516.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>实验成绩</string>
+   </property>
+   <property name="toolTip">
+    <string>实验成绩</string>
+   </property>
+  </action>
+  <action name="ac_homework">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/514.bmp</normaloff>:/images/514.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>作业</string>
+   </property>
+   <property name="toolTip">
+    <string>作业成绩</string>
    </property>
   </action>
  </widget>

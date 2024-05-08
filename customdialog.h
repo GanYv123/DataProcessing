@@ -20,7 +20,7 @@ protected:
     QPushButton *pb_confirm;
     QPushButton *pb_cancel;
 
-    QString select_data = "falied to select schoolYear";
+    QString select_data = "";
 };
 
 class CustomDialog_chooseClassID : public QDialog
