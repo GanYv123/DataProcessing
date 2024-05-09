@@ -384,16 +384,16 @@ void MainWindow::on_ac_Attendance_triggered()
         return;
     }
     if(table_attdendance == nullptr)
+    {
         table_attdendance = new QStandardItemModel;
+        QStringList heardLabels;
+        heardLabels<<"学号1"<<"姓名1"<<"1考勤次数"<<"学号2"<<"姓名2"<<"2考勤次数";
+        table_attdendance->setHorizontalHeaderLabels(heardLabels);
+        operExcel->setAttdendanceViewModel(table_attdendance);
+        connect(table_attdendance,&QStandardItemModel::itemChanged,this,&MainWindow::handleItemChanged_attendance);
+    }
 
-    QStringList heardLabels;
-    heardLabels<<"学号1"<<"姓名1"<<"1考勤次数"<<"学号2"<<"姓名2"<<"2考勤次数";
-
-    table_attdendance->setHorizontalHeaderLabels(heardLabels);
-
-    operExcel->setAttdendanceViewModel(table_attdendance);
-    ui->tableView->setModel(table_attdendance);
-    connect(table_attdendance,&QStandardItemModel::itemChanged,this,&MainWindow::handleItemChanged_attendance);
+    ui->tableView->setModel(this->table_attdendance);
 }
 
 
