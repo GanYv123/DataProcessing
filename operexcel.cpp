@@ -24,7 +24,8 @@ void OperExcel::oper_data_class1(QXlsx::Document &xlsx)
         schoolYear = m_finalSheet->getCourseData().schoolYears.toString();
 
     xlsx.selectSheet(0);  // 设置表 1 既 一班的成绩
-    QXlsx::Format xlsx_foramt = xlsx.cellAt(7,1)->format();
+    QXlsx::Format xlsx_foramt = xlsx.cellAt(7,4)->format();
+    QXlsx::Format xlsx_foramt_10point = xlsx.cellAt(7,1)->format();
 
 
     //将 表格数定为各班级人数
@@ -48,8 +49,8 @@ void OperExcel::oper_data_class1(QXlsx::Document &xlsx)
 
     for(int row = sourceRow, index = 0; row <= targetRow; ++row, ++index){
         // 写入学生信息
-        xlsx.write(row, 1, m_finalSheet->class1_students().at(index).studentID.toString(), xlsx_foramt);
-        xlsx.write(row, 2, m_finalSheet->class1_students().at(index).studentName.toString(), xlsx_foramt);
+        xlsx.write(row, 1, m_finalSheet->class1_students().at(index).studentID.toString(), xlsx_foramt_10point);
+        xlsx.write(row, 2, m_finalSheet->class1_students().at(index).studentName.toString(), xlsx_foramt_10point);
 
         // 写入原始考勤成绩
         double attendanceScore = m_finalSheet->class1_students().at(index).attendanceScore.toDouble();
@@ -94,8 +95,8 @@ void OperExcel::oper_data_class2(QXlsx::Document &xlsx)
         schoolYear = m_finalSheet->getCourseData().schoolYears.toString();
 
     xlsx.selectSheet(1);  // 设置表 2 既 2班的成绩
-    QXlsx::Format xlsx_foramt = xlsx.cellAt(7,1)->format();
-
+    QXlsx::Format xlsx_foramt = xlsx.cellAt(7,4)->format();
+    QXlsx::Format xlsx_foramt_10point = xlsx.cellAt(7,1)->format();
 
     //将 表格数定为各班级人数
     int sourceRow = 7;
@@ -117,8 +118,8 @@ void OperExcel::oper_data_class2(QXlsx::Document &xlsx)
 
     for(int row = sourceRow, index = 0; row <= targetRow; ++row, ++index){
         // 写入学生信息
-        xlsx.write(row, 1, m_finalSheet->class2_students().at(index).studentID.toString(), xlsx_foramt);
-        xlsx.write(row, 2, m_finalSheet->class2_students().at(index).studentName.toString(), xlsx_foramt);
+        xlsx.write(row, 1, m_finalSheet->class2_students().at(index).studentID.toString(), xlsx_foramt_10point);
+        xlsx.write(row, 2, m_finalSheet->class2_students().at(index).studentName.toString(), xlsx_foramt_10point);
 
         // 写入原始考勤成绩
         double attendanceScore = m_finalSheet->class2_students().at(index).attendanceScore.toDouble();
@@ -365,8 +366,6 @@ void OperExcel::open_Excel(QString &path, bool &ret,QObject *parent)
 
         qDebug()<<"二班 信息已导入";
         setClassTableViewModel(model2,2);
-
-
 
     }
 }

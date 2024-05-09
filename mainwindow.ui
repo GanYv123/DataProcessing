@@ -51,7 +51,6 @@
     <addaction name="separator"/>
     <addaction name="ac_saveFiles"/>
     <addaction name="separator"/>
-    <addaction name="ac_Save_as"/>
    </widget>
    <widget class="QMenu" name="menu_3">
     <property name="title">
@@ -176,18 +175,6 @@
    </property>
    <property name="toolTip">
     <string>添加课程</string>
-   </property>
-  </action>
-  <action name="ac_Save_as">
-   <property name="icon">
-    <iconset theme="applications-utilities" resource="icons.qrc">
-     <normaloff>:/images/106.bmp</normaloff>:/images/106.bmp</iconset>
-   </property>
-   <property name="text">
-    <string>文件另存为</string>
-   </property>
-   <property name="toolTip">
-    <string>文件另存为</string>
    </property>
   </action>
   <action name="ac_choose_school_year">

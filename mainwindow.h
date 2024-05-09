@@ -65,8 +65,6 @@ private slots:
 
     void on_ac_exportExcel_triggered();
 
-    void on_ac_Save_as_triggered();
-
     void on_ac_addStu_triggered();
 
     void slots_student_added(QList<QStandardItem*> itemList);

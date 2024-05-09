@@ -265,12 +265,6 @@ void MainWindow::on_ac_exportExcel_triggered()
     }
 }
 
-
-void MainWindow::on_ac_Save_as_triggered()
-{//文件另存为
-
-}
-
 /**
 @test 待修改函数
 @title 演示函数
