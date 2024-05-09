@@ -33,8 +33,6 @@ QMap<QString, QVector<FinalSheet::StudentData> > FinalSheet::getStudentData() co
 }
 
 
-
-
 FinalSheet::CourseData FinalSheet::getCourseData() const
 {
     return m_courseData;

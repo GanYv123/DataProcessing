@@ -241,8 +241,7 @@ void OperExcel::setAttendance()
             }
             class2[index].attendance = attdendance;
             int attScore = 100-(m_finalSheet->getCourseData().attendance_reduce_fractions.toInt()*
-                                (m_finalSheet->getCourseData().lessonTime.toInt()/2 -
-                                                                                                       class2.at(index).attendance.toInt()));
+                                (m_finalSheet->getCourseData().lessonTime.toInt()/2 -                                                                                                   class2.at(index).attendance.toInt()));
             class2[index].attendanceScore = attScore;
         }
 

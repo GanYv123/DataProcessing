@@ -77,8 +77,10 @@ private slots:
 
     void on_ac_Attendance_triggered();
 
+    //模型项改变
     void handleItemChanged1(QStandardItem *item);
     void handleItemChanged2(QStandardItem *item);
+    void handleItemChanged_attendance(QStandardItem *item);
 
 public:
     CustomDialog *customDialog = nullptr;

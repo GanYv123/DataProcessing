@@ -399,7 +399,7 @@ void MainWindow::on_ac_Attendance_triggered()
 
     operExcel->setAttdendanceViewModel(table_attdendance);
     ui->tableView->setModel(table_attdendance);
-
+    connect(table_attdendance,&QStandardItemModel::itemChanged,this,&MainWindow::handleItemChanged_attendance);
 }
 
 
@@ -503,6 +503,66 @@ void MainWindow::handleItemChanged2(QStandardItem *item)
     //刷新model2
     operExcel->countTotalScore();
     ui->tableView->viewport()->update();
+}
+
+
+void MainWindow::handleItemChanged_attendance(QStandardItem *item)
+{
+    // 获取发生更改的项的索引
+    QModelIndex changedIndex = item->index();
+    int row = changedIndex.row();
+    int col = changedIndex.column();
+    const int class1Index = 2,class2Index = 5;
+
+    qDebug()<<"row:"<<row<<"  col"<<col;
+
+    if(col == class1Index){
+        // 获取对应的数据项
+        QVector<FinalSheet::StudentData> class1Students = finalSheet->class1_students();
+        FinalSheet::StudentData studentData = class1Students[row];
+
+        studentData.attendance = QVariant(item->text());
+        class1Students[row] = studentData;
+
+        //同步修改到 finallySheet
+        int attScore = (finalSheet->getCourseData().attendance_reduce_fractions.toInt()*
+                        (finalSheet->getCourseData().lessonTime.toInt()/2 -
+                         class1Students.at(row).attendance.toInt()));
+        class1Students[row].attendanceScore = 100-attScore;
+
+        finalSheet->setClass1Students(class1Students);
+        qDebug()<<"修改 后的次数 "<<finalSheet->class1_students()[row].attendance.toString()<<
+            "final score = "<<finalSheet->class1_students()[row].attendanceScore.toString();
+        //修改 model1的data
+        this->table_model1->item(row,2)->setText(
+            finalSheet->class1_students().at(row).attendanceScore.toString());
+
+        operExcel->countTotalScore();
+        ui->tableView->viewport()->update();
+
+    }else if (col == class2Index){
+        QVector<FinalSheet::StudentData> class2Students = finalSheet->class2_students();
+        FinalSheet::StudentData studentData = class2Students[row];
+
+        studentData.attendance = QVariant(item->text());
+        class2Students[row] = studentData;
+
+        //同步修改到 finallySheet
+        int attScore = (finalSheet->getCourseData().attendance_reduce_fractions.toInt()*
+                        (finalSheet->getCourseData().lessonTime.toInt()/2 -
+                         class2Students.at(row).attendance.toInt()));
+        class2Students[row].attendanceScore = 100-attScore;
+
+        finalSheet->setClass2Students(class2Students);
+        qDebug()<<"修改 后的次数 "<<finalSheet->class2_students()[row].attendance.toString()<<
+            "final score = "<<finalSheet->class2_students()[row].attendanceScore.toString();
+        //修改 model1的data
+        this->table_model2->item(row,2)->setText(
+            finalSheet->class2_students().at(row).attendanceScore.toString());
+
+        operExcel->countTotalScore();
+        ui->tableView->viewport()->update();
+    }
 }
 
 
