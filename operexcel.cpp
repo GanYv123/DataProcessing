@@ -7,6 +7,7 @@
 #include "customdialog.h"
 #include "QTemporaryFile"
 #include "mainwindow.h"
+#include "cmath"
 
 QXLSX_USE_NAMESPACE            // 添加Xlsx命名空间
 
@@ -54,7 +55,7 @@ void OperExcel::oper_data_class1(QXlsx::Document &xlsx)
 
         // 写入原始考勤成绩
         double attendanceScore = m_finalSheet->class1_students().at(index).attendanceScore.toDouble();
-        xlsx.write(row, 3, attendanceScore, xlsx_foramt);
+        xlsx.write(row, 3, QString::number((int)attendanceScore), xlsx_foramt);
 
         // 计算并写入考勤加权成绩
         double weightedAttendanceScore = attendanceScore * (*course_information)["rate_kaoqing"].toDouble() / 100.0;
@@ -62,11 +63,11 @@ void OperExcel::oper_data_class1(QXlsx::Document &xlsx)
 
         // 写入作业成绩
         double homeworkScore = m_finalSheet->class1_students().at(index).homework.toDouble();
-        xlsx.write(row, 5, homeworkScore, xlsx_foramt);
+        xlsx.write(row, 5, QString::number((int)homeworkScore), xlsx_foramt);
 
         // 写入实验成绩
         double experimentScore = m_finalSheet->class1_students().at(index).experiment.toDouble();
-        xlsx.write(row, 7, experimentScore, xlsx_foramt);
+        xlsx.write(row, 7, QString::number((int)experimentScore), xlsx_foramt);
 
         // 计算并写入作业加权成绩
         double weightedHomeworkScore = homeworkScore * (*course_information)["rate_zuoye"].toDouble() / 100.0;
@@ -78,7 +79,8 @@ void OperExcel::oper_data_class1(QXlsx::Document &xlsx)
 
         // 计算并写入总成绩
         double totalScore = weightedAttendanceScore + weightedHomeworkScore + weightedExperimentScore;
-        xlsx.write(row, 9, QString::number(totalScore, 'f', 2), xlsx_foramt);
+        int res = std::round(totalScore);
+        xlsx.write(row, 9, QString::number(res), xlsx_foramt);
 
         // 写入备注
         xlsx.write(row, 10, m_finalSheet->class1_students().at(index).remark, xlsx_foramt);
@@ -123,7 +125,7 @@ void OperExcel::oper_data_class2(QXlsx::Document &xlsx)
 
         // 写入原始考勤成绩
         double attendanceScore = m_finalSheet->class2_students().at(index).attendanceScore.toDouble();
-        xlsx.write(row, 3, attendanceScore, xlsx_foramt);
+        xlsx.write(row, 3, QString::number((int)attendanceScore), xlsx_foramt);
 
         // 计算并写入考勤加权成绩
         double weightedAttendanceScore = attendanceScore * (*course_information)["rate_kaoqing"].toDouble() / 100.0;
@@ -131,11 +133,11 @@ void OperExcel::oper_data_class2(QXlsx::Document &xlsx)
 
         // 写入作业成绩
         double homeworkScore = m_finalSheet->class2_students().at(index).homework.toDouble();
-        xlsx.write(row, 5, homeworkScore, xlsx_foramt);
+        xlsx.write(row, 5, QString::number((int)homeworkScore), xlsx_foramt);
 
         // 写入实验成绩
         double experimentScore = m_finalSheet->class2_students().at(index).experiment.toDouble();
-        xlsx.write(row, 7, experimentScore, xlsx_foramt);
+        xlsx.write(row, 7, QString::number((int)experimentScore), xlsx_foramt);
 
         // 计算并写入作业加权成绩
         double weightedHomeworkScore = homeworkScore * (*course_information)["rate_zuoye"].toDouble() / 100.0;
@@ -147,7 +149,8 @@ void OperExcel::oper_data_class2(QXlsx::Document &xlsx)
 
         // 计算并写入总成绩
         double totalScore = weightedAttendanceScore + weightedHomeworkScore + weightedExperimentScore;
-        xlsx.write(row, 9, QString::number(totalScore, 'f', 2), xlsx_foramt);
+        int res = std::round(totalScore);
+        xlsx.write(row, 9, QString::number(res), xlsx_foramt);
 
         // 写入备注
         xlsx.write(row, 10, m_finalSheet->class2_students().at(index).remark, xlsx_foramt);
