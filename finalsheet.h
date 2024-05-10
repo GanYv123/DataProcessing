@@ -18,10 +18,16 @@ public:
         QVariant studentName = QVariant("Null");
         QVariant attendance = QVariant(0);  // 考勤次数
         QVariant attendanceScore = QVariant(0);  // 考勤成绩
+
         QVariant homework = QVariant(0);    // 作业成绩
+        QVector<QVariant> sub_homework;       //分次作业成绩
+
         QVariant experiment = QVariant(0);  // 实验成绩
+        QVector<QVariant> sub_experiment;     // 分次实验成绩
+
         QVariant totalScore = QVariant(0);  // 总成绩
         QVariant remark = QVariant(" ");
+
     };
 
     struct CourseData{

@@ -18,16 +18,118 @@
     <normaloff>:/images/winIcon.jpg</normaloff>:/images/winIcon.jpg</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTableView" name="tableView">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>781</width>
-      <height>481</height>
-     </rect>
-    </property>
-   </widget>
+   <property name="font">
+    <font>
+     <bold>false</bold>
+     <strikeout>false</strikeout>
+    </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="font">
+       <font>
+        <family>仿宋</family>
+        <bold>true</bold>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="tabPosition">
+       <enum>QTabWidget::South</enum>
+      </property>
+      <property name="tabShape">
+       <enum>QTabWidget::Rounded</enum>
+      </property>
+      <property name="currentIndex">
+       <number>2</number>
+      </property>
+      <property name="elideMode">
+       <enum>Qt::ElideNone</enum>
+      </property>
+      <property name="documentMode">
+       <bool>true</bool>
+      </property>
+      <property name="tabsClosable">
+       <bool>false</bool>
+      </property>
+      <property name="movable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="tab_class1">
+       <attribute name="icon">
+        <iconset resource="icons.qrc">
+         <normaloff>:/images/winIcon.jpg</normaloff>:/images/winIcon.jpg</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>班级1</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QTableView" name="tableView">
+          <property name="font">
+           <font>
+            <family>Microsoft YaHei UI Light</family>
+            <pointsize>10</pointsize>
+            <bold>true</bold>
+            <strikeout>false</strikeout>
+           </font>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_class2">
+       <attribute name="icon">
+        <iconset resource="icons.qrc">
+         <normaloff>:/images/winIcon.jpg</normaloff>:/images/winIcon.jpg</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>班级2</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QTableView" name="tableView_2">
+          <property name="font">
+           <font>
+            <family>Microsoft YaHei UI Light</family>
+            <pointsize>10</pointsize>
+            <bold>true</bold>
+            <strikeout>false</strikeout>
+           </font>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_attdance">
+       <attribute name="icon">
+        <iconset resource="icons.qrc">
+         <normaloff>:/images/winIcon.jpg</normaloff>:/images/winIcon.jpg</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>考勤信息表</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QTableView" name="tableView_3">
+          <property name="font">
+           <font>
+            <family>Microsoft JhengHei</family>
+            <pointsize>10</pointsize>
+            <bold>false</bold>
+            <strikeout>false</strikeout>
+           </font>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -67,7 +169,6 @@
     <addaction name="ac_homework"/>
     <addaction name="ac_experimentScore"/>
     <addaction name="ac_Attendance"/>
-    <addaction name="ac_checkMajor"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_3"/>
@@ -100,7 +201,7 @@
    <addaction name="ac_saveSettings"/>
    <addaction name="ac_loadSettings"/>
    <addaction name="separator"/>
-   <addaction name="ac_checkMajor"/>
+   <addaction name="ac_toallSocre"/>
    <addaction name="ac_Attendance"/>
    <addaction name="ac_homework"/>
    <addaction name="ac_experimentScore"/>
@@ -249,18 +350,6 @@
     <string>查看课程</string>
    </property>
   </action>
-  <action name="ac_checkMajor">
-   <property name="icon">
-    <iconset resource="icons.qrc">
-     <normaloff>:/images/app.ico</normaloff>:/images/app.ico</iconset>
-   </property>
-   <property name="text">
-    <string>查看专业班级</string>
-   </property>
-   <property name="toolTip">
-    <string>查看专业班级</string>
-   </property>
-  </action>
   <action name="ac_exportExcel">
    <property name="icon">
     <iconset resource="icons.qrc">
@@ -319,6 +408,21 @@
    </property>
    <property name="toolTip">
     <string>作业成绩</string>
+   </property>
+  </action>
+  <action name="ac_toallSocre">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/app.ico</normaloff>:/images/app.ico</iconset>
+   </property>
+   <property name="text">
+    <string>平时成绩汇总表</string>
+   </property>
+   <property name="toolTip">
+    <string>平时成绩汇总表</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
    </property>
   </action>
  </widget>

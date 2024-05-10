@@ -80,9 +80,17 @@ private slots:
     void handleItemChanged2(QStandardItem *item);
     void handleItemChanged_attendance(QStandardItem *item);
 
+    void on_ac_homework_triggered();
+
+    void on_ac_experimentScore_triggered();
+
+    void on_ac_toallSocre_triggered();
+
 public:
     CustomDialog *customDialog = nullptr;
-    CustomDialog_chooseClassID *customDialog_chooseClassID = nullptr;
+
+    //CustomDialog_chooseClassID *customDialog_chooseClassID = nullptr;
+
     qint8 currentChooseClassID = -1;
 
 private:
@@ -92,6 +100,12 @@ private:
     QStandardItemModel *table_model1 = nullptr; //班级 1
     QStandardItemModel *table_model2 = nullptr; //班级 2
     QStandardItemModel *table_attdendance = nullptr; //考勤表
+
+    QStandardItemModel *table_homeWork1 = nullptr; //作业成绩表
+    QStandardItemModel *table_experiment1 = nullptr; //实验成绩表
+    QStandardItemModel *table_homeWork2 = nullptr; //作业成绩表
+    QStandardItemModel *table_experiment2 = nullptr; //实验成绩表
+
     QString path = "NullPath";
     //最终表单
     FinalSheet *finalSheet = nullptr;

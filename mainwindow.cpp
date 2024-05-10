@@ -40,7 +40,9 @@ MainWindow::~MainWindow()
     if(ui)
         delete ui;
 }
-
+/**
+ * @brief MainWindow::initMainWindow 初始化界面组件
+ */
 void MainWindow::initMainWindow()
 {//初始化界面组件
     label_tips = new QLabel("状态栏pass",this);
@@ -70,6 +72,8 @@ void MainWindow::initMainWindow()
 
     //需要有优化逻辑
     ui->tableView->setModel(table_model1);
+    ui->tableView_2->setModel(table_model2);
+
     // 获取表格模型并尝试转换为 QStandardItemModel
     QStandardItemModel *tableModel = qobject_cast<QStandardItemModel *>(ui->tableView->model());
     if (tableModel) {
@@ -148,9 +152,19 @@ void MainWindow::handleFile(const QString &filePath)
     if(ret){
         this->label_tips->setText("文件打开成功!");
         qInfo()<<"文件打开成功！";
-        //文件打开成功就返回加到好数据的模型
-        //table_model = operExcel->getQStandardItemModelPoint();
-        //ui->tableView->setModel(table_model);
+
+        //考勤信息初始化
+        if(table_attdendance == nullptr)
+        {
+            table_attdendance = new QStandardItemModel;
+            QStringList heardLabels;
+            heardLabels<<"学号1"<<"姓名1"<<"1考勤次数"<<"学号2"<<"姓名2"<<"2考勤次数";
+            table_attdendance->setHorizontalHeaderLabels(heardLabels);
+            operExcel->setAttdendanceViewModel(table_attdendance);
+            connect(table_attdendance,&QStandardItemModel::itemChanged,this,&MainWindow::handleItemChanged_attendance);
+        }
+        ui->tableView_3->setModel(table_attdendance);
+
     }else{
         this->label_tips->setText("文件未打开");
         qWarning()<<"文件未打开!";
@@ -306,11 +320,15 @@ void MainWindow::on_ac_addStu_triggered()
     emit student_added(itemList);
 }
 
+/**
+ * @brief MainWindow::slots_student_added
+ * @param itemList
+ * @todo 待修改函数
+ */
 void MainWindow::slots_student_added(QList<QStandardItem*> itemList)
 {//添加完学生更新视图
 
     //后期添加 选择班级的判断
-
     if(this->currentChooseClassID == 1){
         table_model1->appendRow(itemList);
         ui->tableView->setModel(table_model1);
@@ -341,41 +359,46 @@ void MainWindow::on_tableView_clicked(const QModelIndex &index)
     }
 }
 
-
+/**
+ * @warning 弃用的函数 之前用于选择班级
+*/
 void MainWindow::on_ac_checkMajor_triggered()
 {//点击选择的班级 切换 不同班级的 model
 
-    FinalSheet::CourseData t_courseData = finalSheet->getCourseData();
-    if(t_courseData.classID.isNull())
-    {
-        qWarning()<<"未导入文件\\未读取到信息";
-        this->label_tips->setText("未导入文件");
-        showMessageBox("请先导入文件");
-        return;
-    }
-    this->customDialog_chooseClassID =
-        new CustomDialog_chooseClassID(t_courseData.major.toString().append(" - 1"),
-                                       t_courseData.major.toString().append(" - 2"),this);
-    customDialog_chooseClassID->move(this->width()/2-150,this->height()/2-100);
-    customDialog_chooseClassID->resize(300,200);
-    customDialog_chooseClassID->show_chooseClassID();
-    //根据选择班级切换模型
-    if(customDialog_chooseClassID->get_select_data().contains("- 1")){
-        qDebug()<<"选择了班级1";
-        this->currentChooseClassID = 1;
-        ui->tableView->setModel(this->table_model1);
-        this->label_tips->setText(finalSheet->getCourseData().major.toString().append(" 1 班"));
-    }else if(customDialog_chooseClassID->get_select_data().contains("- 2")){
-        qDebug()<<"选择了班级2";
-        this->currentChooseClassID = 2;
-        ui->tableView->setModel(this->table_model2);
-        this->label_tips->setText(finalSheet->getCourseData().major.toString().append(" 2 班"));
-    }else{
-        qDebug()<<"unknow class";
-    }
+    // FinalSheet::CourseData t_courseData = finalSheet->getCourseData();
+    // if(t_courseData.classID.isNull())
+    // {
+    //     qWarning()<<"未导入文件\\未读取到信息";
+    //     this->label_tips->setText("未导入文件");
+    //     showMessageBox("请先导入文件");
+    //     return;
+    // }
+    // this->customDialog_chooseClassID =
+    //     new CustomDialog_chooseClassID(t_courseData.major.toString().append(" - 1"),
+    //                                    t_courseData.major.toString().append(" - 2"),this);
+    // customDialog_chooseClassID->move(this->width()/2-150,this->height()/2-100);
+    // customDialog_chooseClassID->resize(300,200);
+    // customDialog_chooseClassID->show_chooseClassID();
+    // //根据选择班级切换模型
+    // if(customDialog_chooseClassID->get_select_data().contains("- 1")){
+    //     qDebug()<<"选择了班级1";
+    //     this->currentChooseClassID = 1;
+    //     ui->tableView->setModel(this->table_model1);
+    //     this->label_tips->setText(finalSheet->getCourseData().major.toString().append(" 1 班"));
+    // }else if(customDialog_chooseClassID->get_select_data().contains("- 2")){
+    //     qDebug()<<"选择了班级2";
+    //     this->currentChooseClassID = 2;
+    //     ui->tableView->setModel(this->table_model2);
+    //     this->label_tips->setText(finalSheet->getCourseData().major.toString().append(" 2 班"));
+    // }else{
+    //     qDebug()<<"unknow class";
+    // }
 }
 
-//查看考勤信息
+/**
+ * @brief MainWindow::on_ac_Attendance_triggered
+ * @todo 迁移了原来的实现函数 将用作 显示详细的考勤信息
+ */
 void MainWindow::on_ac_Attendance_triggered()
 {//需要单独创建一个model来存储考勤信息
     if(path == "NullPath")
@@ -383,17 +406,8 @@ void MainWindow::on_ac_Attendance_triggered()
         showMessageBox("请先导入文件");
         return;
     }
-    if(table_attdendance == nullptr)
-    {
-        table_attdendance = new QStandardItemModel;
-        QStringList heardLabels;
-        heardLabels<<"学号1"<<"姓名1"<<"1考勤次数"<<"学号2"<<"姓名2"<<"2考勤次数";
-        table_attdendance->setHorizontalHeaderLabels(heardLabels);
-        operExcel->setAttdendanceViewModel(table_attdendance);
-        connect(table_attdendance,&QStandardItemModel::itemChanged,this,&MainWindow::handleItemChanged_attendance);
-    }
+    //迁移函数到 初始化函数 该页面用作 详细成绩显示
 
-    ui->tableView->setModel(this->table_attdendance);
 }
 
 
@@ -499,6 +513,10 @@ void MainWindow::handleItemChanged2(QStandardItem *item)
     ui->tableView->viewport()->update();
 }
 
+/**
+ * @brief MainWindow::handleItemChanged_attendance
+ * @param item 槽函数 处理考勤表改变的信息
+ */
 
 void MainWindow::handleItemChanged_attendance(QStandardItem *item)
 {
@@ -569,3 +587,50 @@ void MainWindow::showMessageBox(const QString &message)
 }
 
 //# end MainWindow.cpp
+
+void MainWindow::on_ac_homework_triggered()
+{//显示作业成绩 && 平时成绩
+    if(path == "NullPath")
+    {
+        showMessageBox("请先导入文件");
+        return;
+    }
+
+}
+
+
+void MainWindow::on_ac_experimentScore_triggered()
+{// 实验成绩
+    if(path == "NullPath")
+    {
+        showMessageBox("请先导入文件");
+        return;
+    }
+    QStringList heardLaber;
+    heardLaber<<"学号"<<"姓名";
+
+    if(table_experiment1 == nullptr){
+        table_experiment1 = new QStandardItemModel(this);
+        table_experiment1->setHorizontalHeaderLabels(heardLaber);
+    }
+    if(table_experiment2 == nullptr){
+        table_experiment2 = new QStandardItemModel(this);
+        table_experiment2->setHorizontalHeaderLabels(heardLaber);
+    }
+
+    ui->tableView->setModel(table_experiment1);
+    ui->tableView_2->setModel(table_experiment2);
+}
+
+void MainWindow::on_ac_toallSocre_triggered()
+{//跳转回成绩汇总表
+    if(path == "NullPath")
+    {
+        showMessageBox("请先导入文件");
+        return;
+    }
+    ui->tableView->setModel(table_model1);
+    ui->tableView_2->setModel(table_model2);
+
+}
+

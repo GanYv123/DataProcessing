@@ -317,7 +317,12 @@ OperExcel::OperExcel(){}
 OperExcel::OperExcel(MainWindow *parent_mainWindow,FinalSheet* finalSheet)
     : m_parent_mainWindow(parent_mainWindow),m_finalSheet(finalSheet){}
 
+
 void textDemoUnit1(Document& x){
+/**
+ * @warning 该函数为测试函数
+ */
+    Q_UNUSED(x);
 }
 
 void OperExcel::creat_New_Excel(QString &path, bool &ret)
@@ -438,19 +443,18 @@ QVariantMap *OperExcel::get_course_information()
 
 /*
     读取表 sheet1 读取到班级1 和 班级 2的 学生信息
+    读取学生学号及其姓名 还有学习通的 实验成绩
 */
-
-//读取学生学号及其姓名
 void OperExcel::read_StudentInformation()
 {
 
     if(m_xlsx->selectSheet("Sheet1")){
         int col,row;
         QVector<FinalSheet::StudentData> studentdatas;
-        //col = m_xlsx->dimension().columnCount();
+        col = m_xlsx->dimension().columnCount();
         row = m_xlsx->dimension().rowCount();
 
-        QVariant t_studentId,t_studentName;
+        QVariant t_studentId,t_studentName,t_sub_experiment;
         FinalSheet::StudentData t_studentdata;
 
         for(int i = 1;i <= row;++ i){
@@ -459,8 +463,17 @@ void OperExcel::read_StudentInformation()
 
             t_studentdata.studentID = t_studentId;
             t_studentdata.studentName = t_studentName;
+
+            for(int j = 6;j <= col;j+=3){
+                t_sub_experiment = m_xlsx->read(i,j);
+
+                t_studentdata.sub_experiment.append(t_sub_experiment);
+
+            }
             studentdatas.append(t_studentdata);
+            t_studentdata.sub_experiment.clear();
             //qDebug()<<t_studentdata.studentID<<t_studentdata.studentName;
+
         }
         m_finalSheet->setStudentData(studentdatas);
     }
@@ -567,5 +580,23 @@ void OperExcel::setAttdendanceViewModel(QStandardItemModel *&model)
             model->setItem(i,5,new QStandardItem(m_finalSheet->class2_students().at(i).attendance.toString()));
         }
     }
+}
 
+/**
+ * @brief OperExcel::setHomeWorkViewModel
+ * @param model 视图模型
+ * @todo 传入模型 给模型设置对应的项
+ */
+void OperExcel::setHomeWorkViewModel(QStandardItemModel *&model)
+{
+
+}
+
+void OperExcel::setExperimentViewModel(QStandardItemModel *&model)
+{
+    if(model == nullptr) return;
+    //FinalSheet::StudentData studentData = m_finalSheet->getStudentData();
+    // for(int i = 0;i <= studentData.sub_experiment.size();++ i){
+
+    // }
 }

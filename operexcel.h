@@ -17,6 +17,7 @@ protected:
     void fillData(QXlsx::Document& xlsx);
     void oper_data_class1(QXlsx::Document& xlsx);
     void oper_data_class2(QXlsx::Document& xlsx);
+
     void setAttendance();
     void loadHomeworkScore();
 
@@ -35,8 +36,13 @@ public:
 
     void read_StudentInformation();
     void read_course_information();
+
+    //视图模型
     void setViewModel(QStandardItemModel* o_model);
     void setAttdendanceViewModel(QStandardItemModel* &model);
+    void setHomeWorkViewModel(QStandardItemModel* &model);
+    void setExperimentViewModel(QStandardItemModel* &model);
+
     void countTotalScore(); //计算总成绩
     void setClassTableViewModel(QStandardItemModel* &model,int classID);
 
