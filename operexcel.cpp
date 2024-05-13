@@ -8,6 +8,8 @@
 #include "QTemporaryFile"
 #include "mainwindow.h"
 #include "cmath"
+#include "boost/accumulators/accumulators.hpp"
+#include "boost/accumulators/statistics.hpp"
 
 QXLSX_USE_NAMESPACE            // 添加Xlsx命名空间
 
@@ -262,18 +264,45 @@ void OperExcel::loadHomeworkScore()
 
 //    }
 
-
 //    if(m_xlsx->selectSheet("平时2")){
 
     //    }
 }
 
-
-//计算总成绩 保存到fin
+//计算总成绩
 void OperExcel::countTotalScore()
 {
     QVector<FinalSheet::StudentData> class1 = m_finalSheet->class1_students();
     QVector<FinalSheet::StudentData> class2 = m_finalSheet->class2_students();
+    //计算实验平均成绩
+    namespace ba = boost::accumulators;
+    using accumulator_type = ba::accumulator_set<double, ba::stats<ba::tag::mean>>;
+    //创建一个累加器
+    accumulator_type acc;
+    for(int i = 0;i < class1.size();++ i){
+        // 创建一个新的累加器对象，以清除累加器内容
+        acc = accumulator_type();
+        for(const auto& a : class1[i].sub_experiment){
+            acc(a.toDouble());
+        }
+        // 将平均值四舍五入到最接近的整数
+        int rounded_mean = static_cast<int>(std::round(ba::mean(acc)));
+        class1[i].experiment = QVariant(rounded_mean);
+    }
+
+    for(int i = 0;i < class2.size();++ i){
+        // 创建一个新的累加器对象，以清除累加器内容
+        acc = accumulator_type();
+        for(const auto& a : class2[i].sub_experiment){
+            acc(a.toDouble());
+        }
+        int rounded_mean = static_cast<int>(std::round(ba::mean(acc)));
+        class2[i].experiment = QVariant(rounded_mean);
+    }
+    //计算作成绩平均
+
+
+
     // 计算班级一的学生总成绩
     for(auto& student : class1){
         double weightedAttendanceScore = student.attendanceScore.toDouble()
@@ -351,7 +380,7 @@ void OperExcel::open_Excel(QString &path, bool &ret,QObject *parent)
         FinalSheet::CourseData t_course = m_finalSheet->getCourseData();
         QString courseInfoText = t_course.teacher_name.toString() + t_course.classID.toString();
         m_parent_mainWindow->setLabel_CourseInfo(courseInfoText);
-        //读取学生信息
+        //读取学生信息 同时读取实验信息
         read_StudentInformation();
         //分班学生
         m_finalSheet->splitTableOperation();

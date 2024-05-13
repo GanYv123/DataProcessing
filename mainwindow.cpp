@@ -589,7 +589,6 @@ void MainWindow::showMessageBox(const QString &message)
 }
 
 //# end MainWindow.cpp
-
 void MainWindow::on_ac_homework_triggered()
 {//显示作业成绩 && 平时成绩
     if(path == "NullPath")

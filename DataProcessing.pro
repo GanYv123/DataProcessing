@@ -40,7 +40,9 @@ RESOURCES += \
     icons.qrc
 
 include($$PWD/QXlsx/QXlsx.pri)
+
 INCLUDEPATH += $$PWD/QXlsx
+INCLUDEPATH += D:/OPLIB/boost_1_85_0
 
 RC_ICONS = myico.ico
 
