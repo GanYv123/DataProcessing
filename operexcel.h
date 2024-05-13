@@ -41,7 +41,7 @@ public:
     void setViewModel(QStandardItemModel* o_model);
     void setAttdendanceViewModel(QStandardItemModel* &model);
     void setHomeWorkViewModel(QStandardItemModel* &model);
-    void setExperimentViewModel(QStandardItemModel* &model);
+    void setExperimentViewModel(QStandardItemModel* &model,int classID);
 
     void countTotalScore(); //计算总成绩
     void setClassTableViewModel(QStandardItemModel* &model,int classID);

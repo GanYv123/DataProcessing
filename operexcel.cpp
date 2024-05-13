@@ -595,11 +595,36 @@ void OperExcel::setHomeWorkViewModel(QStandardItemModel *&model)
 
 }
 
-void OperExcel::setExperimentViewModel(QStandardItemModel *&model)
+void OperExcel::setExperimentViewModel(QStandardItemModel *&model,int classID)
 {
     if(model == nullptr) return;
-    //FinalSheet::StudentData studentData = m_finalSheet->getStudentData();
-    // for(int i = 0;i <= studentData.sub_experiment.size();++ i){
 
-    // }
+    if(classID == 1){
+        QVector<FinalSheet::StudentData> studentData = m_finalSheet->class1_students();
+        for(int i = 0;i < studentData.size();++ i){
+            QVector<QVariant> sub_exp = studentData.at(i).sub_experiment;
+            model->setItem(i,0,new QStandardItem(studentData.at(i).studentID.toString()));
+            model->setItem(i,1,new QStandardItem(studentData.at(i).studentName.toString()));
+            for(int j = 0,index = 2;j < studentData.at(i).sub_experiment.size();++j,++index){
+                model->setItem(i,index,new QStandardItem(sub_exp.at(j).toString()));
+            }
+            model->setItem(i,studentData.at(i).sub_experiment.size()+2,
+                           new QStandardItem(studentData.at(i).experiment.toString()));
+        }
+
+    }else if(classID == 2){
+        QVector<FinalSheet::StudentData> studentData = m_finalSheet->class2_students();
+        for(int i = 0;i < studentData.size();++ i){
+            QVector<QVariant> sub_exp = studentData.at(i).sub_experiment;
+            model->setItem(i,0,new QStandardItem(studentData.at(i).studentID.toString()));
+            model->setItem(i,1,new QStandardItem(studentData.at(i).studentName.toString()));
+            for(int j = 0,index = 2;j < studentData.at(i).sub_experiment.size();++j,++index){
+                model->setItem(i,index,new QStandardItem(sub_exp.at(j).toString()));
+            }
+            model->setItem(i,studentData.at(i).sub_experiment.size()+2,
+                           new QStandardItem(studentData.at(i).experiment.toString()));
+        }
+    }
+    model->setHorizontalHeaderItem(m_finalSheet->class1_students()[0].
+                                       sub_experiment.size()+2,new QStandardItem("总成绩"));
 }

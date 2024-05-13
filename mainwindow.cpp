@@ -74,6 +74,8 @@ void MainWindow::initMainWindow()
     ui->tableView->setModel(table_model1);
     ui->tableView_2->setModel(table_model2);
 
+    ui->tabWidget->setCurrentIndex(0); //设置默认选项卡
+
     // 获取表格模型并尝试转换为 QStandardItemModel
     QStandardItemModel *tableModel = qobject_cast<QStandardItemModel *>(ui->tableView->model());
     if (tableModel) {
@@ -598,7 +600,6 @@ void MainWindow::on_ac_homework_triggered()
 
 }
 
-
 void MainWindow::on_ac_experimentScore_triggered()
 {// 实验成绩
     if(path == "NullPath")
@@ -606,6 +607,10 @@ void MainWindow::on_ac_experimentScore_triggered()
         showMessageBox("请先导入文件");
         return;
     }
+
+    if(ui->tableView->model() == table_experiment1){return;}
+    if(ui->tableView_2->model() == table_experiment2){return;}
+
     QStringList heardLaber;
     heardLaber<<"学号"<<"姓名";
 
@@ -617,6 +622,10 @@ void MainWindow::on_ac_experimentScore_triggered()
         table_experiment2 = new QStandardItemModel(this);
         table_experiment2->setHorizontalHeaderLabels(heardLaber);
     }
+
+    //设置模型项
+    operExcel->setExperimentViewModel(table_experiment1,1);
+    operExcel->setExperimentViewModel(table_experiment2,2);
 
     ui->tableView->setModel(table_experiment1);
     ui->tableView_2->setModel(table_experiment2);
