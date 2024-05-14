@@ -695,6 +695,86 @@ void MainWindow::handleItemChanged_experimentView2(QStandardItem *item)
             &MainWindow::handleItemChanged_experimentView2);
 }
 
+void MainWindow::handleItemChanged_homeworkView1(QStandardItem *item)
+{
+    disconnect(table_homeWork1, &QStandardItemModel::itemChanged, this,
+               &MainWindow::handleItemChanged_homeworkView1);
+    // 获取发生更改的项的索引
+    QModelIndex changedIndex = item->index();
+    int row = changedIndex.row();
+    int col = changedIndex.column();
+    // 获取对应的数据项
+    QVector<FinalSheet::StudentData> class1Students = finalSheet->class1_students();
+    FinalSheet::StudentData studentData = class1Students[row];
+
+    if( col >= 2 && studentData.sub_homework.size()-col+2 >= 0 && col < table_homeWork1->columnCount()-1){
+        studentData.sub_homework[col-2] = QVariant(item->text().toInt());
+        qDebug()<<"changed item : "<<studentData.sub_homework[col-2];
+    }
+    //计算值变化后的平均成绩
+    double mean_total = 0.0;
+    for(const auto& a: studentData.sub_homework){
+        mean_total += a.toDouble();
+    }
+    mean_total = mean_total/studentData.sub_homework.size();
+
+    int res_mean = static_cast<int>(std::round(mean_total));
+    studentData.homework = QVariant(res_mean);
+    QStandardItem* t_item_hom = table_homeWork1->item(row,studentData.sub_homework.size()+2);
+    t_item_hom->setText(studentData.homework.toString());
+
+    class1Students[row] = studentData;
+    finalSheet->setClass1Students(class1Students);
+    //刷新model1
+    operExcel->countTotalScore();
+    ui->tableView->viewport()->update();
+    QStandardItem* t_item_toal = table_model1->item(row,3);
+    t_item_toal->setText(finalSheet->class1_students().at(row).homework.toString());
+    // 连接信号和槽
+    connect(table_homeWork1, &QStandardItemModel::itemChanged, this,
+            &MainWindow::handleItemChanged_homeworkView1);
+}
+
+void MainWindow::handleItemChanged_homeworkView2(QStandardItem *item)
+{
+    disconnect(table_homeWork2, &QStandardItemModel::itemChanged, this,
+               &MainWindow::handleItemChanged_homeworkView2);
+    // 获取发生更改的项的索引
+    QModelIndex changedIndex = item->index();
+    int row = changedIndex.row();
+    int col = changedIndex.column();
+    // 获取对应的数据项
+    QVector<FinalSheet::StudentData> class2Students = finalSheet->class2_students();
+    FinalSheet::StudentData studentData = class2Students[row];
+
+    if( col >= 2 && studentData.sub_homework.size()-col+2 >= 0 && col < table_homeWork2->columnCount()-1){
+        studentData.sub_homework[col-2] = QVariant(item->text().toInt());
+        qDebug()<<"changed item : "<<studentData.sub_homework[col-2];
+    }
+    //计算值变化后的平均成绩
+    double mean_total = 0.0;
+    for(const auto& a: studentData.sub_homework){
+        mean_total += a.toDouble();
+    }
+    mean_total = mean_total/studentData.sub_homework.size();
+
+    int res_mean = static_cast<int>(std::round(mean_total));
+    studentData.homework = QVariant(res_mean);
+    QStandardItem* t_item_hom = table_homeWork2->item(row,studentData.sub_homework.size()+2);
+    t_item_hom->setText(studentData.homework.toString());
+
+    class2Students[row] = studentData;
+    finalSheet->setClass2Students(class2Students);
+    //刷新model2
+    operExcel->countTotalScore();
+    ui->tableView->viewport()->update();
+    QStandardItem* t_item_toal = table_model2->item(row,3);
+    t_item_toal->setText(finalSheet->class2_students().at(row).homework.toString());
+    // 连接信号和槽
+    connect(table_homeWork2, &QStandardItemModel::itemChanged, this,
+            &MainWindow::handleItemChanged_homeworkView2);
+}
+
 void MainWindow::showMessageBox(const QString &message)
 {//消息框
     QMessageBox msgBox;
@@ -717,10 +797,22 @@ void MainWindow::on_ac_homework_triggered()
     ui->tableView->setModel(table_homeWork1);
     ui->tableView_2->setModel(table_homeWork2);
 
+    // 首先断开之前的连接
+    disconnect(table_homeWork1, &QStandardItemModel::itemChanged, this,
+               &MainWindow::handleItemChanged_homeworkView1);
+    disconnect(table_homeWork2, &QStandardItemModel::itemChanged, this,
+               &MainWindow::handleItemChanged_homeworkView2);
+
+    connect(table_homeWork1,&QStandardItemModel::itemChanged,this,
+            &MainWindow::handleItemChanged_homeworkView1);
+    connect(table_homeWork2,&QStandardItemModel::itemChanged,this,
+            &MainWindow::handleItemChanged_homeworkView2);
+
 }
 
+// 实验成绩
 void MainWindow::on_ac_experimentScore_triggered()
-{// 实验成绩
+{
     if(path == "NullPath")
     {
         showMessageBox("请先导入文件");
@@ -745,8 +837,9 @@ void MainWindow::on_ac_experimentScore_triggered()
 
 }
 
+//跳转回成绩汇总表
 void MainWindow::on_ac_toallSocre_triggered()
-{//跳转回成绩汇总表
+{
     if(path == "NullPath")
     {
         showMessageBox("请先导入文件");

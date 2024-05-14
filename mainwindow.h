@@ -81,6 +81,8 @@ private slots:
     void handleItemChanged_attendance(QStandardItem *item);
     void handleItemChanged_experimentView1(QStandardItem *item);
     void handleItemChanged_experimentView2(QStandardItem *item);
+    void handleItemChanged_homeworkView1(QStandardItem *item);
+    void handleItemChanged_homeworkView2(QStandardItem *item);
 
     void on_ac_homework_triggered();
 
