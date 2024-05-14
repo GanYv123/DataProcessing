@@ -44,7 +44,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -61,7 +61,7 @@
       <widget class="QWidget" name="tab_class1">
        <attribute name="icon">
         <iconset resource="icons.qrc">
-         <normaloff>:/images/winIcon.jpg</normaloff>:/images/winIcon.jpg</iconset>
+         <normaloff>:/images/f1.ico</normaloff>:/images/f1.ico</iconset>
        </attribute>
        <attribute name="title">
         <string>班级1</string>
@@ -84,7 +84,7 @@
       <widget class="QWidget" name="tab_class2">
        <attribute name="icon">
         <iconset resource="icons.qrc">
-         <normaloff>:/images/winIcon.jpg</normaloff>:/images/winIcon.jpg</iconset>
+         <normaloff>:/images/f2.ico</normaloff>:/images/f2.ico</iconset>
        </attribute>
        <attribute name="title">
         <string>班级2</string>

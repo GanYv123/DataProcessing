@@ -15,6 +15,7 @@
 #include "QInputDialog"
 #include "finalsheet.h"
 #include "QMessageBox"
+#include "iostream"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -75,6 +76,13 @@ void MainWindow::initMainWindow()
     ui->tableView_2->setModel(table_model2);
 
     ui->tabWidget->setCurrentIndex(0); //设置默认选项卡
+    // 设置 QTabWidget 的样式表
+    ui->tabWidget->setStyleSheet(
+        "QTabBar::tab:selected {"
+        "   background-color: #99eb1f; /* 设置选中时的背景颜色 */"
+        "}"
+        );
+
 
     // 获取表格模型并尝试转换为 QStandardItemModel
     QStandardItemModel *tableModel = qobject_cast<QStandardItemModel *>(ui->tableView->model());
@@ -170,7 +178,6 @@ void MainWindow::handleFile(const QString &filePath)
 
         QStringList heardLaber;
         heardLaber<<"学号"<<"姓名";
-
         if(table_experiment1 == nullptr){
             table_experiment1 = new QStandardItemModel(this);
             table_experiment1->setHorizontalHeaderLabels(heardLaber);
@@ -182,6 +189,17 @@ void MainWindow::handleFile(const QString &filePath)
         }
         operExcel->setExperimentViewModel(table_experiment1,1);
         operExcel->setExperimentViewModel(table_experiment2,2);
+
+        if(table_homeWork1 == nullptr){
+            table_homeWork1 = new QStandardItemModel(this);
+            table_homeWork1->setHorizontalHeaderLabels(heardLaber);
+        }
+        if(table_homeWork2 == nullptr){
+            table_homeWork2 = new QStandardItemModel(this);
+            table_homeWork2->setHorizontalHeaderLabels(heardLaber);
+        }
+        operExcel->setHomeWorkViewModel(table_homeWork1,1);
+        operExcel->setHomeWorkViewModel(table_homeWork2,2);
 
     }else{
         this->label_tips->setText("文件未打开");
@@ -561,8 +579,8 @@ void MainWindow::handleItemChanged_attendance(QStandardItem *item)
         class1Students[row].attendanceScore = 100-attScore;
 
         finalSheet->setClass1Students(class1Students);
-        qDebug()<<"修改 后的次数 "<<finalSheet->class1_students()[row].attendance.toString()<<
-            "final score = "<<finalSheet->class1_students()[row].attendanceScore.toString();
+        //qDebug()<<"修改 后的次数 "<<finalSheet->class1_students()[row].attendance.toString()<<
+        //   "final score = "<<finalSheet->class1_students()[row].attendanceScore.toString();
         //修改 model1的data
         this->table_model1->item(row,2)->setText(
             finalSheet->class1_students().at(row).attendanceScore.toString());
@@ -584,8 +602,8 @@ void MainWindow::handleItemChanged_attendance(QStandardItem *item)
         class2Students[row].attendanceScore = 100-attScore;
 
         finalSheet->setClass2Students(class2Students);
-        qDebug()<<"修改 后的次数 "<<finalSheet->class2_students()[row].attendance.toString()<<
-            "final score = "<<finalSheet->class2_students()[row].attendanceScore.toString();
+        //qDebug()<<"修改 后的次数 "<<finalSheet->class2_students()[row].attendance.toString()<<
+        //    "final score = "<<finalSheet->class2_students()[row].attendanceScore.toString();
         //修改 model1的data
         this->table_model2->item(row,2)->setText(
             finalSheet->class2_students().at(row).attendanceScore.toString());
@@ -635,7 +653,6 @@ void MainWindow::handleItemChanged_experimentView1(QStandardItem *item)
     connect(table_experiment1, &QStandardItemModel::itemChanged, this,
             &MainWindow::handleItemChanged_experimentView1);
 }
-
 
 void MainWindow::handleItemChanged_experimentView2(QStandardItem *item)
 {
@@ -694,6 +711,11 @@ void MainWindow::on_ac_homework_triggered()
         showMessageBox("请先导入文件");
         return;
     }
+    if(ui->tableView->model() == table_homeWork1){return;}
+    if(ui->tableView_2->model() == table_homeWork2){return;}
+
+    ui->tableView->setModel(table_homeWork1);
+    ui->tableView_2->setModel(table_homeWork2);
 
 }
 

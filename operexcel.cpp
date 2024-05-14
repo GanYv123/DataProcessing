@@ -259,12 +259,75 @@ void OperExcel::setAttendance()
 //加载平时/作业成绩  index(6,19)
 void OperExcel::loadHomeworkScore()
 {
-    //要从sheet2中导入平时成绩
-//    if(m_xlsx->selectSheet("1平时")){
-//    }
+    //从sheet2中导入平时成绩
 
-//    if(m_xlsx->selectSheet("平时2")){
-    //    }
+    if(m_xlsx->selectSheet("Sheet2")){
+        int col,row;
+        QVector<FinalSheet::StudentData> studentdatas = m_finalSheet->getAllStudents();
+        col = m_xlsx->dimension().columnCount();
+        row = m_xlsx->dimension().rowCount();
+        QVariant t_sub_homework;
+        for(int i = 1;i <= row;++ i){
+            for(int j = 6;j <= col;j+=4){
+                t_sub_homework = m_xlsx->read(i,j);
+                studentdatas[i-1].sub_homework.append(t_sub_homework);
+            }
+        }
+        m_finalSheet->setStudentData(studentdatas);
+    }
+}
+
+void OperExcel::loadHomeworkByClassSheet()
+{
+    //从表中导出的数据个数位置后面读
+    const int choose_COL_Index = 3+m_finalSheet->class1_students().at(0).sub_homework.size(); //样例中位置为第六col
+    if(m_xlsx->selectSheet("1平时")){
+        int row,col;
+        row = m_xlsx->dimension().rowCount();
+        col = m_xlsx->dimension().columnCount();
+        QVector<FinalSheet::StudentData> classDatas1 = m_finalSheet->class1_students();
+        for(int i = 6,index = 0; i <= row; ++i,++index) {
+            for(int j = choose_COL_Index; j <= col-1; ++j) {
+                QVariant t_var = m_xlsx->read(i, j);
+                if(t_var.isValid()){
+                    bool conversionOk = false;
+                    double numericValue = t_var.toDouble(&conversionOk);
+                    if(conversionOk) {
+                        //qDebug() <<i<<"  "<<j<< "Numeric value:" << numericValue;
+                        //将合法数据写入内部数据中
+                        classDatas1[index].sub_homework.append(t_var);
+                    } else {
+                        qDebug() <<i<<"  "<<j<< "Not a numeric value:" << t_var.toString();
+                    }
+                }
+            }
+        }
+        m_finalSheet->setClass1Students(classDatas1);
+    }
+
+    if(m_xlsx->selectSheet("平时2")){
+        int row,col;
+        row = m_xlsx->dimension().rowCount();
+        col = m_xlsx->dimension().columnCount();
+        QVector<FinalSheet::StudentData> classDatas2 = m_finalSheet->class2_students();
+        for(int i = 6,index = 0; i <= row; ++i,++index) {
+            for(int j = choose_COL_Index; j <= col-1; ++j) {
+                QVariant t_var = m_xlsx->read(i, j);
+                if(t_var.isValid()){
+                    bool conversionOk = false;
+                    double numericValue = t_var.toDouble(&conversionOk);
+                    if(conversionOk) {
+                        //qDebug() <<i<<"  "<<j<< "Numeric value:" << numericValue;
+                        //将合法数据写入内部数据中
+                        classDatas2[index].sub_homework.append(t_var);
+                    } else {
+                        qDebug() <<i<<"  "<<j<< "Not a numeric value:" << t_var.toString();
+                    }
+                }
+            }
+        }
+        m_finalSheet->setClass2Students(classDatas2);
+    }
 }
 
 //计算总成绩
@@ -297,10 +360,30 @@ void OperExcel::countTotalScore()
         int rounded_mean = static_cast<int>(std::round(ba::mean(acc)));
         class2[i].experiment = QVariant(rounded_mean);
     }
-    //计算作成绩平均
+    ////////////////////////////////////////////////////////
+    //计算作ye成绩平均
+    for(int i = 0;i < class1.size();++ i){
+        // 创建一个新的累加器对象，以清除累加器内容
+        acc = accumulator_type();
+        for(const auto& a : class1[i].sub_homework){
+            acc(a.toDouble());
+        }
+        // 将平均值四舍五入到最接近的整数
+        int rounded_mean = static_cast<int>(std::round(ba::mean(acc)));
+        class1[i].homework = QVariant(rounded_mean);
+    }
 
+    for(int i = 0;i < class2.size();++ i){
+        // 创建一个新的累加器对象，以清除累加器内容
+        acc = accumulator_type();
+        for(const auto& a : class2[i].sub_homework){
+            acc(a.toDouble());
+        }
+        int rounded_mean = static_cast<int>(std::round(ba::mean(acc)));
+        class2[i].homework = QVariant(rounded_mean);
+    }
 
-
+    ///////////////////////////////////////////////////////
     // 计算班级一的学生总成绩
     for(auto& student : class1){
         double weightedAttendanceScore = student.attendanceScore.toDouble()
@@ -344,7 +427,6 @@ OperExcel::OperExcel(){}
 OperExcel::OperExcel(MainWindow *parent_mainWindow,FinalSheet* finalSheet)
     : m_parent_mainWindow(parent_mainWindow),m_finalSheet(finalSheet){}
 
-
 void textDemoUnit1(Document& x){
 /**
  * @warning 该函数为测试函数
@@ -375,19 +457,19 @@ void OperExcel::open_Excel(QString &path, bool &ret,QObject *parent)
         FinalSheet::CourseData t_course = m_finalSheet->getCourseData();
         QString courseInfoText = t_course.teacher_name.toString() + t_course.classID.toString();
         m_parent_mainWindow->setLabel_CourseInfo(courseInfoText);
-        //读取学生信息 同时读取实验信息
-        read_StudentInformation();
+
+        read_StudentInformation();       //读取学生信息 同时读取实验信息
+
+        loadHomeworkScore();qDebug()<<"平时成绩已录入";
         //分班学生
         m_finalSheet->splitTableOperation();
 
-        qDebug()<<"考勤成绩已导入";
-        setAttendance();
+        loadHomeworkByClassSheet();
 
-        qDebug()<<"平时成绩已录入";
-        loadHomeworkScore();
-
+        setAttendance();qDebug()<<"考勤成绩已导入";
         //计算总成绩
         countTotalScore();
+
 
         //设置学生信息到tableview
         QStandardItemModel* model1 =  m_parent_mainWindow->getClass1Model();
@@ -614,8 +696,38 @@ void OperExcel::setAttdendanceViewModel(QStandardItemModel *&model)
  * @param model 视图模型
  * @todo 传入模型 给模型设置对应的项
  */
-void OperExcel::setHomeWorkViewModel(QStandardItemModel *&model)
+void OperExcel::setHomeWorkViewModel(QStandardItemModel *&model,int classID)
 {
+    if(model == nullptr) return;
+
+    if(classID == 1){
+        QVector<FinalSheet::StudentData> studentData = m_finalSheet->class1_students();
+        for(int i = 0;i < studentData.size();++ i){
+            QVector<QVariant> sub_hom = studentData.at(i).sub_homework;
+            model->setItem(i,0,new QStandardItem(studentData.at(i).studentID.toString()));
+            model->setItem(i,1,new QStandardItem(studentData.at(i).studentName.toString()));
+            for(int j = 0,index = 2;j < studentData.at(i).sub_homework.size();++j,++index){
+                model->setItem(i,index,new QStandardItem(sub_hom.at(j).toString()));
+            }
+            model->setItem(i,studentData.at(i).sub_homework.size()+2,
+                           new QStandardItem(studentData.at(i).homework.toString()));
+        }
+
+    }else if(classID == 2){
+        QVector<FinalSheet::StudentData> studentData = m_finalSheet->class2_students();
+        for(int i = 0;i < studentData.size();++ i){
+            QVector<QVariant> sub_hom = studentData.at(i).sub_homework;
+            model->setItem(i,0,new QStandardItem(studentData.at(i).studentID.toString()));
+            model->setItem(i,1,new QStandardItem(studentData.at(i).studentName.toString()));
+            for(int j = 0,index = 2;j < studentData.at(i).sub_homework.size();++j,++index){
+                model->setItem(i,index,new QStandardItem(sub_hom.at(j).toString()));
+            }
+            model->setItem(i,studentData.at(i).sub_homework.size()+2,
+                           new QStandardItem(studentData.at(i).homework.toString()));
+        }
+    }
+    model->setHorizontalHeaderItem(m_finalSheet->class1_students()[0].
+                                       sub_homework.size()+2,new QStandardItem("总成绩"));
 
 }
 

@@ -22,7 +22,7 @@ CustomDialog::CustomDialog(QWidget *parent) : QDialog(parent)
         comboBox_selectYear->addItem(QString::number(year) + " - "+ QString::number(year+1) +" 学年第 1 学期");
         comboBox_selectYear->addItem(QString::number(year) + " - "+ QString::number(year+1) +" 学年第 2 学期");
     }
-    this->comboBox_selectYear->setCurrentIndex(23*2);
+    this->comboBox_selectYear->setCurrentIndex(24*2);
     QVBoxLayout *vb_layout = new QVBoxLayout(this);
     QHBoxLayout *hb_layout = new QHBoxLayout();
 

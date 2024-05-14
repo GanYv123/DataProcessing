@@ -66,6 +66,8 @@ public:
     //分表操作
     void splitTableOperation();
 
+    QVector<FinalSheet::StudentData> getAllStudents();
+
     QVector<FinalSheet::StudentData> class1_students() const;
     QVector<FinalSheet::StudentData> class2_students() const;
     void setClass1Students(const QVector<FinalSheet::StudentData> &students);

@@ -20,6 +20,7 @@ protected:
 
     void setAttendance();
     void loadHomeworkScore();
+    void loadHomeworkByClassSheet();
 
 
 public:
@@ -39,8 +40,9 @@ public:
 
     //视图模型
     void setViewModel(QStandardItemModel* o_model);
+
     void setAttdendanceViewModel(QStandardItemModel* &model);
-    void setHomeWorkViewModel(QStandardItemModel* &model);
+    void setHomeWorkViewModel(QStandardItemModel* &model,int classID);
     void setExperimentViewModel(QStandardItemModel* &model,int classID);
 
     void countTotalScore(); //计算总成绩

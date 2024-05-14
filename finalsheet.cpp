@@ -61,6 +61,11 @@ void FinalSheet::splitTableOperation()
     qDebug() << QString("检测到2班学生 %1 个").arg(m_class2_students.size());
 }
 
+QVector<FinalSheet::StudentData> FinalSheet::getAllStudents()
+{
+    return m_students;
+}
+
 QVector<FinalSheet::StudentData> FinalSheet::class1_students() const
 {
     return m_class1_students;
