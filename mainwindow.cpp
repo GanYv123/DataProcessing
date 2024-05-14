@@ -163,9 +163,25 @@ void MainWindow::handleFile(const QString &filePath)
             heardLabels<<"学号1"<<"姓名1"<<"1考勤次数"<<"学号2"<<"姓名2"<<"2考勤次数";
             table_attdendance->setHorizontalHeaderLabels(heardLabels);
             operExcel->setAttdendanceViewModel(table_attdendance);
-            connect(table_attdendance,&QStandardItemModel::itemChanged,this,&MainWindow::handleItemChanged_attendance);
+            connect(table_attdendance,&QStandardItemModel::itemChanged,this,
+                    &MainWindow::handleItemChanged_attendance);
         }
         ui->tableView_3->setModel(table_attdendance);
+
+        QStringList heardLaber;
+        heardLaber<<"学号"<<"姓名";
+
+        if(table_experiment1 == nullptr){
+            table_experiment1 = new QStandardItemModel(this);
+            table_experiment1->setHorizontalHeaderLabels(heardLaber);
+
+        }
+        if(table_experiment2 == nullptr){
+            table_experiment2 = new QStandardItemModel(this);
+            table_experiment2->setHorizontalHeaderLabels(heardLaber);
+        }
+        operExcel->setExperimentViewModel(table_experiment1,1);
+        operExcel->setExperimentViewModel(table_experiment2,2);
 
     }else{
         this->label_tips->setText("文件未打开");
@@ -438,19 +454,17 @@ void MainWindow::handleItemChanged1(QStandardItem *item)
         studentData.remark = item->text();
     }
     // 继续根据需要处理其他列
-
     // 更新对应的数据项
-
     FinalSheet::CourseData courseData = finalSheet->getCourseData();
 
     QVariant attdance = QVariant((table_model1->item(row,2)->text()));
     QVariant homework =  QVariant((table_model1->item(row,3)->text()));
     QVariant experiment =  QVariant((table_model1->item(row,4)->text()));
-
-    QVariant total = ( (attdance.toDouble() * courseData.rate_attendance.toDouble()/100.0) +
+    double t_total = ( (attdance.toDouble() * courseData.rate_attendance.toDouble()/100.0) +
                       (homework.toDouble() * courseData.rate_homework.toDouble()/100.0) +
                       (experiment.toDouble() * courseData.rate_experiment.toDouble()/100.0));
-
+    //四舍五入取整
+    QVariant total = QVariant(static_cast<int>(std::round(t_total)));
     QStandardItem* t_item = table_model1->item(row,5);
     t_item->setText(total.toString());
 
@@ -499,9 +513,11 @@ void MainWindow::handleItemChanged2(QStandardItem *item)
     QVariant homework =  QVariant((table_model2->item(row,3)->text()));
     QVariant experiment =  QVariant((table_model2->item(row,4)->text()));
 
-    QVariant total = ( (attdance.toDouble() * courseData.rate_attendance.toDouble()/100.0) +
+    double t_total = ( (attdance.toDouble() * courseData.rate_attendance.toDouble()/100.0) +
                       (homework.toDouble() * courseData.rate_homework.toDouble()/100.0) +
                       (experiment.toDouble() * courseData.rate_experiment.toDouble()/100.0));
+    //四舍五入取整
+    QVariant total = QVariant(static_cast<int>(std::round(t_total)));
 
     QStandardItem* t_item = table_model2->item(row,5);
     t_item->setText(total.toString());
@@ -512,7 +528,7 @@ void MainWindow::handleItemChanged2(QStandardItem *item)
     finalSheet->setClass2Students(class2Students);
     //刷新model2
     operExcel->countTotalScore();
-    ui->tableView->viewport()->update();
+    ui->tableView_2->viewport()->update();
 }
 
 /**
@@ -579,6 +595,88 @@ void MainWindow::handleItemChanged_attendance(QStandardItem *item)
     }
 }
 
+void MainWindow::handleItemChanged_experimentView1(QStandardItem *item)
+{//实验成绩视图
+    //qDebug()<<"实验1表被修改";
+    disconnect(table_experiment1, &QStandardItemModel::itemChanged, this,
+               &MainWindow::handleItemChanged_experimentView1);
+    // 获取发生更改的项的索引
+    QModelIndex changedIndex = item->index();
+    int row = changedIndex.row();
+    int col = changedIndex.column();
+    // 获取对应的数据项
+    QVector<FinalSheet::StudentData> class1Students = finalSheet->class1_students();
+    FinalSheet::StudentData studentData = class1Students[row];
+
+    if( col >= 2 && studentData.sub_experiment.size()-col+2 >= 0 && col < table_experiment1->columnCount()-1){
+        studentData.sub_experiment[col-2] = QVariant(item->text().toInt());
+        qDebug()<<"changed item : "<<studentData.sub_experiment[col-2];
+    }
+    //计算值变化后的平均成绩
+    double mean_total = 0.0;
+    for(const auto& a: studentData.sub_experiment){
+        mean_total += a.toDouble();
+    }
+    mean_total = mean_total/studentData.sub_experiment.size();
+
+    int res_mean = static_cast<int>(std::round(mean_total));
+    studentData.experiment = QVariant(res_mean);
+    QStandardItem* t_item_exp = table_experiment1->item(row,studentData.sub_experiment.size()+2);
+    t_item_exp->setText(studentData.experiment.toString());
+
+    class1Students[row] = studentData;
+    finalSheet->setClass1Students(class1Students);
+    //刷新model1
+    operExcel->countTotalScore();
+    ui->tableView->viewport()->update();
+    QStandardItem* t_item_toal = table_model1->item(row,4);
+    t_item_toal->setText(finalSheet->class1_students().at(row).experiment.toString());
+    // 连接信号和槽
+    connect(table_experiment1, &QStandardItemModel::itemChanged, this,
+            &MainWindow::handleItemChanged_experimentView1);
+}
+
+
+void MainWindow::handleItemChanged_experimentView2(QStandardItem *item)
+{
+    //qDebug()<<"实验2表被修改";
+    disconnect(table_experiment2, &QStandardItemModel::itemChanged, this,
+               &MainWindow::handleItemChanged_experimentView2);
+    // 获取发生更改的项的索引
+    QModelIndex changedIndex = item->index();
+    int row = changedIndex.row();
+    int col = changedIndex.column();
+    // 获取对应的数据项
+    QVector<FinalSheet::StudentData> class2Students = finalSheet->class2_students();
+    FinalSheet::StudentData studentData = class2Students[row];
+
+    if( col >= 2 && studentData.sub_experiment.size()-col+2 >= 0 && col < table_experiment2->columnCount()-1){
+        studentData.sub_experiment[col-2] = QVariant(item->text().toInt());
+        qDebug()<<"changed item : "<<studentData.sub_experiment[col-2];
+    }
+    //计算值变化后的平均成绩
+    double mean_total = 0.0;
+    for(const auto& a: studentData.sub_experiment){
+        mean_total += a.toDouble();
+    }
+    mean_total = mean_total/studentData.sub_experiment.size();
+
+    int res_mean = static_cast<int>(std::round(mean_total));
+    studentData.experiment = QVariant(res_mean);
+    QStandardItem* t_item_exp = table_experiment2->item(row,studentData.sub_experiment.size()+2);
+    t_item_exp->setText(studentData.experiment.toString());
+
+    class2Students[row] = studentData;
+    finalSheet->setClass2Students(class2Students);
+    //刷新model1
+    operExcel->countTotalScore();
+    ui->tableView_2->viewport()->update();
+    QStandardItem* t_item_toal = table_model2->item(row,4);
+    t_item_toal->setText(finalSheet->class2_students().at(row).experiment.toString());
+    // 连接信号和槽
+    connect(table_experiment2, &QStandardItemModel::itemChanged, this,
+            &MainWindow::handleItemChanged_experimentView2);
+}
 
 void MainWindow::showMessageBox(const QString &message)
 {//消息框
@@ -609,25 +707,20 @@ void MainWindow::on_ac_experimentScore_triggered()
 
     if(ui->tableView->model() == table_experiment1){return;}
     if(ui->tableView_2->model() == table_experiment2){return;}
-
-    QStringList heardLaber;
-    heardLaber<<"学号"<<"姓名";
-
-    if(table_experiment1 == nullptr){
-        table_experiment1 = new QStandardItemModel(this);
-        table_experiment1->setHorizontalHeaderLabels(heardLaber);
-    }
-    if(table_experiment2 == nullptr){
-        table_experiment2 = new QStandardItemModel(this);
-        table_experiment2->setHorizontalHeaderLabels(heardLaber);
-    }
-
-    //设置模型项
-    operExcel->setExperimentViewModel(table_experiment1,1);
-    operExcel->setExperimentViewModel(table_experiment2,2);
-
     ui->tableView->setModel(table_experiment1);
     ui->tableView_2->setModel(table_experiment2);
+
+    // 首先断开之前的连接
+    disconnect(table_experiment1, &QStandardItemModel::itemChanged, this,
+               &MainWindow::handleItemChanged_experimentView1);
+    disconnect(table_experiment2, &QStandardItemModel::itemChanged, this,
+               &MainWindow::handleItemChanged_experimentView2);
+
+    connect(table_experiment1,&QStandardItemModel::itemChanged,this,
+            &MainWindow::handleItemChanged_experimentView1);
+    connect(table_experiment2,&QStandardItemModel::itemChanged,this,
+            &MainWindow::handleItemChanged_experimentView2);
+
 }
 
 void MainWindow::on_ac_toallSocre_triggered()

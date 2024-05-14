@@ -261,11 +261,9 @@ void OperExcel::loadHomeworkScore()
 {
     //要从sheet2中导入平时成绩
 //    if(m_xlsx->selectSheet("1平时")){
-
 //    }
 
 //    if(m_xlsx->selectSheet("平时2")){
-
     //    }
 }
 
@@ -312,7 +310,7 @@ void OperExcel::countTotalScore()
         double weightedExperimentScore = student.experiment.toDouble()
                                          * (*course_information)["rate_shiyan"].toDouble() / 100.0;
         double totalScore = weightedAttendanceScore + weightedHomeworkScore + weightedExperimentScore;
-        student.totalScore = totalScore;
+        student.totalScore = QVariant(static_cast<int>(std::round(totalScore)));
     }
 
     // 计算班级二的学生总成绩
@@ -324,14 +322,12 @@ void OperExcel::countTotalScore()
         double weightedExperimentScore = student.experiment.toDouble()
                                          * (*course_information)["rate_shiyan"].toDouble() / 100.0;
         double totalScore = weightedAttendanceScore + weightedHomeworkScore + weightedExperimentScore;
-        student.totalScore = totalScore;
+        student.totalScore = QVariant(static_cast<int>(std::round(totalScore)));
     }
     // 更新班级一和班级二的学生信息
     m_finalSheet->setClass1Students(class1);
     m_finalSheet->setClass2Students(class2);
 }
-
-
 
 /*
     一班二班分表操作
@@ -342,7 +338,6 @@ void OperExcel::fillData(Document& xlsx)
     oper_data_class2(xlsx);
 
 }
-
 
 OperExcel::OperExcel(){}
 
