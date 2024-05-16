@@ -110,6 +110,9 @@ private:
     QStandardItemModel *table_homeWork2 = nullptr; //作业成绩表
     QStandardItemModel *table_experiment2 = nullptr; //实验成绩表
 
+    QStandardItemModel *table_final_overall1 = nullptr;
+    QStandardItemModel *table_final_overall2 = nullptr;
+
     QString path = "NullPath";
     //最终表单
     FinalSheet *finalSheet = nullptr;
