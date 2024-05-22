@@ -1,10 +1,13 @@
 #ifndef CUSTOMDIALOG_H
 #define CUSTOMDIALOG_H
 
+#include <QLabel>
 #include <QDialog>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QRadioButton>
+#include <QDesktopServices>
+#include <QUrl>
 
 class QComboBox;
 
@@ -65,6 +68,27 @@ private:
     int classNum;
     QRadioButton* rb_class1;
     QRadioButton* rb_class2;
+};
+
+
+
+
+class AboutDialog : public QDialog
+{
+    Q_OBJECT
+
+public:
+    explicit AboutDialog(QWidget *parent = nullptr);
+    ~AboutDialog();
+
+private slots:
+    void openWebsite();
+
+private:
+    QLabel *titleLabel;
+    QLabel *versionLabel;
+    QLabel *websiteLabel;
+    QPushButton *okButton;
 };
 
 #endif // CUSTOMDIALOG_H

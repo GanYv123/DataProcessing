@@ -10,6 +10,10 @@
 #include <QRegularExpressionValidator>
 #include <QRadioButton>
 #include <QMessageBox>
+
+#include <QDesktopServices>
+#include <QUrl>
+
 CustomDialog::CustomDialog(QWidget *parent) : QDialog(parent)
 {
     QFont font = this->font();
@@ -203,4 +207,41 @@ QString StudentDialog::getStudentID() const
 QString StudentDialog::getClassName() const
 {
     return QString::number(classNum);
+}
+
+AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent)
+{
+    setWindowTitle("关于软件");
+
+    titleLabel = new QLabel("软件信息", this);
+    titleLabel->setAlignment(Qt::AlignCenter);
+
+    versionLabel = new QLabel("版本号：1.0.0", this);
+    versionLabel->setAlignment(Qt::AlignCenter);
+
+    websiteLabel =
+        new QLabel("<a style = 'color: red' href=\"https://github.com/GanYv123/DataProcessing/tree/master\">仓库地址</a>", this);
+    websiteLabel->setOpenExternalLinks(true);
+    websiteLabel->setAlignment(Qt::AlignCenter);
+    connect(websiteLabel, SIGNAL(linkActivated(QString)), this, SLOT(openWebsite()));
+
+    okButton = new QPushButton("确定", this);
+    connect(okButton, &QPushButton::clicked, this, &AboutDialog::accept);
+
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->addWidget(titleLabel);
+    layout->addWidget(versionLabel);
+    layout->addWidget(websiteLabel);
+    layout->addWidget(okButton);
+    setLayout(layout);
+    this->resize(100,80);
+}
+
+AboutDialog::~AboutDialog()
+{
+}
+
+void AboutDialog::openWebsite()
+{
+    QDesktopServices::openUrl(QUrl("https://github.com/GanYv123/DataProcessing/tree/master"));
 }

@@ -348,10 +348,10 @@ void MainWindow::on_ac_addStu_triggered()
  * @param itemList
  * @todo 待修改函数
  */
-void MainWindow::slots_student_added(QList<QVariant*> list)
-{//获取完信息添加到 m_fin 的对应班级表中
-    if(list.last()->toInt() == 1){
-        qDebug()<<"1班学生"<<*list.at(0)<<" "<<*list.at(1);
+void MainWindow::slots_student_added(QList<QVariant*> list) {
+    // 获取完信息添加到 m_fin 的对应班级表中
+    if(list.last()->toInt() == 1) {
+        qDebug() << "1班学生" << *list.at(0) << " " << *list.at(1);
         QVector <FinalSheet::StudentData> stu_1 = finalSheet->class1_students();
         FinalSheet::StudentData t_stu;
         t_stu.studentName = QVariant(*list.at(0));
@@ -361,16 +361,27 @@ void MainWindow::slots_student_added(QList<QVariant*> list)
         stu_1.insert(0,t_stu);
         finalSheet->setClass1Students(stu_1);
 
-        this->table_model1->removeRows(0, table_model1->rowCount()); // 删除所有行，但保留表头
-        operExcel->setClassTableViewModel(table_model1,1);
-        this->table_experiment1->removeRows(0,table_experiment1->rowCount());
-        operExcel->setExperimentViewModel(table_experiment1,1);
-        this->table_homeWork1->removeRows(0,table_homeWork1->rowCount());
-        operExcel->setHomeWorkViewModel(table_homeWork1,1);
+        // 暂时禁用信号和槽的连接
+        table_model1->blockSignals(true);
+        table_experiment1->blockSignals(true);
+        table_homeWork1->blockSignals(true);
 
+        // 删除所有行，但保留表头
+        table_model1->removeRows(0, table_model1->rowCount());
+        operExcel->setClassTableViewModel(table_model1, 1);
+        table_experiment1->removeRows(0, table_experiment1->rowCount());
+        operExcel->setExperimentViewModel(table_experiment1, 1);
+        table_homeWork1->removeRows(0, table_homeWork1->rowCount());
+        operExcel->setHomeWorkViewModel(table_homeWork1, 1);
+
+        // 恢复信号和槽的连接
+        table_model1->blockSignals(false);
+        table_experiment1->blockSignals(false);
+        table_homeWork1->blockSignals(false);
     }
-    if(list.last()->toInt() == 2){
-        qDebug()<<"2班学生"<<*list.at(0)<<" "<<*list.at(1);
+
+    if(list.last()->toInt() == 2) {
+        qDebug() << "2班学生" << *list.at(0) << " " << *list.at(1);
         QVector <FinalSheet::StudentData> stu_2 = finalSheet->class2_students();
         FinalSheet::StudentData t_stu;
         t_stu.studentName = QVariant(*list.at(0));
@@ -380,17 +391,35 @@ void MainWindow::slots_student_added(QList<QVariant*> list)
         stu_2.insert(0,t_stu);
         finalSheet->setClass2Students(stu_2);
 
-        this->table_model2->removeRows(0, table_model2->rowCount()); // 删除所有行，但保留表头
-        operExcel->setClassTableViewModel(table_model2,2);
-        this->table_experiment2->removeRows(0,table_experiment2->rowCount());
-        operExcel->setExperimentViewModel(table_experiment2,2);
-        this->table_homeWork2->removeRows(0,table_homeWork2->rowCount());
-        operExcel->setHomeWorkViewModel(table_homeWork2,2);
+        // 暂时禁用信号和槽的连接
+        table_model2->blockSignals(true);
+        table_experiment2->blockSignals(true);
+        table_homeWork2->blockSignals(true);
+
+        // 删除所有行，但保留表头
+        table_model2->removeRows(0, table_model2->rowCount());
+        operExcel->setClassTableViewModel(table_model2, 2);
+        table_experiment2->removeRows(0, table_experiment2->rowCount());
+        operExcel->setExperimentViewModel(table_experiment2, 2);
+        table_homeWork2->removeRows(0, table_homeWork2->rowCount());
+        operExcel->setHomeWorkViewModel(table_homeWork2, 2);
+
+        // 恢复信号和槽的连接
+        table_model2->blockSignals(false);
+        table_experiment2->blockSignals(false);
+        table_homeWork2->blockSignals(false);
     }
-    //刷新各表视图
 
+    // 暂时禁用信号和槽的连接
+    table_attdendance->blockSignals(true);
+
+    // 刷新考勤表
+    this->table_attdendance->removeColumns(0, table_attdendance->rowCount());
+    operExcel->setAttdendanceViewModel(table_attdendance);
+
+    // 恢复信号和槽的连接
+    table_attdendance->blockSignals(false);
 }
-
 
 void MainWindow::on_tableView_clicked(const QModelIndex &index)
 {
@@ -577,53 +606,80 @@ void MainWindow::handleItemChanged_attendance(QStandardItem *item)
 
     qDebug()<<"row:"<<row<<"  col"<<col;
 
-    if(col == class1Index){
+    if (col == class1Index) {
         // 获取对应的数据项
         QVector<FinalSheet::StudentData> class1Students = finalSheet->class1_students();
-        FinalSheet::StudentData studentData = class1Students[row];
+
+        // 检查 row 是否越界
+        if (row < 0 || row >= class1Students.size()) {
+            QMessageBox::critical(nullptr, "Error", "Row index out of range for class1Students.");
+            item->setText("");
+            return;
+        }
+
+        FinalSheet::StudentData studentData = class1Students.at(row);
+
+        // 检查 item 是否为 nullptr
+        if (item == nullptr) {
+            QMessageBox::critical(nullptr, "Error", "Item is a nullptr.");
+            item->setText("");
+            return;
+        }
 
         studentData.attendance = QVariant(item->text());
         class1Students[row] = studentData;
 
-        //同步修改到 finallySheet
-        int attScore = (finalSheet->getCourseData().attendance_reduce_fractions.toInt()*
-                        (finalSheet->getCourseData().lessonTime.toInt()/2 -
+        // 同步修改到 finalSheet
+        int attScore = (finalSheet->getCourseData().attendance_reduce_fractions.toInt() *
+                        (finalSheet->getCourseData().lessonTime.toInt() / 2 -
                          class1Students.at(row).attendance.toInt()));
-        class1Students[row].attendanceScore = 100-attScore;
+        class1Students[row].attendanceScore = 100 - attScore;
 
         finalSheet->setClass1Students(class1Students);
-        //qDebug()<<"修改 后的次数 "<<finalSheet->class1_students()[row].attendance.toString()<<
-        //   "final score = "<<finalSheet->class1_students()[row].attendanceScore.toString();
-        //修改 model1的data
-        this->table_model1->item(row,2)->setText(
-            finalSheet->class1_students().at(row).attendanceScore.toString());
+
+        // 修改 model1 的 data
+        this->table_model1->item(row, 2)->setText(finalSheet->class1_students().at(row).attendanceScore.toString());
 
         operExcel->countTotalScore();
         ui->tableView->viewport()->update();
 
-    }else if (col == class2Index){
+    } else if (col == class2Index) {
         QVector<FinalSheet::StudentData> class2Students = finalSheet->class2_students();
-        FinalSheet::StudentData studentData = class2Students[row];
+
+        // 检查 row 是否越界
+        if (row < 0 || row >= class2Students.size()) {
+            QMessageBox::critical(nullptr, "Error", "Row index out of range for class2Students.");
+            item->setText("");
+            return;
+        }
+
+        FinalSheet::StudentData studentData = class2Students.at(row);
+
+        // 检查 item 是否为 nullptr
+        if (item == nullptr) {
+            QMessageBox::critical(nullptr, "Error", "Item is a nullptr.");
+            item->setText("");
+            return;
+        }
 
         studentData.attendance = QVariant(item->text());
         class2Students[row] = studentData;
 
-        //同步修改到 finallySheet
-        int attScore = (finalSheet->getCourseData().attendance_reduce_fractions.toInt()*
-                        (finalSheet->getCourseData().lessonTime.toInt()/2 -
+        // 同步修改到 finalSheet
+        int attScore = (finalSheet->getCourseData().attendance_reduce_fractions.toInt() *
+                        (finalSheet->getCourseData().lessonTime.toInt() / 2 -
                          class2Students.at(row).attendance.toInt()));
-        class2Students[row].attendanceScore = 100-attScore;
+        class2Students[row].attendanceScore = 100 - attScore;
 
         finalSheet->setClass2Students(class2Students);
-        //qDebug()<<"修改 后的次数 "<<finalSheet->class2_students()[row].attendance.toString()<<
-        //    "final score = "<<finalSheet->class2_students()[row].attendanceScore.toString();
-        //修改 model1的data
-        this->table_model2->item(row,2)->setText(
-            finalSheet->class2_students().at(row).attendanceScore.toString());
+
+        // 修改 model2 的 data
+        this->table_model2->item(row, 2)->setText(finalSheet->class2_students().at(row).attendanceScore.toString());
 
         operExcel->countTotalScore();
         ui->tableView->viewport()->update();
     }
+
 }
 
 void MainWindow::handleItemChanged_experimentView1(QStandardItem *item)
@@ -870,5 +926,12 @@ void MainWindow::on_ac_final_overall_triggered()
         showMessageBox("请先导入文件");
         return;
     }
+}
+
+
+void MainWindow::on_ac_v_Info_triggered()
+{//版本信息
+    AboutDialog aboutDialog(this); // 创建 AboutDialog 的实例
+    aboutDialog.exec(); // 显示对话框
 }
 

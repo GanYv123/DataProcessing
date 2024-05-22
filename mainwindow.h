@@ -92,6 +92,8 @@ private slots:
 
     void on_ac_final_overall_triggered();
 
+    void on_ac_v_Info_triggered();
+
 public:
     CustomDialog *customDialog = nullptr;
 
