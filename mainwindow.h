@@ -50,7 +50,7 @@ public:
 
 
 signals:
-    void student_added(QList<QStandardItem*>);
+    void student_added(QList<QVariant*> list);
 
 private slots:
     void on_ac_openFiles_triggered();
@@ -67,7 +67,7 @@ private slots:
 
     void on_ac_addStu_triggered();
 
-    void slots_student_added(QList<QStandardItem*> itemList);
+    void slots_student_added(QList<QVariant*> list);
 
     void on_tableView_clicked(const QModelIndex &index);
 
@@ -90,6 +90,8 @@ private slots:
 
     void on_ac_toallSocre_triggered();
 
+    void on_ac_final_overall_triggered();
+
 public:
     CustomDialog *customDialog = nullptr;
 
@@ -110,7 +112,7 @@ private:
     QStandardItemModel *table_homeWork2 = nullptr; //作业成绩表
     QStandardItemModel *table_experiment2 = nullptr; //实验成绩表
 
-    QStandardItemModel *table_final_overall1 = nullptr;
+    QStandardItemModel *table_final_overall1 = nullptr; //总评成绩
     QStandardItemModel *table_final_overall2 = nullptr;
 
     QString path = "NullPath";

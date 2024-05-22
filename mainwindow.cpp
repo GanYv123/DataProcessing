@@ -244,17 +244,11 @@ void MainWindow::on_ac_openFiles_triggered() //打开文件
 
 //增加try catch 日志记录功能
 void MainWindow::on_ac_creatFiles_triggered() //demo function BETA 1
-{//新建文件
+{//新建文件 自己导入空文件 学生信息都空！
     if(!operExcel)
         operExcel = new OperExcel();
     bool ret;
     QString path = "./1.xlsx";
-    operExcel->creat_New_Excel(path,ret); //修改未 可自己选择文件位置的 函数
-    if(ret){
-        qInfo()<<"创建成功";
-    }else{
-        qWarning()<<"创建失败!";
-    }
 
 }
 
@@ -268,6 +262,11 @@ void MainWindow::on_ac_choose_school_year_triggered()
 
 }
 
+/**
+ * @warning 禁用函数
+ * @brief MainWindow::on_tableView_doubleClicked
+ * @param index
+ */
 void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
 {
     //禁用函数
@@ -320,40 +319,28 @@ void MainWindow::on_ac_exportExcel_triggered()
 @title 演示函数
 */
 void MainWindow::on_ac_addStu_triggered()
-{//添加学生
+{//添加学生 得到name id classid
     if(this->operExcel == nullptr || this->path == "NullPath")
     {
         qWarning()<<"未导入文件";
         this->label_tips->setText("未导入文件");
         return;
     }
-    QVector<FinalSheet::StudentData> studentData = finalSheet->getStudentData("");
 
-    FinalSheet::StudentData t_studentData;
+    StudentDialog dialog(this);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        QString name = dialog.getStudentName();
+        QString id = dialog.getStudentID();
+        QString className = dialog.getClassName();
 
-    QVariant t_studentID = QVariant("2021050301xx");
-    QVariant t_studentName =QVariant("姓名");
-    QVariant t_attendanceScore = QVariant(0);
-    QVariant t_homework = QVariant(0.00);
-    QVariant t_experiment = QVariant(0.00);
+        QList<QVariant*> list;
+        list << new QVariant(name);
+        list << new QVariant(id);
+        list << new QVariant(className);
 
-    t_studentData.studentID = t_studentID;
-    t_studentData.attendanceScore = t_attendanceScore;
-    t_studentData.studentName = t_studentName;
-    t_studentData.homework = t_homework;
-    t_studentData.experiment = t_experiment;
-
-    studentData.push_back(t_studentData);
-
-    QList<QStandardItem*> itemList;
-    itemList.append(new QStandardItem(t_studentData.studentID.toString()));
-    itemList.append(new QStandardItem(t_studentData.studentName.toString()));
-    itemList.append(new QStandardItem(QString::number(t_studentData.attendanceScore.toDouble())));
-    itemList.append(new QStandardItem(QString::number(t_studentData.homework.toDouble())));
-    itemList.append(new QStandardItem(QString::number(t_studentData.experiment.toDouble())));
-
-    finalSheet->setStudentData(studentData); //从修改完成的模型添加
-    emit student_added(itemList);
+        emit student_added(list);
+    }
 }
 
 /**
@@ -361,21 +348,47 @@ void MainWindow::on_ac_addStu_triggered()
  * @param itemList
  * @todo 待修改函数
  */
-void MainWindow::slots_student_added(QList<QStandardItem*> itemList)
-{//添加完学生更新视图
+void MainWindow::slots_student_added(QList<QVariant*> list)
+{//获取完信息添加到 m_fin 的对应班级表中
+    if(list.last()->toInt() == 1){
+        qDebug()<<"1班学生"<<*list.at(0)<<" "<<*list.at(1);
+        QVector <FinalSheet::StudentData> stu_1 = finalSheet->class1_students();
+        FinalSheet::StudentData t_stu;
+        t_stu.studentName = QVariant(*list.at(0));
+        t_stu.studentID = QVariant(*list.at(1));
+        t_stu.sub_experiment.resize(stu_1.at(0).sub_experiment.size());
+        t_stu.sub_homework.resize(stu_1.at(0).sub_homework.size());
+        stu_1.insert(0,t_stu);
+        finalSheet->setClass1Students(stu_1);
 
-    //后期添加 选择班级的判断
-    if(this->currentChooseClassID == 1){
-        table_model1->appendRow(itemList);
-        ui->tableView->setModel(table_model1);
-        //ui->tableView->resizeColumnsToContents();
-    }else if(this->currentChooseClassID == 2){
-        table_model2->appendRow(itemList);
-        ui->tableView->setModel(table_model2);
-        //ui->tableView->resizeColumnsToContents();
-    }else{
-        qDebug()<<"没有选择正确的班级";
+        this->table_model1->removeRows(0, table_model1->rowCount()); // 删除所有行，但保留表头
+        operExcel->setClassTableViewModel(table_model1,1);
+        this->table_experiment1->removeRows(0,table_experiment1->rowCount());
+        operExcel->setExperimentViewModel(table_experiment1,1);
+        this->table_homeWork1->removeRows(0,table_homeWork1->rowCount());
+        operExcel->setHomeWorkViewModel(table_homeWork1,1);
+
     }
+    if(list.last()->toInt() == 2){
+        qDebug()<<"2班学生"<<*list.at(0)<<" "<<*list.at(1);
+        QVector <FinalSheet::StudentData> stu_2 = finalSheet->class2_students();
+        FinalSheet::StudentData t_stu;
+        t_stu.studentName = QVariant(*list.at(0));
+        t_stu.studentID = QVariant(*list.at(1));
+        t_stu.sub_experiment.resize(stu_2.at(0).sub_experiment.size());
+        t_stu.sub_homework.resize(stu_2.at(0).sub_homework.size());
+        stu_2.insert(0,t_stu);
+        finalSheet->setClass2Students(stu_2);
+
+        this->table_model2->removeRows(0, table_model2->rowCount()); // 删除所有行，但保留表头
+        operExcel->setClassTableViewModel(table_model2,2);
+        this->table_experiment2->removeRows(0,table_experiment2->rowCount());
+        operExcel->setExperimentViewModel(table_experiment2,2);
+        this->table_homeWork2->removeRows(0,table_homeWork2->rowCount());
+        operExcel->setHomeWorkViewModel(table_homeWork2,2);
+    }
+    //刷新各表视图
+
 }
 
 
@@ -848,5 +861,14 @@ void MainWindow::on_ac_toallSocre_triggered()
     ui->tableView->setModel(table_model1);
     ui->tableView_2->setModel(table_model2);
 
+}
+
+void MainWindow::on_ac_final_overall_triggered()
+{
+    if(path == "NullPath")
+    {
+        showMessageBox("请先导入文件");
+        return;
+    }
 }
 

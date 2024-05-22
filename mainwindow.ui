@@ -228,7 +228,7 @@
     <string>打开文件</string>
    </property>
    <property name="toolTip">
-    <string>打开文件</string>
+    <string>打开文件(ctrl+o)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -275,6 +275,9 @@
    <property name="toolTip">
     <string>添加学生</string>
    </property>
+   <property name="shortcut">
+    <string>Shift+A</string>
+   </property>
   </action>
   <action name="ac_choose_school_year">
    <property name="icon">
@@ -298,6 +301,9 @@
    </property>
    <property name="toolTip">
     <string>删除学生</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+D</string>
    </property>
   </action>
   <action name="ac_deleteLesson">

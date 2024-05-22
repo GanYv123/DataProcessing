@@ -1,10 +1,12 @@
 #ifndef CUSTOMDIALOG_H
 #define CUSTOMDIALOG_H
 
-#include "QDialog"
+#include <QDialog>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QRadioButton>
 
 class QComboBox;
-class QPushButton;
 
 class CustomDialog : public QDialog
 {
@@ -37,12 +39,32 @@ protected:
     QPushButton *pb_confirm;
     QPushButton *pb_cancel;
 
-
-    QString m_classID1,m_classID2;
+    QString m_classID1, m_classID2;
     QString currentSelectData = "Not find";
 
 };
 
+class StudentDialog : public QDialog
+{
+    Q_OBJECT
 
+public:
+    explicit StudentDialog(QWidget *parent = nullptr);
+    ~StudentDialog();
+
+    QString getStudentName() const;
+    QString getStudentID() const;
+    QString getClassName() const;
+    void validateAndAccept();
+
+private:
+    QLineEdit *lineEdit_name;
+    QLineEdit *lineEdit_id;
+    QPushButton *pb_confirm;
+    QPushButton *pb_cancel;
+    int classNum;
+    QRadioButton* rb_class1;
+    QRadioButton* rb_class2;
+};
 
 #endif // CUSTOMDIALOG_H

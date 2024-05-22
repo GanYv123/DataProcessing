@@ -495,6 +495,7 @@ void OperExcel::save_Excel(QString &path, bool &ret, QObject *parent)
 
 }
 
+
 void OperExcel::export_Excel(QString &path, bool &ret, QObject *parent)
 {//导出表格
     //读取资源文件中的excel表格到临时文件中
