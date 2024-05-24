@@ -1,4 +1,5 @@
 #include "finalsheet.h"
+#include "mysettings.h"
 
 // 构造函数
 FinalSheet::FinalSheet(QObject *parent)
@@ -84,6 +85,42 @@ void FinalSheet::setClass1Students(const QVector<FinalSheet::StudentData> &stude
 void FinalSheet::setClass2Students(const QVector<FinalSheet::StudentData> &students)
 {
     m_class2_students = students;
+}
+/**
+ * @brief FinalSheet::setclass1Config
+ * @target 将班级里的学生信息保存到配置文件
+ */
+void FinalSheet::setclass1Config()
+{
+    MySettings::instance().saveStudentData("class1",m_class1_students);
+
+}
+
+void FinalSheet::setclass2Config()
+{
+    MySettings::instance().saveStudentData("class2",m_class2_students);
+}
+/** 读取信息
+ * @brief FinalSheet::readclass1FromConfig
+ */
+void FinalSheet::readclass1FromConfig()
+{
+    MySettings::instance().loadStudentData("class1",m_class1_students);
+}
+
+void FinalSheet::readclass2FromConfig()
+{
+        MySettings::instance().loadStudentData("class2",m_class2_students);
+}
+
+void FinalSheet::setCourseDataConfig()
+{
+    MySettings::instance().saveCourseData("CourseData",m_courseData);
+}
+
+void FinalSheet::readCourseDataConfig()
+{
+    MySettings::instance().loadCourseData("CourseData",m_courseData);
 }
 
 /*

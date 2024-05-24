@@ -16,6 +16,7 @@
 #include "finalsheet.h"
 #include "QMessageBox"
 #include "iostream"
+#include "mysettings.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -36,16 +37,23 @@ MainWindow::MainWindow(QWidget *parent)
     connect(table_model2,&QStandardItemModel::itemChanged,this,&MainWindow::handleItemChanged2);
 }
 
+/**
+ * 析构
+ * @brief MainWindow::~MainWindow
+ */
 MainWindow::~MainWindow()
 {
     if(ui)
         delete ui;
+    //设置配置文件为隐藏
+
 }
 /**
  * @brief MainWindow::initMainWindow 初始化界面组件
  */
 void MainWindow::initMainWindow()
 {//初始化界面组件
+    ui->ac_hidden_configFile->setChecked(MySettings::instance().getIshided());
     label_tips = new QLabel("状态栏pass",this);
     ui->statusbar->addWidget(label_tips);
     ui->toolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
@@ -290,7 +298,7 @@ void MainWindow::on_ac_saveFiles_triggered()
 
 void MainWindow::on_ac_exportExcel_triggered()
 {//导出表格
-    if(this->operExcel == nullptr || this->path == "NullPath")
+    if(this->path == "NullPath" && notConfig)
     {
         qWarning()<<"未导入文件";
         showMessageBox("未导入文件!");
@@ -320,10 +328,10 @@ void MainWindow::on_ac_exportExcel_triggered()
 */
 void MainWindow::on_ac_addStu_triggered()
 {//添加学生 得到name id classid
-    if(this->operExcel == nullptr || this->path == "NullPath")
+    if(this->path == "NullPath" && this->notConfig)
     {
-        qWarning()<<"未导入文件";
-        this->label_tips->setText("未导入文件");
+        qWarning()<<"未导入文件|配置";
+        this->label_tips->setText("未导入文件|配置");
         return;
     }
 
@@ -479,7 +487,7 @@ void MainWindow::on_ac_checkMajor_triggered()
  */
 void MainWindow::on_ac_Attendance_triggered()
 {//需要单独创建一个model来存储考勤信息
-    if(path == "NullPath")
+    if(path == "NullPath" &&  notConfig)
     {
         showMessageBox("请先导入文件");
         return;
@@ -852,10 +860,101 @@ void MainWindow::showMessageBox(const QString &message)
     msgBox.exec();
 }
 
+/**
+ * @brief MainWindow::save_Iniconfig
+ * @param ret
+ * 1.保存 每个 model 上的 item && 每个ui->tableview 上的 model
+ * 2.保存一班 二班学生的 信息
+ * 3.保存课程信息
+ * 4.保存控件 信息
+ *
+ */
+void MainWindow::save_Iniconfig(bool &ret)
+{//保存配置文件的实现
+    if(finalSheet == nullptr) ret = false;
+
+
+    finalSheet->setclass1Config();
+    finalSheet->setclass2Config();
+    finalSheet->setCourseDataConfig();
+
+    if(MySettings::instance().getIshided()){
+        MySettings::instance().hideFile();
+    }
+    ret = true;
+
+
+}
+/**
+ * @brief MainWindow::save_Iniconfig
+ * //保存配置文件的实现 定时保存(暂定)
+ */
+void MainWindow::save_Iniconfig()
+{
+
+}
+
+void MainWindow::read_Iniconfig(bool &ret)
+{
+    if(finalSheet == nullptr) ret = false;
+    finalSheet->readclass1FromConfig();
+    finalSheet->readclass2FromConfig();
+
+    //考勤信息初始化
+    if(table_attdendance == nullptr)
+    {
+        table_attdendance = new QStandardItemModel;
+        QStringList heardLabels;
+        heardLabels<<"学号1"<<"姓名1"<<"1考勤次数"<<"学号2"<<"姓名2"<<"2考勤次数";
+        table_attdendance->setHorizontalHeaderLabels(heardLabels);
+        operExcel->setAttdendanceViewModel(table_attdendance);
+        connect(table_attdendance,&QStandardItemModel::itemChanged,this,
+                &MainWindow::handleItemChanged_attendance);
+    }
+
+    QStringList heardLaber;
+    heardLaber<<"学号"<<"姓名";
+    if(table_experiment1 == nullptr){
+        table_experiment1 = new QStandardItemModel(this);
+        table_experiment1->setHorizontalHeaderLabels(heardLaber);
+
+    }
+    if(table_experiment2 == nullptr){
+        table_experiment2 = new QStandardItemModel(this);
+        table_experiment2->setHorizontalHeaderLabels(heardLaber);
+    }
+
+    if(table_homeWork1 == nullptr){
+        table_homeWork1 = new QStandardItemModel(this);
+        table_homeWork1->setHorizontalHeaderLabels(heardLaber);
+    }
+    if(table_homeWork2 == nullptr){
+        table_homeWork2 = new QStandardItemModel(this);
+        table_homeWork2->setHorizontalHeaderLabels(heardLaber);
+    }
+    operExcel->setHomeWorkViewModel(table_homeWork1,1);
+    operExcel->setHomeWorkViewModel(table_homeWork2,2);
+
+    operExcel->setClassTableViewModel(table_model1,1);
+    operExcel->setClassTableViewModel(table_model2,2);
+
+    operExcel->setExperimentViewModel(table_experiment1,1);
+    operExcel->setExperimentViewModel(table_experiment2,2);
+
+
+    ui->tableView_3->setModel(table_attdendance);
+    ui->tableView->setModel(table_model1);
+    ui->tableView_2->setModel(table_model2);
+
+    finalSheet->readCourseDataConfig();
+
+    ret = true;
+}
+
 //# end MainWindow.cpp
 void MainWindow::on_ac_homework_triggered()
 {//显示作业成绩 && 平时成绩
-    if(path == "NullPath")
+    if(path == "NullPath" &&  notConfig)
     {
         showMessageBox("请先导入文件");
         return;
@@ -882,7 +981,7 @@ void MainWindow::on_ac_homework_triggered()
 // 实验成绩
 void MainWindow::on_ac_experimentScore_triggered()
 {
-    if(path == "NullPath")
+    if(path == "NullPath" &&  notConfig)
     {
         showMessageBox("请先导入文件");
         return;
@@ -909,7 +1008,7 @@ void MainWindow::on_ac_experimentScore_triggered()
 //跳转回成绩汇总表
 void MainWindow::on_ac_toallSocre_triggered()
 {
-    if(path == "NullPath")
+    if(path == "NullPath" &&  notConfig)
     {
         showMessageBox("请先导入文件");
         return;
@@ -921,7 +1020,7 @@ void MainWindow::on_ac_toallSocre_triggered()
 
 void MainWindow::on_ac_final_overall_triggered()
 {
-    if(path == "NullPath")
+    if(path == "NullPath" &&  notConfig)
     {
         showMessageBox("请先导入文件");
         return;
@@ -933,5 +1032,45 @@ void MainWindow::on_ac_v_Info_triggered()
 {//版本信息
     AboutDialog aboutDialog(this); // 创建 AboutDialog 的实例
     aboutDialog.exec(); // 显示对话框
+}
+
+void MainWindow::on_ac_saveSettings_triggered()
+{//保存配置文件
+    bool ret;
+    save_Iniconfig(ret);
+    if(ret){
+        qDebug()<<"保存成功!";
+    }else{
+        qDebug()<<"保存失败!";
+    }
+}
+
+/**
+ * @brief MainWindow::on_ac_loadSettings_triggered
+ *读取配置文件
+ */
+void MainWindow::on_ac_loadSettings_triggered()
+{
+    bool ret = false;
+    read_Iniconfig(ret);
+    if(ret){
+        qDebug()<<"读取成功!";
+        this->notConfig = false;
+    }else{
+        qDebug()<<"读取失败!";
+    }
+}
+
+void MainWindow::on_ac_hidden_configFile_triggered(bool checked)
+{
+    if(checked){
+        ui->ac_hidden_configFile->setText("取消隐藏配置文件");
+        MySettings::instance().setIshided(true);
+        MySettings::instance().hideFile();
+    }else{
+        ui->ac_hidden_configFile->setText("隐藏配置文件");
+        MySettings::instance().setIshided(false);
+        MySettings::instance().unhideFile();
+    }
 }
 

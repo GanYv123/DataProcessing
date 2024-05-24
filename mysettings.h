@@ -1,24 +1,53 @@
 #ifndef MYSETTINGS_H
 #define MYSETTINGS_H
 
-#include <QString>  // 包含需要的头文件
+#include <QString>
+#include "finalsheet.h"
+#include "QStandardItem"
 
-class MySettings
-{
+class MySettings {
 public:
-    // 获取单例实例的静态成员函数
     static MySettings& instance();
 
-    // 设置和获取示例数据的成员函数
     void setExampleData(const QString& data);
     QString getExampleData() const;
 
-private:
-    // 私有构造函数，防止外部创建实例
-    MySettings();
+    //保存学生数据
+    void saveStudentData(const QString& key,const QVector<FinalSheet::StudentData>& students);
+    void loadStudentData(const QString& key,QVector<FinalSheet::StudentData>& students);
 
-    // 数据成员，用于存储示例数据
+    //保存课程信息
+    void loadCourseInformation(QVariantMap &courseInfo);
+    void saveCourseInformation(const QVariantMap &courseInfo);
+
+    // 保存课程信息
+    void saveCourseData(const QString& key, const FinalSheet::CourseData& course);
+    void loadCourseData(const QString& key, FinalSheet::CourseData& course);
+
+    //隐藏配置文件
+    void hideFile();
+    void unhideFile();
+
+    //配置文件的状态
+    void saveFile_status();
+    void loadFile_status();
+
+    bool getIshided() const;
+    void setIshided(bool newIshided);
+
+private:
+    MySettings();
+    ~MySettings() = default;
+
+    MySettings(const MySettings&) = delete;
+    MySettings& operator=(const MySettings&) = delete;
+
     QString m_exampleData;
+
+    void loadSettings();
+    void saveSettings() const;
+
+    bool ishided = false; //是否隐藏
 };
 
 #endif // MYSETTINGS_H

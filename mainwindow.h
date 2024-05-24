@@ -26,6 +26,10 @@ class MainWindow : public QMainWindow
 
 protected:
     void showMessageBox(const QString &message);
+    void save_Iniconfig(bool &ret);
+    void save_Iniconfig();
+
+    void read_Iniconfig(bool &ret);
 
 private:
     QLabel *label_size,*label_tips;
@@ -94,6 +98,12 @@ private slots:
 
     void on_ac_v_Info_triggered();
 
+    void on_ac_saveSettings_triggered();
+
+    void on_ac_loadSettings_triggered();
+
+    void on_ac_hidden_configFile_triggered(bool checked);
+
 public:
     CustomDialog *customDialog = nullptr;
 
@@ -118,6 +128,7 @@ private:
     QStandardItemModel *table_final_overall2 = nullptr;
 
     QString path = "NullPath";
+    bool notConfig = true;
     //最终表单
     FinalSheet *finalSheet = nullptr;
 

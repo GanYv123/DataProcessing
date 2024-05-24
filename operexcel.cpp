@@ -8,6 +8,7 @@
 #include "QTemporaryFile"
 #include "mainwindow.h"
 #include "cmath"
+#include "mysettings.h"
 #include "boost/accumulators/accumulators.hpp"
 #include "boost/accumulators/statistics.hpp"
 
@@ -360,7 +361,7 @@ void OperExcel::countTotalScore()
         int rounded_mean = static_cast<int>(std::round(ba::mean(acc)));
         class2[i].experiment = QVariant(rounded_mean);
     }
-    ////////////////////////////////////////////////////////
+    /*-----------------------------------------------------------------------------------*/
     //计算作ye成绩平均
     for(int i = 0;i < class1.size();++ i){
         // 创建一个新的累加器对象，以清除累加器内容
@@ -422,10 +423,23 @@ void OperExcel::fillData(Document& xlsx)
 
 }
 
+//构造函数
 OperExcel::OperExcel(){}
 
 OperExcel::OperExcel(MainWindow *parent_mainWindow,FinalSheet* finalSheet)
-    : m_parent_mainWindow(parent_mainWindow),m_finalSheet(finalSheet){}
+    : m_parent_mainWindow(parent_mainWindow),m_finalSheet(finalSheet){
+
+     if(course_information == nullptr)
+        course_information = new QVariantMap();
+
+    // 尝试从配置文件中加载课程信息
+    QVariantMap loadedCourseInfo;
+    MySettings::instance().loadCourseInformation(loadedCourseInfo);
+    if (!loadedCourseInfo.isEmpty()) {
+        // 如果配置文件中有课程信息，则使用配置文件中的信息
+        *course_information = loadedCourseInfo;
+    }
+}
 
 void textDemoUnit1(Document& x){
 /**
@@ -604,10 +618,14 @@ void OperExcel::read_StudentInformation()
 
 */
 
-void OperExcel::read_course_information()
-{//读取课程信息
-course_information = new QVariantMap(); // 创建 QVariantMap 对象
 
+void OperExcel::read_course_information()
+{
+    // 创建 QVariantMap 对象
+    if(course_information == nullptr)
+        course_information = new QVariantMap();
+
+    // 如果配置文件中没有课程信息，则从 Excel 文件中读取
     if (m_xlsx->selectSheet("概述")) { // 选择指定的工作表
         // 从指定单元格读取课程信息
         QVariant course_name = m_xlsx->read("A5");
@@ -662,9 +680,12 @@ course_information = new QVariantMap(); // 创建 QVariantMap 对象
 
         m_finalSheet->setCourseData(course);
 
-    }
+        // 保存课程信息到配置文件
+        MySettings::instance().saveCourseInformation(*course_information);
 
+    }
 }
+
 
 void OperExcel::setViewModel(QStandardItemModel *o_model)
 {

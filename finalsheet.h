@@ -73,6 +73,13 @@ public:
     void setClass1Students(const QVector<FinalSheet::StudentData> &students);
     void setClass2Students(const QVector<FinalSheet::StudentData> &students);
 
+    void setclass1Config();
+    void setclass2Config();
+    void readclass1FromConfig();
+    void readclass2FromConfig();
+    void setCourseDataConfig();
+    void readCourseDataConfig();
+
 
 signals:
     // 定义信号（可根据需要添加）

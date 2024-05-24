@@ -44,7 +44,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -77,6 +77,9 @@
             <strikeout>false</strikeout>
            </font>
           </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
+          </property>
          </widget>
         </item>
        </layout>
@@ -100,6 +103,9 @@
             <strikeout>false</strikeout>
            </font>
           </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
+          </property>
          </widget>
         </item>
        </layout>
@@ -122,6 +128,9 @@
             <bold>false</bold>
             <strikeout>false</strikeout>
            </font>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
           </property>
          </widget>
         </item>
@@ -161,6 +170,8 @@
     <addaction name="ac_saveSettings"/>
     <addaction name="ac_loadSettings"/>
     <addaction name="ac_choose_school_year"/>
+    <addaction name="separator"/>
+    <addaction name="ac_hidden_configFile"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -461,6 +472,24 @@
    </property>
    <property name="toolTip">
     <string>模板规范</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="ac_hidden_configFile">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/220.bmp</normaloff>:/images/220.bmp</iconset>
+   </property>
+   <property name="text">
+    <string>隐藏配置文件</string>
+   </property>
+   <property name="toolTip">
+    <string>隐藏配置文件</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
