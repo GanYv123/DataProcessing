@@ -233,7 +233,7 @@
   <action name="ac_openFiles">
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/images/122.bmp</normaloff>:/images/122.bmp</iconset>
+     <normaloff>:/images2/file_open_24dp.png</normaloff>:/images2/file_open_24dp.png</iconset>
    </property>
    <property name="text">
     <string>打开文件</string>
@@ -278,7 +278,7 @@
   <action name="ac_addStu">
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/images/212.bmp</normaloff>:/images/212.bmp</iconset>
+     <normaloff>:/images2/person_add_24dp.png</normaloff>:/images2/person_add_24dp.png</iconset>
    </property>
    <property name="text">
     <string>添加学生</string>
@@ -293,7 +293,7 @@
   <action name="ac_choose_school_year">
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/images/322.bmp</normaloff>:/images/322.bmp</iconset>
+     <normaloff>:/images2/date_range_24dp.png</normaloff>:/images2/date_range_24dp.png</iconset>
    </property>
    <property name="text">
     <string>选择学年</string>
@@ -305,7 +305,7 @@
   <action name="ac_deleteStu">
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/images/324.bmp</normaloff>:/images/324.bmp</iconset>
+     <normaloff>:/images2/delete_24dp.png</normaloff>:/images2/delete_24dp.png</iconset>
    </property>
    <property name="text">
     <string>删除学生</string>
@@ -344,7 +344,7 @@
   <action name="ac_creatSheet">
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/images/114.bmp</normaloff>:/images/114.bmp</iconset>
+     <normaloff>:/images2/description_24dp.png</normaloff>:/images2/description_24dp.png</iconset>
    </property>
    <property name="text">
     <string>创建表</string>
@@ -368,7 +368,7 @@
   <action name="ac_exportExcel">
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/images/322.bmp</normaloff>:/images/322.bmp</iconset>
+     <normaloff>:/images2/logout_24dp.png</normaloff>:/images2/logout_24dp.png</iconset>
    </property>
    <property name="text">
     <string>导出表格</string>
@@ -380,7 +380,7 @@
   <action name="ac_saveSettings">
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/images/114.bmp</normaloff>:/images/114.bmp</iconset>
+     <normaloff>:/images2/save_alt_24dp.png</normaloff>:/images2/save_alt_24dp.png</iconset>
    </property>
    <property name="text">
     <string>保存配置</string>
@@ -392,7 +392,7 @@
   <action name="ac_loadSettings">
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/images/218.bmp</normaloff>:/images/218.bmp</iconset>
+     <normaloff>:/images2/save_24dp.png</normaloff>:/images2/save_24dp.png</iconset>
    </property>
    <property name="text">
     <string>加载配置</string>
@@ -428,7 +428,7 @@
   <action name="ac_toallSocre">
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/images/app.ico</normaloff>:/images/app.ico</iconset>
+     <normaloff>:/images2/receipt_long_24dp.png</normaloff>:/images2/receipt_long_24dp.png</iconset>
    </property>
    <property name="text">
     <string>平时成绩汇总表</string>
@@ -443,7 +443,7 @@
   <action name="ac_final_overall">
    <property name="icon">
     <iconset theme="battery" resource="icons.qrc">
-     <normaloff>:/images/winIcon.jpg</normaloff>:/images/winIcon.jpg</iconset>
+     <normaloff>:/images2/align_horizontal_right_24dp.png</normaloff>:/images2/align_horizontal_right_24dp.png</iconset>
    </property>
    <property name="text">
     <string>期末总评成绩</string>
@@ -456,6 +456,10 @@
    </property>
   </action>
   <action name="ac_v_Info">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images2/info_24dp.png</normaloff>:/images2/info_24dp.png</iconset>
+   </property>
    <property name="text">
     <string>版本信息</string>
    </property>
@@ -467,6 +471,10 @@
    </property>
   </action>
   <action name="ac_template">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images2/build_24dp.png</normaloff>:/images2/build_24dp.png</iconset>
+   </property>
    <property name="text">
     <string>模板规范</string>
    </property>
@@ -483,7 +491,7 @@
    </property>
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/images/220.bmp</normaloff>:/images/220.bmp</iconset>
+     <normaloff>:/images2/visibility_off_24dp.png</normaloff>:/images2/visibility_off_24dp.png</iconset>
    </property>
    <property name="text">
     <string>隐藏配置文件</string>

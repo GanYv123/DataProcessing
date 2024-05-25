@@ -40,5 +40,23 @@
         <file>images/winIcon.jpg</file>
         <file>images/f1.ico</file>
         <file>images/f2.ico</file>
+        <file>images2/align_horizontal_right_24dp.png</file>
+        <file>images2/build_24dp.png</file>
+        <file>images2/description_24dp.png</file>
+        <file>images2/person_add_24dp.png</file>
+        <file>images2/save_24dp.png</file>
+        <file>images2/save_alt_24dp.png</file>
+        <file>images2/settings_24dp.png</file>
+        <file>images2/visibility_off_24dp.png</file>
+        <file>images2/date_range_24dp.png</file>
+        <file>images2/delete_24dp.png</file>
+        <file>images2/edit_24dp.png</file>
+        <file>images2/grading_24dp.png</file>
+        <file>images2/grid_on_24dp.png</file>
+        <file>images2/info_24dp.png</file>
+        <file>images2/logout_24dp.png</file>
+        <file>images2/receipt_long_24dp.png</file>
+        <file>images2/trending_down_24dp.png</file>
+        <file>images2/file_open_24dp.png</file>
     </qresource>
 </RCC>

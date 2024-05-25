@@ -100,6 +100,9 @@ void MainWindow::initMainWindow()
         // 处理转换失败的情况
         qDebug() << "Failed to cast table model to QStandardItemModel";
     }
+
+    MySettings::instance().getIshided() ?
+        ui->ac_hidden_configFile->setText("取消隐藏配置文件") : ui->ac_hidden_configFile->setText("隐藏配置文件");
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event) //拖拽进入
@@ -873,7 +876,6 @@ void MainWindow::save_Iniconfig(bool &ret)
 {//保存配置文件的实现
     if(finalSheet == nullptr) ret = false;
 
-
     finalSheet->setclass1Config();
     finalSheet->setclass2Config();
     finalSheet->setCourseDataConfig();
@@ -1040,8 +1042,10 @@ void MainWindow::on_ac_saveSettings_triggered()
     save_Iniconfig(ret);
     if(ret){
         qDebug()<<"保存成功!";
+        this->label_tips->setText("保存成功!");
     }else{
         qDebug()<<"保存失败!";
+        this->label_tips->setText("保存失败!");
     }
 }
 
@@ -1055,9 +1059,12 @@ void MainWindow::on_ac_loadSettings_triggered()
     read_Iniconfig(ret);
     if(ret){
         qDebug()<<"读取成功!";
+        this->label_tips->setText("读取配置文件成功!");
+        this->setWindowTitle("已导入配置文件");
         this->notConfig = false;
     }else{
         qDebug()<<"读取失败!";
+        this->label_tips->setText("读取配置文件失败!");
     }
 }
 
@@ -1067,10 +1074,12 @@ void MainWindow::on_ac_hidden_configFile_triggered(bool checked)
         ui->ac_hidden_configFile->setText("取消隐藏配置文件");
         MySettings::instance().setIshided(true);
         MySettings::instance().hideFile();
+        this->label_tips->setText("取消隐藏配置文件");
     }else{
         ui->ac_hidden_configFile->setText("隐藏配置文件");
         MySettings::instance().setIshided(false);
         MySettings::instance().unhideFile();
+        this->label_tips->setText("隐藏配置文件");
     }
 }
 
