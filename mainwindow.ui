@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="icons.qrc">
-    <normaloff>:/images/winIcon.jpg</normaloff>:/images/winIcon.jpg</iconset>
+    <normaloff>:/images2/trending_down_24dp.png</normaloff>:/images2/trending_down_24dp.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="font">
@@ -44,7 +44,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -113,10 +113,10 @@
       <widget class="QWidget" name="tab_attdance">
        <attribute name="icon">
         <iconset resource="icons.qrc">
-         <normaloff>:/images/winIcon.jpg</normaloff>:/images/winIcon.jpg</iconset>
+         <normaloff>:/images2/date_range_24dp.png</normaloff>:/images2/date_range_24dp.png</iconset>
        </attribute>
        <attribute name="title">
-        <string>考勤信息表</string>
+        <string>考勤信息总表</string>
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
@@ -151,31 +151,29 @@
    </property>
    <widget class="QMenu" name="menu">
     <property name="title">
-     <string>文件(&amp;F)</string>
+     <string>文件(F)</string>
     </property>
-    <addaction name="ac_creatFiles"/>
     <addaction name="separator"/>
     <addaction name="separator"/>
-    <addaction name="ac_exportExcel"/>
-    <addaction name="ac_creatSheet"/>
     <addaction name="ac_openFiles"/>
+    <addaction name="ac_exportExcel"/>
     <addaction name="separator"/>
-    <addaction name="ac_saveFiles"/>
     <addaction name="separator"/>
+    <addaction name="ac_export_template"/>
    </widget>
    <widget class="QMenu" name="menu_3">
     <property name="title">
-     <string>系统</string>
+     <string>系统(S)</string>
     </property>
     <addaction name="ac_saveSettings"/>
     <addaction name="ac_loadSettings"/>
-    <addaction name="ac_choose_school_year"/>
     <addaction name="separator"/>
     <addaction name="ac_hidden_configFile"/>
+    <addaction name="ac_setConfigPath"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
-     <string>成绩</string>
+     <string>成绩(Sc)</string>
     </property>
     <addaction name="ac_homework"/>
     <addaction name="ac_experimentScore"/>
@@ -183,15 +181,28 @@
    </widget>
    <widget class="QMenu" name="menu_4">
     <property name="title">
-     <string>关于</string>
+     <string>关于(Ab)</string>
     </property>
     <addaction name="ac_v_Info"/>
     <addaction name="separator"/>
     <addaction name="ac_template"/>
    </widget>
+   <widget class="QMenu" name="menu_5">
+    <property name="title">
+     <string>表操作</string>
+    </property>
+    <addaction name="ac_choose_school_year"/>
+    <addaction name="separator"/>
+    <addaction name="ac_addStu"/>
+    <addaction name="ac_deleteStu"/>
+    <addaction name="separator"/>
+    <addaction name="ac_sortByID"/>
+    <addaction name="ac_sortByToalScore"/>
+   </widget>
    <addaction name="menu"/>
    <addaction name="menu_3"/>
    <addaction name="menu_2"/>
+   <addaction name="menu_5"/>
    <addaction name="menu_4"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -223,12 +234,14 @@
    <addaction name="separator"/>
    <addaction name="ac_toallSocre"/>
    <addaction name="ac_final_overall"/>
-   <addaction name="ac_Attendance"/>
+   <addaction name="separator"/>
    <addaction name="ac_homework"/>
    <addaction name="ac_experimentScore"/>
    <addaction name="separator"/>
    <addaction name="ac_addStu"/>
    <addaction name="ac_deleteStu"/>
+   <addaction name="separator"/>
+   <addaction name="ac_hidden_configFile"/>
   </widget>
   <action name="ac_openFiles">
    <property name="icon">
@@ -402,6 +415,9 @@
    </property>
   </action>
   <action name="ac_experimentScore">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="icons.qrc">
      <normaloff>:/images/516.bmp</normaloff>:/images/516.bmp</iconset>
@@ -414,6 +430,9 @@
    </property>
   </action>
   <action name="ac_homework">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="icons.qrc">
      <normaloff>:/images/514.bmp</normaloff>:/images/514.bmp</iconset>
@@ -426,6 +445,9 @@
    </property>
   </action>
   <action name="ac_toallSocre">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="icons.qrc">
      <normaloff>:/images2/receipt_long_24dp.png</normaloff>:/images2/receipt_long_24dp.png</iconset>
@@ -441,9 +463,12 @@
    </property>
   </action>
   <action name="ac_final_overall">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset theme="battery" resource="icons.qrc">
-     <normaloff>:/images2/align_horizontal_right_24dp.png</normaloff>:/images2/align_horizontal_right_24dp.png</iconset>
+     <normaloff>:/images2/bar_chart_4_bars_24dp_FILL0_wght400_GRAD0_opsz24.png</normaloff>:/images2/bar_chart_4_bars_24dp_FILL0_wght400_GRAD0_opsz24.png</iconset>
    </property>
    <property name="text">
     <string>期末总评成绩</string>
@@ -498,6 +523,58 @@
    </property>
    <property name="toolTip">
     <string>隐藏配置文件</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="ac_setConfigPath">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images2/settings_24dp.png</normaloff>:/images2/settings_24dp.png</iconset>
+   </property>
+   <property name="text">
+    <string>设置配置文件路径</string>
+   </property>
+   <property name="toolTip">
+    <string>设置配置文件保存路径</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="ac_export_template">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images2/credit_score_24dp.png</normaloff>:/images2/credit_score_24dp.png</iconset>
+   </property>
+   <property name="text">
+    <string>获取模板</string>
+   </property>
+   <property name="toolTip">
+    <string>获取模板</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="ac_sortByID">
+   <property name="text">
+    <string>按学号排序</string>
+   </property>
+   <property name="toolTip">
+    <string>按学号排序</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="ac_sortByToalScore">
+   <property name="text">
+    <string>按总成绩排序</string>
+   </property>
+   <property name="toolTip">
+    <string>按总成绩排序</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>

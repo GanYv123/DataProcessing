@@ -35,6 +35,15 @@ public:
     bool getIshided() const;
     void setIshided(bool newIshided);
 
+    bool configExists();
+
+    QString getCONFIG_FILE_NAME() const;
+    void setCONFIG_FILE_NAME(const QString &newCONFIG_FILE_NAME);
+
+    // 选择配置文件保存路径
+    void selectConfigFilePath();
+
+
 private:
     MySettings();
     ~MySettings() = default;
@@ -48,6 +57,7 @@ private:
     void saveSettings() const;
 
     bool ishided = false; //是否隐藏
+    QString CONFIG_FILE_NAME = "dataproconfig.ini";
 };
 
 #endif // MYSETTINGS_H

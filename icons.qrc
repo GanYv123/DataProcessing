@@ -58,5 +58,9 @@
         <file>images2/receipt_long_24dp.png</file>
         <file>images2/trending_down_24dp.png</file>
         <file>images2/file_open_24dp.png</file>
+        <file>images2/bar_chart_4_bars_24dp_FILL0_wght400_GRAD0_opsz24.png</file>
+        <file>images2/credit_score_24dp.png</file>
+        <file>images2/package_24dp_FILL0_wght400_GRAD0_opsz24.png</file>
+        <file>images2/visibility_24dp_FILL0_wght400_GRAD0_opsz24.png</file>
     </qresource>
 </RCC>

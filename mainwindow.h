@@ -7,6 +7,7 @@
 #include "customdialog.h"
 #include <QStandardItemModel>
 #include <QStandardItem>
+#include "QActionGroup"
 
 
 //声明类
@@ -51,6 +52,8 @@ public:
 
     QStandardItemModel* getClass1Model();
     QStandardItemModel* getClass2Model();
+
+    void deleteStudent(int classNumber, int rowIndex);
 
 
 signals:
@@ -104,6 +107,12 @@ private slots:
 
     void on_ac_hidden_configFile_triggered(bool checked);
 
+    void on_ac_setConfigPath_triggered();
+
+    void on_ac_export_template_triggered();
+
+    void on_ac_deleteStu_triggered();
+
 public:
     CustomDialog *customDialog = nullptr;
 
@@ -131,6 +140,9 @@ private:
     bool notConfig = true;
     //最终表单
     FinalSheet *finalSheet = nullptr;
+    QActionGroup *actionGroup;
+
+    bool isopen = false; //判断是否打开文件
 
 };
 #endif // MAINWINDOW_H

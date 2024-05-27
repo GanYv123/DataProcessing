@@ -35,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this,&MainWindow::student_added,this,&MainWindow::slots_student_added);
     connect(table_model1,&QStandardItemModel::itemChanged,this,&MainWindow::handleItemChanged1);
     connect(table_model2,&QStandardItemModel::itemChanged,this,&MainWindow::handleItemChanged2);
+
 }
 
 /**
@@ -53,6 +54,15 @@ MainWindow::~MainWindow()
  */
 void MainWindow::initMainWindow()
 {//初始化界面组件
+    // 初始化 QActionGroup
+    this->actionGroup = new QActionGroup(this);
+    this->actionGroup->setExclusive(true); // 设置互斥
+    this->actionGroup->addAction(ui->ac_homework);
+    this->actionGroup->addAction(ui->ac_experimentScore);
+    this->actionGroup->addAction(ui->ac_toallSocre);
+    this->actionGroup->addAction(ui->ac_final_overall);
+    ui->ac_toallSocre->setChecked(true);
+
     ui->ac_hidden_configFile->setChecked(MySettings::instance().getIshided());
     label_tips = new QLabel("状态栏pass",this);
     ui->statusbar->addWidget(label_tips);
@@ -101,8 +111,16 @@ void MainWindow::initMainWindow()
         qDebug() << "Failed to cast table model to QStandardItemModel";
     }
 
-    MySettings::instance().getIshided() ?
-        ui->ac_hidden_configFile->setText("取消隐藏配置文件") : ui->ac_hidden_configFile->setText("隐藏配置文件");
+    if(MySettings::instance().getIshided()){
+        ui->ac_hidden_configFile->setText("取消隐藏配置");
+        QIcon icon(":/images2/visibility_24dp_FILL0_wght400_GRAD0_opsz24.png");
+        ui->ac_hidden_configFile->setIcon(icon);
+    }else{
+
+        ui->ac_hidden_configFile->setText("隐藏配置文件");
+        QIcon icon(":/images2/visibility_off_24dp.png");
+        ui->ac_hidden_configFile->setIcon(icon);
+    }
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event) //拖拽进入
@@ -158,6 +176,9 @@ void MainWindow::resizeEvent(QResizeEvent *event) //尺寸改变
 
 void MainWindow::handleFile(const QString &filePath)
 {//处理文件
+    if(isopen){
+        showMessageBox("已打开 文件/配置\n若需要加载新文件请重启软件");return;
+    }
     this->setWindowTitle("已打开文件");
     this->setAcceptDrops(false);
     // 在这里实现对文件的具体处理逻辑
@@ -173,7 +194,7 @@ void MainWindow::handleFile(const QString &filePath)
     if(ret){
         this->label_tips->setText("文件打开成功!");
         qInfo()<<"文件打开成功！";
-
+        isopen = true;
         //考勤信息初始化
         if(table_attdendance == nullptr)
         {
@@ -898,7 +919,8 @@ void MainWindow::save_Iniconfig()
 
 void MainWindow::read_Iniconfig(bool &ret)
 {
-    if(finalSheet == nullptr) ret = false;
+
+    if(finalSheet == nullptr || !MySettings::instance().configExists()){ ret = false;return;}
     finalSheet->readclass1FromConfig();
     finalSheet->readclass2FromConfig();
 
@@ -1055,31 +1077,150 @@ void MainWindow::on_ac_saveSettings_triggered()
  */
 void MainWindow::on_ac_loadSettings_triggered()
 {
+    if(isopen){
+        showMessageBox("已打开 文件/配置\n若需要加载新文件请重启软件");return;
+    }
     bool ret = false;
     read_Iniconfig(ret);
     if(ret){
         qDebug()<<"读取成功!";
         this->label_tips->setText("读取配置文件成功!");
         this->setWindowTitle("已导入配置文件");
+        this->isopen = true;
         this->notConfig = false;
     }else{
         qDebug()<<"读取失败!";
         this->label_tips->setText("读取配置文件失败!");
+         showMessageBox("读取配置文件失败!");
     }
 }
 
 void MainWindow::on_ac_hidden_configFile_triggered(bool checked)
 {
+    if(!MySettings::instance().configExists()){
+        showMessageBox("未查询到配置文件!");
+        ui->ac_hidden_configFile->setChecked(!checked);
+        return;
+    }
     if(checked){
-        ui->ac_hidden_configFile->setText("取消隐藏配置文件");
+        ui->ac_hidden_configFile->setText("取消隐藏配置");
+        QIcon icon(":/images2/visibility_24dp_FILL0_wght400_GRAD0_opsz24.png");
+        ui->ac_hidden_configFile->setIcon(icon);
         MySettings::instance().setIshided(true);
         MySettings::instance().hideFile();
         this->label_tips->setText("取消隐藏配置文件");
     }else{
         ui->ac_hidden_configFile->setText("隐藏配置文件");
+        QIcon icon(":/images2/visibility_off_24dp.png");
+        ui->ac_hidden_configFile->setIcon(icon);
         MySettings::instance().setIshided(false);
         MySettings::instance().unhideFile();
         this->label_tips->setText("隐藏配置文件");
     }
 }
+
+
+void MainWindow::on_ac_setConfigPath_triggered()
+{//设置配置文件保存位置 默认为 软件运行的目录
+    MySettings::instance().selectConfigFilePath();
+    showMessageBox(QString("配置文件路径为:%1\n下次需要导入配置文件请重新定位该目录")
+                       .arg(MySettings::instance().getCONFIG_FILE_NAME()));
+}
+
+
+void MainWindow::on_ac_export_template_triggered()
+{//导出模板
+    QString dir = QFileDialog::getExistingDirectory(this,
+                "选择目录", "", QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if (!dir.isEmpty()) {
+        QString fileName = QFileDialog::getSaveFileName(this, "保存模板",
+                                                        dir + "/MOBAN.xlsx", "Excel 文件 (*.xlsx)");
+        if (!fileName.isEmpty()) {
+            QFile file(":/excel_formwork/MOBAN.xlsx");
+            if (!file.copy(fileName)) {
+                QMessageBox::warning(this, "错误", "无法复制模板文件。");
+            } else {
+                QMessageBox::information(this, "成功", "模板文件导出成功。");
+            }
+        } else {
+            QMessageBox::warning(this, "警告", "未提供文件名。");
+        }
+    } else {
+        QMessageBox::warning(this, "警告", "未选择目录。");
+    }
+
+}
+
+void MainWindow::deleteStudent(int classNumber, int rowIndex) {
+    if (classNumber == 1) {
+        QVector<FinalSheet::StudentData> stu_1 = finalSheet->class1_students();
+        if (rowIndex >= 0 && rowIndex < stu_1.size()) {
+            stu_1.remove(rowIndex);
+            finalSheet->setClass1Students(stu_1);
+
+            // 删除视图中对应的行
+            table_model1->removeRow(rowIndex);
+
+            // 重新设置视图的模型数据
+            operExcel->setClassTableViewModel(table_model1, 1);
+        } else {
+            qDebug() << "Invalid row index for class 1.";
+        }
+    } else if (classNumber == 2) {
+        QVector<FinalSheet::StudentData> stu_2 = finalSheet->class2_students();
+        if (rowIndex >= 0 && rowIndex < stu_2.size()) {
+            stu_2.remove(rowIndex);
+            finalSheet->setClass2Students(stu_2);
+
+            // 删除视图中对应的行
+            table_model2->removeRow(rowIndex);
+
+            // 重新设置视图的模型数据
+            operExcel->setClassTableViewModel(table_model2, 2);
+        } else {
+            qDebug() << "Invalid row index for class 2.";
+        }
+    } else {
+        qDebug() << "Invalid class number.";
+    }
+}
+
+void MainWindow::on_ac_deleteStu_triggered() {
+    if (this->path == "NullPath" && this->notConfig) {
+        qWarning() << "未导入文件|配置";
+        this->label_tips->setText("未导入文件|配置");
+        return;
+    }
+
+    DeleteStudentDialog dialog(this);
+
+    connect(&dialog, &DeleteStudentDialog::classSelectionChanged, this, [&dialog, this](int classNumber) {
+        dialog.clearStudentList();
+        if (classNumber == 1) {
+            QVector<FinalSheet::StudentData> stu_1 = finalSheet->class1_students();
+            for (const auto &stu : stu_1) {
+                dialog.addStudentToList(stu.studentID.toString(), stu.studentName.toString(), 1);
+            }
+        } else if (classNumber == 2) {
+            QVector<FinalSheet::StudentData> stu_2 = finalSheet->class2_students();
+            for (const auto &stu : stu_2) {
+                dialog.addStudentToList(stu.studentID.toString(), stu.studentName.toString(), 2);
+            }
+        }
+    });
+
+    emit dialog.classSelectionChanged(1);
+
+    if (dialog.exec() == QDialog::Accepted) {
+        int classNumber = dialog.getSelectedClass();
+        int rowIndex = dialog.getSelectedRow();
+
+        if (rowIndex >= 0) {
+            deleteStudent(classNumber, rowIndex);
+        } else {
+            qWarning() << "没有选中任何学生";
+        }
+    }
+}
+
 

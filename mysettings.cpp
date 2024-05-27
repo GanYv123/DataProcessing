@@ -3,13 +3,14 @@
 #include <QCoreApplication>
 #include <QFile>
 #include <QFileInfo>
+#include <QFileDialog>
 
 #ifdef Q_OS_WIN // 如果是 Windows 平台
 #include <Windows.h> // 包含Windows API头文件
 #endif
 
 
-const QString CONFIG_FILE_NAME = "config.ini";
+
 
 // 定义静态成员变量
 MySettings& MySettings::instance()
@@ -204,6 +205,16 @@ void MySettings::saveSettings() const
     settings.setValue("Example/ExampleData", m_exampleData);
 }
 
+QString MySettings::getCONFIG_FILE_NAME() const
+{
+    return CONFIG_FILE_NAME;
+}
+
+void MySettings::setCONFIG_FILE_NAME(const QString &newCONFIG_FILE_NAME)
+{
+    CONFIG_FILE_NAME = newCONFIG_FILE_NAME;
+}
+
 bool MySettings::getIshided() const
 {
     return ishided;
@@ -212,4 +223,26 @@ bool MySettings::getIshided() const
 void MySettings::setIshided(bool newIshided)
 {
     ishided = newIshided;
+}
+
+bool MySettings::configExists()
+{
+    QFileInfo fileinfo(this->CONFIG_FILE_NAME);
+    return fileinfo.exists();
+}
+
+void MySettings::selectConfigFilePath()
+{
+    QString dir = QFileDialog::getExistingDirectory(nullptr, "Select Directory", "",
+                        QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if (!dir.isEmpty()) {
+        CONFIG_FILE_NAME = dir + "/dataproconfig.ini";
+        qDebug() << "配置文件保存路径设置为：" << CONFIG_FILE_NAME;
+
+        // 保存配置文件路径到 QSettings 或其他持久化存储中
+        QSettings settings;
+        settings.setValue("configFilePath", CONFIG_FILE_NAME);
+    } else {
+        qDebug() << "未选择任何目录";
+    }
 }

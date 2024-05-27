@@ -281,8 +281,9 @@ void OperExcel::loadHomeworkScore()
 void OperExcel::loadHomeworkByClassSheet()
 {
     //从表中导出的数据个数位置后面读
-    const int choose_COL_Index = 3+m_finalSheet->class1_students().at(0).sub_homework.size(); //样例中位置为第六col
+    int choose_COL_Index = 0;
     if(m_xlsx->selectSheet("1平时")){
+        choose_COL_Index = 3+m_finalSheet->class1_students().at(0).sub_homework.size(); //样例中位置为第六col
         int row,col;
         row = m_xlsx->dimension().rowCount();
         col = m_xlsx->dimension().columnCount();

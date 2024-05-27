@@ -8,6 +8,11 @@
 #include <QRadioButton>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QListWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QMessageBox>
+#include "finalsheet.h"
 
 class QComboBox;
 
@@ -70,9 +75,6 @@ private:
     QRadioButton* rb_class2;
 };
 
-
-
-
 class AboutDialog : public QDialog
 {
     Q_OBJECT
@@ -89,6 +91,30 @@ private:
     QLabel *versionLabel;
     QLabel *websiteLabel;
     QPushButton *okButton;
+};
+class DeleteStudentDialog : public QDialog
+{
+    Q_OBJECT
+
+public:
+    explicit DeleteStudentDialog(QWidget *parent = nullptr);
+
+    void addStudentToList(const QString &id, const QString &name, int classNumber);
+    int getSelectedClass() const;
+    int getSelectedRow() const;
+    void clearStudentList(); // 添加清除列表的方法
+
+signals:
+    void classSelectionChanged(int classNumber);
+
+private slots:
+    void handleClassSelection();
+
+private:
+    QListWidget *studentListWidget;
+    QRadioButton *rb_class1;
+    QRadioButton *rb_class2;
+    QPushButton *deleteButton;
 };
 
 #endif // CUSTOMDIALOG_H

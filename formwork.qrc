@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/excel_formwork">
         <file>formwork.xlsx</file>
+        <file>MOBAN.xlsx</file>
     </qresource>
 </RCC>

@@ -245,3 +245,64 @@ void AboutDialog::openWebsite()
 {
     QDesktopServices::openUrl(QUrl("https://github.com/GanYv123/DataProcessing/tree/master"));
 }
+
+//--------------------------------------------------------------------------------
+DeleteStudentDialog::DeleteStudentDialog(QWidget *parent)
+    : QDialog(parent),
+    studentListWidget(new QListWidget(this)),
+    rb_class1(new QRadioButton("1班", this)),
+    rb_class2(new QRadioButton("2班", this)),
+    deleteButton(new QPushButton("删除", this))
+{
+    rb_class1->setChecked(true); // 默认选择1班
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    QHBoxLayout *classLayout = new QHBoxLayout();
+    classLayout->addWidget(rb_class1);
+    classLayout->addWidget(rb_class2);
+    mainLayout->addLayout(classLayout);
+    mainLayout->addWidget(studentListWidget);
+    mainLayout->addWidget(deleteButton);
+
+    setLayout(mainLayout);
+
+    connect(rb_class1, &QRadioButton::toggled, this, &DeleteStudentDialog::handleClassSelection);
+    connect(rb_class2, &QRadioButton::toggled, this, &DeleteStudentDialog::handleClassSelection);
+    connect(deleteButton, &QPushButton::clicked, this, &QDialog::accept);
+}
+
+void DeleteStudentDialog::addStudentToList(const QString &id, const QString &name, int classNumber)
+{
+    QListWidgetItem *item = new QListWidgetItem(id + " - " + name, studentListWidget);
+    item->setData(Qt::UserRole, classNumber);
+}
+
+int DeleteStudentDialog::getSelectedClass() const
+{
+    if (rb_class1->isChecked())
+        return 1;
+    else if (rb_class2->isChecked())
+        return 2;
+    else
+        return -1;
+}
+
+int DeleteStudentDialog::getSelectedRow() const
+{
+    QListWidgetItem *item = studentListWidget->currentItem();
+    if (item)
+        return studentListWidget->row(item);
+    else
+        return -1;
+}
+
+void DeleteStudentDialog::handleClassSelection()
+{
+    int selectedClass = getSelectedClass();
+    emit classSelectionChanged(selectedClass);
+}
+
+void DeleteStudentDialog::clearStudentList()
+{
+    studentListWidget->clear();
+}

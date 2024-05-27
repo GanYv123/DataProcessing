@@ -10,9 +10,10 @@ int main(int argc, char *argv[])
     w.setStyleSheet(QString("QMenuBar {"
                             "    background-color: #f9cbff;"  // 菜单栏背景色
                             "    color: #2a2626;"  // 菜单栏文字颜色
+                            "    font-weight: bold;"
                             "}"
                             "QMenu {"
-                            "    background-color: #9efd8a;"  // 菜单项背景色
+                            "    background-color: #00cecc;"  // 菜单项背景色
                             "    color: #000000;"  // 菜单项文字颜色
                             "}"
                             "QMenu::item:selected {"
