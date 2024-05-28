@@ -44,7 +44,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -226,7 +226,6 @@
     <bool>false</bool>
    </attribute>
    <addaction name="ac_openFiles"/>
-   <addaction name="separator"/>
    <addaction name="ac_exportExcel"/>
    <addaction name="separator"/>
    <addaction name="ac_saveSettings"/>
@@ -242,6 +241,7 @@
    <addaction name="ac_deleteStu"/>
    <addaction name="separator"/>
    <addaction name="ac_hidden_configFile"/>
+   <addaction name="separator"/>
   </widget>
   <action name="ac_openFiles">
    <property name="icon">
@@ -453,7 +453,7 @@
      <normaloff>:/images2/receipt_long_24dp.png</normaloff>:/images2/receipt_long_24dp.png</iconset>
    </property>
    <property name="text">
-    <string>平时成绩汇总表</string>
+    <string>平时成绩</string>
    </property>
    <property name="toolTip">
     <string>平时成绩汇总表</string>
@@ -471,7 +471,7 @@
      <normaloff>:/images2/bar_chart_4_bars_24dp_FILL0_wght400_GRAD0_opsz24.png</normaloff>:/images2/bar_chart_4_bars_24dp_FILL0_wght400_GRAD0_opsz24.png</iconset>
    </property>
    <property name="text">
-    <string>期末总评成绩</string>
+    <string>期末成绩</string>
    </property>
    <property name="toolTip">
     <string>期末总评成绩</string>
@@ -519,10 +519,10 @@
      <normaloff>:/images2/visibility_off_24dp.png</normaloff>:/images2/visibility_off_24dp.png</iconset>
    </property>
    <property name="text">
-    <string>隐藏配置文件</string>
+    <string>隐藏配置</string>
    </property>
    <property name="toolTip">
-    <string>隐藏配置文件</string>
+    <string>隐藏配置</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
