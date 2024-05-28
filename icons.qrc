@@ -62,5 +62,9 @@
         <file>images2/credit_score_24dp.png</file>
         <file>images2/package_24dp_FILL0_wght400_GRAD0_opsz24.png</file>
         <file>images2/visibility_24dp_FILL0_wght400_GRAD0_opsz24.png</file>
+        <file>images2/sort_by_alpha_24dp_FILL0_wght400_GRAD0_opsz24.png</file>
+        <file>images2/swap_vert_24dp_FILL0_wght400_GRAD0_opsz24.png</file>
+        <file>images2/k0.png</file>
+        <file>images2/k1.png</file>
     </qresource>
 </RCC>

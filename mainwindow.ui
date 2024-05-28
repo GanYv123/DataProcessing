@@ -44,7 +44,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -61,7 +61,7 @@
       <widget class="QWidget" name="tab_class1">
        <attribute name="icon">
         <iconset resource="icons.qrc">
-         <normaloff>:/images/f1.ico</normaloff>:/images/f1.ico</iconset>
+         <normaloff>:/images2/k0.png</normaloff>:/images2/k0.png</iconset>
        </attribute>
        <attribute name="title">
         <string>班级1</string>
@@ -87,7 +87,7 @@
       <widget class="QWidget" name="tab_class2">
        <attribute name="icon">
         <iconset resource="icons.qrc">
-         <normaloff>:/images/f2.ico</normaloff>:/images/f2.ico</iconset>
+         <normaloff>:/images2/k1.png</normaloff>:/images2/k1.png</iconset>
        </attribute>
        <attribute name="title">
         <string>班级2</string>
@@ -559,6 +559,10 @@
    </property>
   </action>
   <action name="ac_sortByID">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images2/sort_by_alpha_24dp_FILL0_wght400_GRAD0_opsz24.png</normaloff>:/images2/sort_by_alpha_24dp_FILL0_wght400_GRAD0_opsz24.png</iconset>
+   </property>
    <property name="text">
     <string>按学号排序</string>
    </property>
@@ -570,6 +574,10 @@
    </property>
   </action>
   <action name="ac_sortByToalScore">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images2/swap_vert_24dp_FILL0_wght400_GRAD0_opsz24.png</normaloff>:/images2/swap_vert_24dp_FILL0_wght400_GRAD0_opsz24.png</iconset>
+   </property>
    <property name="text">
     <string>按总成绩排序</string>
    </property>

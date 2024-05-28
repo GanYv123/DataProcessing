@@ -113,6 +113,8 @@ private slots:
 
     void on_ac_deleteStu_triggered();
 
+    void on_ac_template_triggered();
+
 public:
     CustomDialog *customDialog = nullptr;
 

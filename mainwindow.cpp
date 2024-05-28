@@ -378,7 +378,7 @@ void MainWindow::on_ac_addStu_triggered()
 /**
  * @brief MainWindow::slots_student_added
  * @param itemList
- * @todo 待修改函数
+ * @todo 待修改函数 修改插入位置 （默认为插入到头部）
  */
 void MainWindow::slots_student_added(QList<QVariant*> list) {
     // 获取完信息添加到 m_fin 的对应班级表中
@@ -390,7 +390,7 @@ void MainWindow::slots_student_added(QList<QVariant*> list) {
         t_stu.studentID = QVariant(*list.at(1));
         t_stu.sub_experiment.resize(stu_1.at(0).sub_experiment.size());
         t_stu.sub_homework.resize(stu_1.at(0).sub_homework.size());
-        stu_1.insert(0,t_stu);
+        stu_1.insert(0,t_stu); //插入位置 后期修改为可选择插入位置
         finalSheet->setClass1Students(stu_1);
 
         // 暂时禁用信号和槽的连接
@@ -1223,4 +1223,10 @@ void MainWindow::on_ac_deleteStu_triggered() {
     }
 }
 
+void MainWindow::on_ac_template_triggered()
+{//模板规范信息
+    QUrl url("https://github.com/GanYv123/DataProcessing/blob/master/README.md");
+    QDesktopServices::openUrl(url);
+
+}
 
