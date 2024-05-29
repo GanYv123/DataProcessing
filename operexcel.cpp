@@ -164,6 +164,7 @@ void OperExcel::oper_data_class2(QXlsx::Document &xlsx)
 //操作视图
 void OperExcel::setClassTableViewModel(QStandardItemModel* &model, int classID)
 {
+    model->clear();
     if (classID == 1) {
         QVector<FinalSheet::StudentData> class1Students = m_finalSheet->class1_students();
         for (const auto& a : class1Students) {
@@ -697,6 +698,7 @@ void OperExcel::setViewModel(QStandardItemModel *o_model)
 //设置考勤的模型
 void OperExcel::setAttdendanceViewModel(QStandardItemModel *&model)
 {
+    model->clear();
     int maxSize = -1;
     maxSize = qMax(m_finalSheet->class1_students().size(),m_finalSheet->class2_students().size());
 

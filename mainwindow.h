@@ -8,6 +8,7 @@
 #include <QStandardItemModel>
 #include <QStandardItem>
 #include "QActionGroup"
+#include <QTimer>
 
 
 //声明类
@@ -31,6 +32,9 @@ protected:
     void save_Iniconfig();
 
     void read_Iniconfig(bool &ret);
+
+    void sortByID(bool &ret);
+    void sortByTotalScore(bool &ret);
 
 private:
     QLabel *label_size,*label_tips;
@@ -82,6 +86,8 @@ private slots:
 
     void on_ac_Attendance_triggered();
 
+    void onTimerTimeout();
+
     //模型项改变
     void handleItemChanged1(QStandardItem *item);
     void handleItemChanged2(QStandardItem *item);
@@ -115,6 +121,12 @@ private slots:
 
     void on_ac_template_triggered();
 
+    void on_ac_sortByID_triggered();
+
+    void on_ac_sortByToalScore_triggered();
+
+    void on_ac_autoConfigTime_triggered();
+
 public:
     CustomDialog *customDialog = nullptr;
 
@@ -145,6 +157,8 @@ private:
     QActionGroup *actionGroup;
 
     bool isopen = false; //判断是否打开文件
+
+    QTimer *timer;
 
 };
 #endif // MAINWINDOW_H

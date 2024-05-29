@@ -30,6 +30,10 @@ MainWindow::MainWindow(QWidget *parent)
     this->customDialog->setAcceptDrops(false);
     customDialog->close();
     operExcel = new OperExcel(this,finalSheet);
+    timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &MainWindow::onTimerTimeout);
+    // 设置定时器时间间隔为 1 分钟 (60,000 毫秒)
+    timer->setInterval(60000); // 单位为毫秒
 
     initMainWindow();
     connect(this,&MainWindow::student_added,this,&MainWindow::slots_student_added);
@@ -520,6 +524,20 @@ void MainWindow::on_ac_Attendance_triggered()
 
 }
 
+void MainWindow::onTimerTimeout()
+{//定时器溢出函数实现自动保存
+    bool ret = false;
+    save_Iniconfig(ret);
+    if(!ret){
+        showMessageBox("自动保存失败");
+    }else{
+        // 设置标签文本为成功自动保存配置 + 当前系统时间
+        QDateTime currentDateTime = QDateTime::currentDateTime();
+        QString currentDateTimeString = currentDateTime.toString("yyyy-MM-dd hh:mm:ss");
+        this->label_tips->setText("成功自动保存配置 " + currentDateTimeString);
+    }
+}
+
 
 void MainWindow::handleItemChanged1(QStandardItem *item)
 {
@@ -975,6 +993,129 @@ void MainWindow::read_Iniconfig(bool &ret)
     ret = true;
 }
 
+void MainWindow::sortByID(bool &ret)
+{
+    // 1. 获取并排序班级1的学生数据
+    QVector<FinalSheet::StudentData> stu_1 = finalSheet->class1_students();
+    std::sort(stu_1.begin(), stu_1.end(), [](const FinalSheet::StudentData &a, const FinalSheet::StudentData &b) {
+        QString idA = a.studentID.toString();
+        QString idB = b.studentID.toString();
+        QString lastTwoDigitsA = idA.right(2);  // 获取学号的后两位
+        QString lastTwoDigitsB = idB.right(2);  // 获取学号的后两位
+        return lastTwoDigitsA.toInt() < lastTwoDigitsB.toInt();
+    });
+    finalSheet->setClass1Students(stu_1);
+
+    // 2. 获取并排序班级2的学生数据
+    QVector<FinalSheet::StudentData> stu_2 = finalSheet->class2_students();
+    std::sort(stu_2.begin(), stu_2.end(), [](const FinalSheet::StudentData &a, const FinalSheet::StudentData &b) {
+        QString idA = a.studentID.toString();
+        QString idB = b.studentID.toString();
+        QString lastTwoDigitsA = idA.right(2);  // 获取学号的后两位
+        QString lastTwoDigitsB = idB.right(2);  // 获取学号的后两位
+        return lastTwoDigitsA.toInt() < lastTwoDigitsB.toInt();
+    });
+    finalSheet->setClass2Students(stu_2);
+
+    // 3. 禁用信号和槽的连接以防止多余的更新
+    table_model1->blockSignals(true);
+    table_experiment1->blockSignals(true);
+    table_homeWork1->blockSignals(true);
+    table_model2->blockSignals(true);
+    table_experiment2->blockSignals(true);
+    table_homeWork2->blockSignals(true);
+    table_attdendance->blockSignals(true);
+
+    // 4. 更新模型并刷新视图
+    // 删除所有行，但保留表头
+    table_model1->removeRows(0, table_model1->rowCount());
+    operExcel->setClassTableViewModel(table_model1, 1);
+    table_experiment1->removeRows(0, table_experiment1->rowCount());
+    operExcel->setExperimentViewModel(table_experiment1, 1);
+    table_homeWork1->removeRows(0, table_homeWork1->rowCount());
+    operExcel->setHomeWorkViewModel(table_homeWork1, 1);
+
+    table_model2->removeRows(0, table_model2->rowCount());
+    operExcel->setClassTableViewModel(table_model2, 2);
+    table_experiment2->removeRows(0, table_experiment2->rowCount());
+    operExcel->setExperimentViewModel(table_experiment2, 2);
+    table_homeWork2->removeRows(0, table_homeWork2->rowCount());
+    operExcel->setHomeWorkViewModel(table_homeWork2, 2);
+
+    // 刷新考勤表
+    table_attdendance->removeColumns(0, table_attdendance->rowCount());
+    operExcel->setAttdendanceViewModel(table_attdendance);
+
+    // 5. 恢复信号和槽的连接
+    table_model1->blockSignals(false);
+    table_experiment1->blockSignals(false);
+    table_homeWork1->blockSignals(false);
+    table_model2->blockSignals(false);
+    table_experiment2->blockSignals(false);
+    table_homeWork2->blockSignals(false);
+    table_attdendance->blockSignals(false);
+
+    ret = true;
+}
+
+void MainWindow::sortByTotalScore(bool &ret)
+{
+    // 1. 获取并排序班级1的学生数据
+    QVector<FinalSheet::StudentData> stu_1 = finalSheet->class1_students();
+    std::sort(stu_1.begin(), stu_1.end(), [](const FinalSheet::StudentData &a, const FinalSheet::StudentData &b) {
+        return a.totalScore.toDouble() > b.totalScore.toDouble();  // 按总成绩从高到低排序
+    });
+    finalSheet->setClass1Students(stu_1);
+
+    // 2. 获取并排序班级2的学生数据
+    QVector<FinalSheet::StudentData> stu_2 = finalSheet->class2_students();
+    std::sort(stu_2.begin(), stu_2.end(), [](const FinalSheet::StudentData &a, const FinalSheet::StudentData &b) {
+        return a.totalScore.toDouble() > b.totalScore.toDouble();  // 按总成绩从高到低排序
+    });
+    finalSheet->setClass2Students(stu_2);
+
+    // 3. 禁用信号和槽的连接以防止多余的更新
+    table_model1->blockSignals(true);
+    table_experiment1->blockSignals(true);
+    table_homeWork1->blockSignals(true);
+    table_model2->blockSignals(true);
+    table_experiment2->blockSignals(true);
+    table_homeWork2->blockSignals(true);
+    table_attdendance->blockSignals(true);
+
+    // 4. 更新模型并刷新视图
+    // 删除所有行，但保留表头
+    table_model1->removeRows(0, table_model1->rowCount());
+    operExcel->setClassTableViewModel(table_model1, 1);
+    table_experiment1->removeRows(0, table_experiment1->rowCount());
+    operExcel->setExperimentViewModel(table_experiment1, 1);
+    table_homeWork1->removeRows(0, table_homeWork1->rowCount());
+    operExcel->setHomeWorkViewModel(table_homeWork1, 1);
+
+    table_model2->removeRows(0, table_model2->rowCount());
+    operExcel->setClassTableViewModel(table_model2, 2);
+    table_experiment2->removeRows(0, table_experiment2->rowCount());
+    operExcel->setExperimentViewModel(table_experiment2, 2);
+    table_homeWork2->removeRows(0, table_homeWork2->rowCount());
+    operExcel->setHomeWorkViewModel(table_homeWork2, 2);
+
+    // 刷新考勤表
+    table_attdendance->removeColumns(0, table_attdendance->rowCount());
+    operExcel->setAttdendanceViewModel(table_attdendance);
+
+    // 5. 恢复信号和槽的连接
+    table_model1->blockSignals(false);
+    table_experiment1->blockSignals(false);
+    table_homeWork1->blockSignals(false);
+    table_model2->blockSignals(false);
+    table_experiment2->blockSignals(false);
+    table_homeWork2->blockSignals(false);
+    table_attdendance->blockSignals(false);
+
+    ret = true;  // 设置返回值为 true，表示排序成功
+}
+
+
 //# end MainWindow.cpp
 void MainWindow::on_ac_homework_triggered()
 {//显示作业成绩 && 平时成绩
@@ -1152,17 +1293,31 @@ void MainWindow::on_ac_export_template_triggered()
 }
 
 void MainWindow::deleteStudent(int classNumber, int rowIndex) {
+
     if (classNumber == 1) {
         QVector<FinalSheet::StudentData> stu_1 = finalSheet->class1_students();
         if (rowIndex >= 0 && rowIndex < stu_1.size()) {
             stu_1.remove(rowIndex);
             finalSheet->setClass1Students(stu_1);
 
-            // 删除视图中对应的行
-            table_model1->removeRow(rowIndex);
+            // 暂时禁用信号和槽的连接
+            table_model1->blockSignals(true);
+            table_experiment1->blockSignals(true);
+            table_homeWork1->blockSignals(true);
 
-            // 重新设置视图的模型数据
+            // 删除所有行，但保留表头
+            table_model1->removeRows(0, table_model1->rowCount());
             operExcel->setClassTableViewModel(table_model1, 1);
+            table_experiment1->removeRows(0, table_experiment1->rowCount());
+            operExcel->setExperimentViewModel(table_experiment1, 1);
+            table_homeWork1->removeRows(0, table_homeWork1->rowCount());
+            operExcel->setHomeWorkViewModel(table_homeWork1, 1);
+
+            // 恢复信号和槽的连接
+            table_model1->blockSignals(false);
+            table_experiment1->blockSignals(false);
+            table_homeWork1->blockSignals(false);
+
         } else {
             qDebug() << "Invalid row index for class 1.";
         }
@@ -1172,23 +1327,43 @@ void MainWindow::deleteStudent(int classNumber, int rowIndex) {
             stu_2.remove(rowIndex);
             finalSheet->setClass2Students(stu_2);
 
-            // 删除视图中对应的行
-            table_model2->removeRow(rowIndex);
+            // 暂时禁用信号和槽的连接
+            table_model2->blockSignals(true);
+            table_experiment2->blockSignals(true);
+            table_homeWork2->blockSignals(true);
 
-            // 重新设置视图的模型数据
+            // 删除所有行，但保留表头
+            table_model2->removeRows(0, table_model2->rowCount());
             operExcel->setClassTableViewModel(table_model2, 2);
-        } else {
-            qDebug() << "Invalid row index for class 2.";
+            table_experiment2->removeRows(0, table_experiment2->rowCount());
+            operExcel->setExperimentViewModel(table_experiment2, 2);
+            table_homeWork2->removeRows(0, table_homeWork2->rowCount());
+            operExcel->setHomeWorkViewModel(table_homeWork2, 2);
+
+            // 恢复信号和槽的连接
+            table_model2->blockSignals(false);
+            table_experiment2->blockSignals(false);
+            table_homeWork2->blockSignals(false);
+
         }
     } else {
         qDebug() << "Invalid class number.";
     }
+    // 暂时禁用信号和槽的连接
+    table_attdendance->blockSignals(true);
+
+    // 刷新考勤表
+    operExcel->setAttdendanceViewModel(table_attdendance);
+
+    // 恢复信号和槽的连接
+    table_attdendance->blockSignals(false);
 }
 
 void MainWindow::on_ac_deleteStu_triggered() {
     if (this->path == "NullPath" && this->notConfig) {
         qWarning() << "未导入文件|配置";
         this->label_tips->setText("未导入文件|配置");
+        showMessageBox("未导入文件|配置");
         return;
     }
 
@@ -1228,5 +1403,106 @@ void MainWindow::on_ac_template_triggered()
     QUrl url("https://github.com/GanYv123/DataProcessing/blob/master/README.md");
     QDesktopServices::openUrl(url);
 
+}
+
+
+void MainWindow::on_ac_sortByID_triggered()
+{//点击的话排序学生 按照学号
+    if (this->path == "NullPath" && this->notConfig) {
+        qWarning() << "未导入文件|配置";
+        this->label_tips->setText("未导入文件|配置");
+        showMessageBox("未导入文件|配置");
+        return;
+    }
+    bool ret = false;
+    sortByID(ret);
+    if(ret){
+        QMessageBox::information(this,"tips","排序成功");
+    }else{
+        QMessageBox::warning(this,"error!","未知的错误");
+    }
+}
+
+
+void MainWindow::on_ac_sortByToalScore_triggered()
+{//按照平时分排序
+    if (this->path == "NullPath" && this->notConfig) {
+        qWarning() << "未导入文件|配置";
+        this->label_tips->setText("未导入文件|配置");
+        showMessageBox("未导入文件|配置");
+        return;
+    }
+    bool ret = false;
+    sortByTotalScore(ret);
+    if(ret){
+        QMessageBox::information(this,"tips","排序成功");
+    }else{
+        QMessageBox::warning(this,"error!","未知的错误");
+    }
+}
+
+
+void MainWindow::on_ac_autoConfigTime_triggered()
+{//设置自动保存配置时间
+    // 创建一个对话框
+    QDialog dialog(this);
+    dialog.setWindowTitle("设置自动保存配置时间");
+
+    // 创建布局
+    QVBoxLayout layout;
+
+    // 创建QComboBox控件
+    QComboBox *comboBox = new QComboBox(&dialog);
+    comboBox->addItem("不启动自动保存");
+    comboBox->addItem("5分钟");
+    comboBox->addItem("10分钟");
+    comboBox->addItem("15分钟");
+    comboBox->addItem("30分钟");
+    comboBox->addItem("1小时");
+
+    // 创建确定和取消按钮
+    QPushButton *okButton = new QPushButton("确定", &dialog);
+    QPushButton *cancelButton = new QPushButton("取消", &dialog);
+
+    // 将控件添加到布局中
+    layout.addWidget(comboBox);
+    layout.addWidget(okButton);
+    layout.addWidget(cancelButton);
+
+    // 设置对话框布局
+    dialog.setLayout(&layout);
+
+    // 连接确定和取消按钮的信号槽
+    connect(okButton, &QPushButton::clicked, &dialog, &QDialog::accept);
+    connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
+
+    // 显示对话框并获取用户输入
+    if (dialog.exec() == QDialog::Accepted) {
+        QString selectedOption = comboBox->currentText();
+        if (selectedOption == "不启动自动保存") {
+            // 处理不启动自动保存的逻辑
+            QMessageBox::information(this, "选择的选项", "自动保存功能未启动");
+            // 停止定时器
+            timer->stop();
+        } else {
+            // 处理选择的时间间隔
+            QMessageBox::information(this, "选择的选项", "您选择的自动保存时间间隔是: " + selectedOption);
+            // 启动定时器
+            if (selectedOption == "5分钟") {
+                timer->start(5 * 60 * 1000); // 5分钟，单位为毫秒
+            } else if (selectedOption == "10分钟") {
+                timer->start(10 * 60 * 1000); // 10分钟，单位为毫秒
+            } else if (selectedOption == "15分钟") {
+                timer->start(15 * 60 * 1000); // 15分钟，单位为毫秒
+            } else if (selectedOption == "30分钟") {
+                timer->start(30 * 60 * 1000); // 30分钟，单位为毫秒
+            } else if (selectedOption == "1小时") {
+                timer->start(60 * 60 * 1000); // 1小时，单位为毫秒
+            } else {
+                // 默认情况下，启动定时器，并且使用默认间隔（例如 5 分钟）
+                timer->start(5 * 60 * 1000);
+            }
+        }
+    }
 }
 

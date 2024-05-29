@@ -170,6 +170,7 @@
     <addaction name="separator"/>
     <addaction name="ac_hidden_configFile"/>
     <addaction name="ac_setConfigPath"/>
+    <addaction name="ac_autoConfigTime"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -583,6 +584,21 @@
    </property>
    <property name="toolTip">
     <string>按总成绩排序</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="ac_autoConfigTime">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images2/edit_24dp.png</normaloff>:/images2/edit_24dp.png</iconset>
+   </property>
+   <property name="text">
+    <string>设置自动保存时间</string>
+   </property>
+   <property name="toolTip">
+    <string>设置自动保存时间</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>

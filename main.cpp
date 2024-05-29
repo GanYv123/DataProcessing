@@ -1,12 +1,32 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include <QPalette>
+#include <QSharedMemory>
+#include <QMessageBox>
 
 int main(int argc, char *argv[])
 {
 
     QApplication a(argc, argv);
+
+    QSharedMemory sharedMemory;
+    sharedMemory.setKey("Hi3ts2u3yo1");
+
     MainWindow w;
+
+
+    // 尝试创建共享内存段
+    if (sharedMemory.attach()) {
+        // 如果能attach到共享内存段，说明已有实例在运行
+        QMessageBox::warning(&w,"error","已经打开进程");
+        return 0;
+    }
+
+    if (!sharedMemory.create(1)) {
+        // 如果创建共享内存段失败，也说明已有实例在运行
+        QMessageBox::warning(&w,"error","已经打开进程");
+        return 0;
+    }
     w.resize(803,600);
     w.setStyleSheet(QString("QMenuBar {"
                             "    background-color: #333333;"  // 菜单栏背景色
