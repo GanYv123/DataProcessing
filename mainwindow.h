@@ -157,6 +157,7 @@ private:
     QActionGroup *actionGroup;
 
     bool isopen = false; //判断是否打开文件
+    QString selectedOption = "-1";//选择的时间
 
     QTimer *timer;
 

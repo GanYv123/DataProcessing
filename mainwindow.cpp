@@ -918,6 +918,7 @@ void MainWindow::save_Iniconfig(bool &ret)
     finalSheet->setclass1Config();
     finalSheet->setclass2Config();
     finalSheet->setCourseDataConfig();
+    MySettings::instance().saveTimerData("chooseTime",selectedOption);
 
     if(MySettings::instance().getIshided()){
         MySettings::instance().hideFile();
@@ -989,6 +990,36 @@ void MainWindow::read_Iniconfig(bool &ret)
     ui->tableView_2->setModel(table_model2);
 
     finalSheet->readCourseDataConfig();
+
+    MySettings::instance().loadTimerData("chooseTime",selectedOption);
+    if (selectedOption == "不启动自动保存") {
+        // 处理不启动自动保存的逻辑
+        QMessageBox::information(this, "选择的选项", "关闭自动保存");
+        // 停止定时器
+        timer->stop();
+    } else {
+        // 处理选择的时间间隔
+        QMessageBox::information(this, "选择的选项", "您选择的自动保存时间间隔是: " + selectedOption);
+        // 启动定时器
+        if (selectedOption == "30秒") {
+            timer->start(30 * 1000); // 30秒，单位为毫秒
+        } else if (selectedOption == "1分钟") {
+            timer->start(60 * 1000); // 1分钟，单位为毫秒
+        } else if (selectedOption == "5分钟") {
+            timer->start(5 * 60 * 1000); // 5分钟，单位为毫秒
+        } else if (selectedOption == "10分钟") {
+            timer->start(10 * 60 * 1000); // 10分钟，单位为毫秒
+        } else if (selectedOption == "15分钟") {
+            timer->start(15 * 60 * 1000); // 15分钟，单位为毫秒
+        } else if (selectedOption == "30分钟") {
+            timer->start(30 * 60 * 1000); // 30分钟，单位为毫秒
+        } else if (selectedOption == "1小时") {
+            timer->start(60 * 60 * 1000); // 1小时，单位为毫秒
+        } else {
+            // 默认情况下，启动定时器，并且使用默认间隔（例如 5 分钟）
+            timer->start(5 * 60 * 1000);
+        }
+    }
 
     ret = true;
 }
@@ -1362,7 +1393,7 @@ void MainWindow::deleteStudent(int classNumber, int rowIndex) {
 void MainWindow::on_ac_deleteStu_triggered() {
     if (this->path == "NullPath" && this->notConfig) {
         qWarning() << "未导入文件|配置";
-        this->label_tips->setText("未导入文件|配置");
+        this->label_tips->setText("未导入文件|");
         showMessageBox("未导入文件|配置");
         return;
     }
@@ -1454,6 +1485,8 @@ void MainWindow::on_ac_autoConfigTime_triggered()
     // 创建QComboBox控件
     QComboBox *comboBox = new QComboBox(&dialog);
     comboBox->addItem("不启动自动保存");
+    comboBox->addItem("30秒");
+    comboBox->addItem("1分钟");
     comboBox->addItem("5分钟");
     comboBox->addItem("10分钟");
     comboBox->addItem("15分钟");
@@ -1478,17 +1511,21 @@ void MainWindow::on_ac_autoConfigTime_triggered()
 
     // 显示对话框并获取用户输入
     if (dialog.exec() == QDialog::Accepted) {
-        QString selectedOption = comboBox->currentText();
+        selectedOption = comboBox->currentText();
         if (selectedOption == "不启动自动保存") {
             // 处理不启动自动保存的逻辑
-            QMessageBox::information(this, "选择的选项", "自动保存功能未启动");
+            QMessageBox::information(this, "选择的选项", "关闭自动保存");
             // 停止定时器
             timer->stop();
         } else {
             // 处理选择的时间间隔
             QMessageBox::information(this, "选择的选项", "您选择的自动保存时间间隔是: " + selectedOption);
             // 启动定时器
-            if (selectedOption == "5分钟") {
+            if (selectedOption == "30秒") {
+                timer->start(30 * 1000); // 30秒，单位为毫秒
+            } else if (selectedOption == "1分钟") {
+                timer->start(60 * 1000); // 1分钟，单位为毫秒
+            } else if (selectedOption == "5分钟") {
                 timer->start(5 * 60 * 1000); // 5分钟，单位为毫秒
             } else if (selectedOption == "10分钟") {
                 timer->start(10 * 60 * 1000); // 10分钟，单位为毫秒
@@ -1505,4 +1542,5 @@ void MainWindow::on_ac_autoConfigTime_triggered()
         }
     }
 }
+
 

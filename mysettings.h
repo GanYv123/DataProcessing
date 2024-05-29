@@ -24,6 +24,10 @@ public:
     void saveCourseData(const QString& key, const FinalSheet::CourseData& course);
     void loadCourseData(const QString& key, FinalSheet::CourseData& course);
 
+    //保存定时器配置
+    void saveTimerData(const QString& key,const QString& val);
+    void loadTimerData(const QString& key,QString& val);
+
     //隐藏配置文件
     void hideFile();
     void unhideFile();

@@ -137,6 +137,18 @@ void MySettings::loadCourseData(const QString& key, FinalSheet::CourseData& cour
     course.schoolYears = settings.value(key + "/schoolYears");
 }
 
+void MySettings::saveTimerData(const QString &key, const QString &val)
+{
+    QSettings settings(CONFIG_FILE_NAME, QSettings::IniFormat);
+    settings.setValue(key,val);
+}
+
+void MySettings::loadTimerData(const QString &key, QString &val)
+{
+    QSettings settings(CONFIG_FILE_NAME, QSettings::IniFormat);
+    val = settings.value(key).toString();
+}
+
 void MySettings::hideFile()
 {
 #ifdef Q_OS_WIN // 如果是 Windows 平台
