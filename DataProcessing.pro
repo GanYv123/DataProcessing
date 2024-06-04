@@ -8,23 +8,19 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    course.cpp \
     customdialog.cpp \
     finalsheet.cpp \
     main.cpp \
     mainwindow.cpp \
     mysettings.cpp \
-    operexcel.cpp \
-    student.cpp
+    operexcel.cpp
 
 HEADERS += \
-    course.h \
     customdialog.h \
     finalsheet.h \
     mainwindow.h \
     mysettings.h \
-    operexcel.h \
-    student.h
+    operexcel.h
 
 FORMS += \
     mainwindow.ui
