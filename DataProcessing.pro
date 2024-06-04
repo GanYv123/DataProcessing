@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,14 +13,16 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     mysettings.cpp \
-    operexcel.cpp
+    operexcel.cpp \
+    sqldata.cpp
 
 HEADERS += \
     customdialog.h \
     finalsheet.h \
     mainwindow.h \
     mysettings.h \
-    operexcel.h
+    operexcel.h \
+    sqldata.h
 
 FORMS += \
     mainwindow.ui

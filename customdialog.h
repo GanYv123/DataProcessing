@@ -117,4 +117,38 @@ private:
     QPushButton *deleteButton;
 };
 
+
+class connectSQLDialog : public QDialog
+{
+    Q_OBJECT
+
+public:
+    explicit connectSQLDialog(QWidget *parent = nullptr);
+
+
+    QLineEdit *hostLineEdit;
+    QLineEdit *portLineEdit;
+    QLineEdit *userLineEdit;
+    QLineEdit *passwordLineEdit;
+    QLineEdit *dbNameLineEdit;
+
+    QPushButton *testConnectionButton;
+    QPushButton *connectButton;
+    QPushButton *cancelButton;
+
+
+private slots:
+    void testConnection();
+    void connectToDatabase();
+
+private:
+    QString m_host;
+    int m_port;
+    QString m_user;
+    QString m_password;
+    QString m_dbName;
+    QString connectionName;
+
+};
+
 #endif // CUSTOMDIALOG_H

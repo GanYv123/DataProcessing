@@ -10,9 +10,10 @@
 #include <QRegularExpressionValidator>
 #include <QRadioButton>
 #include <QMessageBox>
-
+#include <sqldata.h>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QSqlError>
 
 CustomDialog::CustomDialog(QWidget *parent) : QDialog(parent)
 {
@@ -305,4 +306,79 @@ void DeleteStudentDialog::handleClassSelection()
 void DeleteStudentDialog::clearStudentList()
 {
     studentListWidget->clear();
+}
+//---------------------------------------------------------------------数据库连接对话框
+connectSQLDialog::connectSQLDialog(QWidget *parent)
+    : QDialog(parent),
+    hostLineEdit(new QLineEdit(this)),
+    portLineEdit(new QLineEdit(this)),
+    userLineEdit(new QLineEdit(this)),
+    passwordLineEdit(new QLineEdit(this)),
+    dbNameLineEdit(new QLineEdit(this)),
+    testConnectionButton(new QPushButton(tr("测试连接"), this)),
+    connectButton(new QPushButton(tr("连接数据库"), this)),
+    cancelButton(new QPushButton(tr("取消"), this))
+{
+    // Create layout
+    QGridLayout *inputLayout = new QGridLayout;
+    inputLayout->addWidget(new QLabel(tr("主机:")), 0, 0);
+    inputLayout->addWidget(hostLineEdit, 0, 1);
+    inputLayout->addWidget(new QLabel(tr("端口:")), 1, 0);
+    inputLayout->addWidget(portLineEdit, 1, 1);
+    inputLayout->addWidget(new QLabel(tr("用户名:")), 2, 0);
+    inputLayout->addWidget(userLineEdit, 2, 1);
+    inputLayout->addWidget(new QLabel(tr("密码:")), 3, 0);
+    inputLayout->addWidget(passwordLineEdit, 3, 1);
+    inputLayout->addWidget(new QLabel(tr("数据库名:")), 4, 0);
+    inputLayout->addWidget(dbNameLineEdit, 4, 1);
+
+    QHBoxLayout *buttonLayout = new QHBoxLayout;
+    buttonLayout->addWidget(testConnectionButton);
+    buttonLayout->addWidget(connectButton);
+    buttonLayout->addWidget(cancelButton);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->addLayout(inputLayout);
+    mainLayout->addLayout(buttonLayout);
+
+    setLayout(mainLayout);
+
+    hostLineEdit->setText("localhost");
+    userLineEdit->setText("root");
+    portLineEdit->setText("3306");
+    passwordLineEdit->setFocus();
+
+    connect(testConnectionButton, &QPushButton::clicked, this, &connectSQLDialog::testConnection);
+    connect(connectButton, &QPushButton::clicked, this, &connectSQLDialog::connectToDatabase);
+    connect(cancelButton, &QPushButton::clicked, this, &QDialog::reject);
+}
+
+void connectSQLDialog::testConnection()
+{
+    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", "test_connection");
+    db.setHostName(hostLineEdit->text());
+    db.setPort(portLineEdit->text().toInt());
+    db.setUserName(userLineEdit->text());
+    db.setPassword(passwordLineEdit->text());
+    db.setDatabaseName(dbNameLineEdit->text());
+
+    if (db.open()) {
+        QMessageBox::information(this, tr("成功"), tr("连接成功！"));
+        db.close();
+    } else {
+        QMessageBox::critical(this, tr("失败"), tr("连接失败: %1").arg(db.lastError().text()));
+    }
+
+    QSqlDatabase::removeDatabase("test_connection");
+}
+
+void connectSQLDialog::connectToDatabase()
+{
+    m_host = hostLineEdit->text();
+    m_port = portLineEdit->text().toInt();
+    m_user = userLineEdit->text();
+    m_password = passwordLineEdit->text();
+    m_dbName = dbNameLineEdit->text();
+
+    QDialog::accept();
 }

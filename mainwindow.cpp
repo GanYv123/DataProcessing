@@ -17,6 +17,7 @@
 #include "QMessageBox"
 #include "iostream"
 #include "mysettings.h"
+#include "sqldata.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -471,42 +472,6 @@ void MainWindow::on_tableView_clicked(const QModelIndex &index)
         qDebug() << "Clicked cell at row:" << row << ", column:" << column << ", data:" << cellData.toString();
 
     }
-}
-
-/**
- * @warning 弃用的函数 之前用于选择班级
-*/
-void MainWindow::on_ac_checkMajor_triggered()
-{//点击选择的班级 切换 不同班级的 model
-
-    // FinalSheet::CourseData t_courseData = finalSheet->getCourseData();
-    // if(t_courseData.classID.isNull())
-    // {
-    //     qWarning()<<"未导入文件\\未读取到信息";
-    //     this->label_tips->setText("未导入文件");
-    //     showMessageBox("请先导入文件");
-    //     return;
-    // }
-    // this->customDialog_chooseClassID =
-    //     new CustomDialog_chooseClassID(t_courseData.major.toString().append(" - 1"),
-    //                                    t_courseData.major.toString().append(" - 2"),this);
-    // customDialog_chooseClassID->move(this->width()/2-150,this->height()/2-100);
-    // customDialog_chooseClassID->resize(300,200);
-    // customDialog_chooseClassID->show_chooseClassID();
-    // //根据选择班级切换模型
-    // if(customDialog_chooseClassID->get_select_data().contains("- 1")){
-    //     qDebug()<<"选择了班级1";
-    //     this->currentChooseClassID = 1;
-    //     ui->tableView->setModel(this->table_model1);
-    //     this->label_tips->setText(finalSheet->getCourseData().major.toString().append(" 1 班"));
-    // }else if(customDialog_chooseClassID->get_select_data().contains("- 2")){
-    //     qDebug()<<"选择了班级2";
-    //     this->currentChooseClassID = 2;
-    //     ui->tableView->setModel(this->table_model2);
-    //     this->label_tips->setText(finalSheet->getCourseData().major.toString().append(" 2 班"));
-    // }else{
-    //     qDebug()<<"unknow class";
-    // }
 }
 
 /**
@@ -1543,4 +1508,35 @@ void MainWindow::on_ac_autoConfigTime_triggered()
     }
 }
 
+void MainWindow::on_ac_linkDataBase_triggered()
+{//连接数据库
+    connectSQLDialog dialog(this);
+
+    if (dialog.exec() == QDialog::Accepted) {
+        QString host = dialog.hostLineEdit->text();
+        int port = dialog.portLineEdit->text().toInt();
+        QString user = dialog.userLineEdit->text();
+        QString password = dialog.passwordLineEdit->text();
+        QString dbName = dialog.dbNameLineEdit->text();
+
+        // 连接数据库
+        if (SQLData::instance().connect(host, port, user, password, dbName)) {
+            qDebug() << "Successfully connected to the database";
+            showMessageBox("Successfully connected to the database");
+        } else {
+            qDebug() << "Failed to connect to the database";
+            showMessageBox("Failed to connect to the database");
+        }
+    }
+}
+
+void MainWindow::on_ac_unLink_triggered()
+{
+    if(SQLData::instance().isLinked()){
+        SQLData::instance().disconnect();
+        showMessageBox("断开成功!");
+    }else{
+        showMessageBox("数据库未连接，无需断开!");
+    }
+}
 

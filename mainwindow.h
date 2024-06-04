@@ -82,8 +82,6 @@ private slots:
 
     void on_tableView_clicked(const QModelIndex &index);
 
-    void on_ac_checkMajor_triggered();
-
     void on_ac_Attendance_triggered();
 
     void onTimerTimeout();
@@ -126,6 +124,10 @@ private slots:
     void on_ac_sortByToalScore_triggered();
 
     void on_ac_autoConfigTime_triggered();
+
+    void on_ac_linkDataBase_triggered();
+
+    void on_ac_unLink_triggered();
 
 public:
     CustomDialog *customDialog = nullptr;
