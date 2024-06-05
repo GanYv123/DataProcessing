@@ -343,9 +343,10 @@ connectSQLDialog::connectSQLDialog(QWidget *parent)
 
     setLayout(mainLayout);
 
-    hostLineEdit->setText("localhost");
-    userLineEdit->setText("root");
+    hostLineEdit->setText("zhaoxuyang.cloud");
+    userLineEdit->setText("miku");
     portLineEdit->setText("3306");
+    dbNameLineEdit->setText("stu");
     passwordLineEdit->setFocus();
 
     connect(testConnectionButton, &QPushButton::clicked, this, &connectSQLDialog::testConnection);

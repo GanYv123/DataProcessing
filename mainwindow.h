@@ -9,7 +9,7 @@
 #include <QStandardItem>
 #include "QActionGroup"
 #include <QTimer>
-
+#include <thread>
 
 //声明类
 class QLabel;
@@ -62,6 +62,8 @@ public:
 
 signals:
     void student_added(QList<QVariant*> list);
+    void addStuSQLFailed();
+    void addStuSQLSuccessful();
 
 private slots:
     void on_ac_openFiles_triggered();
@@ -129,6 +131,10 @@ private slots:
 
     void on_ac_unLink_triggered();
 
+    void on_ac_update_triggered();
+
+    void on_ac_download_triggered();
+
 public:
     CustomDialog *customDialog = nullptr;
 
@@ -162,6 +168,10 @@ private:
     QString selectedOption = "-1";//选择的时间
 
     QTimer *timer;
+
+    //functions
+    void threadFunctionAddStudentsToSQL();
+
 
 };
 #endif // MAINWINDOW_H

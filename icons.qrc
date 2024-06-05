@@ -66,5 +66,15 @@
         <file>images2/swap_vert_24dp_FILL0_wght400_GRAD0_opsz24.png</file>
         <file>images2/k0.png</file>
         <file>images2/k1.png</file>
+        <file>images2/add_24dp_FILL0_wght400_GRAD0_opsz24.png</file>
+        <file>images2/cancel_24dp_FILL0_wght400_GRAD0_opsz24.png</file>
+        <file>images2/database_24dp_FILL0_wght400_GRAD0_opsz24.png</file>
+        <file>images2/file_copy_24dp_FILL0_wght400_GRAD0_opsz24.png</file>
+        <file>images2/remove_24dp_FILL0_wght400_GRAD0_opsz24.png</file>
+        <file>images2/share_24dp_FILL0_wght400_GRAD0_opsz24.png</file>
+        <file>images2/share_off_24dp_FILL0_wght400_GRAD0_opsz24.png</file>
+        <file>images2/cloud_download_24dp_FILL0_wght400_GRAD0_opsz24.png</file>
+        <file>images2/update_24dp_FILL0_wght400_GRAD0_opsz24.png</file>
+        <file>images2/upgrade_24dp_FILL0_wght400_GRAD0_opsz24.png</file>
     </qresource>
 </RCC>

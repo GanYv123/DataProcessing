@@ -41,6 +41,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(table_model1,&QStandardItemModel::itemChanged,this,&MainWindow::handleItemChanged1);
     connect(table_model2,&QStandardItemModel::itemChanged,this,&MainWindow::handleItemChanged2);
 
+    connect(this,&MainWindow::addStuSQLSuccessful,this,[this](){showMessageBox("添加成功!");});
 }
 
 /**
@@ -1538,5 +1539,51 @@ void MainWindow::on_ac_unLink_triggered()
     }else{
         showMessageBox("数据库未连接，无需断开!");
     }
+}
+
+/**
+ * @brief MainWindow::on_ac_update_triggered
+ * 暂且测试为 将 class1 & class2 学生信息写道 数据库 单独开一个线程运行
+ */
+void MainWindow::on_ac_update_triggered()
+{//写入更新数据
+    if(!SQLData::instance().isLinked()){
+        showMessageBox("请先连接数据库");
+        return;
+    }
+    std::thread threadAddStu(&MainWindow::threadFunctionAddStudentsToSQL, this);
+    threadAddStu.detach();
+}
+
+
+void MainWindow::on_ac_download_triggered()
+{
+    //读取数据库中的数据
+    if(!SQLData::instance().isLinked()){
+        showMessageBox("数据库未连接!");
+        return;
+    }
+    finalSheet->setStudentData(SQLData::instance().readStudentData());
+    finalSheet->splitTableOperation();
+}
+
+void MainWindow::threadFunctionAddStudentsToSQL()
+{
+    if(!finalSheet->class1_students().empty()){
+        for(const auto& stu1 : finalSheet->class1_students()){
+            if(!SQLData::instance().insertStudentData(stu1)){
+                emit addStuSQLFailed();
+            }
+        }
+    }
+
+    if(!finalSheet->class2_students().empty()){
+        for(const auto& stu2 : finalSheet->class2_students()){
+            if(!SQLData::instance().insertStudentData(stu2)){
+                emit addStuSQLFailed();
+            }
+        }
+    }
+    emit addStuSQLSuccessful();
 }
 

@@ -206,6 +206,9 @@
     </property>
     <addaction name="ac_linkDataBase"/>
     <addaction name="ac_unLink"/>
+    <addaction name="separator"/>
+    <addaction name="ac_update"/>
+    <addaction name="ac_download"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_3"/>
@@ -600,7 +603,7 @@
   <action name="ac_autoConfigTime">
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/images2/edit_24dp.png</normaloff>:/images2/edit_24dp.png</iconset>
+     <normaloff>:/images2/update_24dp_FILL0_wght400_GRAD0_opsz24.png</normaloff>:/images2/update_24dp_FILL0_wght400_GRAD0_opsz24.png</iconset>
    </property>
    <property name="text">
     <string>设置自动保存时间</string>
@@ -615,7 +618,7 @@
   <action name="ac_linkDataBase">
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/images2/grading_24dp.png</normaloff>:/images2/grading_24dp.png</iconset>
+     <normaloff>:/images2/database_24dp_FILL0_wght400_GRAD0_opsz24.png</normaloff>:/images2/database_24dp_FILL0_wght400_GRAD0_opsz24.png</iconset>
    </property>
    <property name="text">
     <string>连接数据库</string>
@@ -630,13 +633,43 @@
   <action name="ac_unLink">
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/images2/grid_on_24dp.png</normaloff>:/images2/grid_on_24dp.png</iconset>
+     <normaloff>:/images2/cancel_24dp_FILL0_wght400_GRAD0_opsz24.png</normaloff>:/images2/cancel_24dp_FILL0_wght400_GRAD0_opsz24.png</iconset>
    </property>
    <property name="text">
     <string>断开连接</string>
    </property>
    <property name="toolTip">
     <string>断开连接</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="ac_update">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images2/upgrade_24dp_FILL0_wght400_GRAD0_opsz24.png</normaloff>:/images2/upgrade_24dp_FILL0_wght400_GRAD0_opsz24.png</iconset>
+   </property>
+   <property name="text">
+    <string>上传数据</string>
+   </property>
+   <property name="toolTip">
+    <string>上传数据</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="ac_download">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images2/cloud_download_24dp_FILL0_wght400_GRAD0_opsz24.png</normaloff>:/images2/cloud_download_24dp_FILL0_wght400_GRAD0_opsz24.png</iconset>
+   </property>
+   <property name="text">
+    <string>读取数据</string>
+   </property>
+   <property name="toolTip">
+    <string>读取数据</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>

@@ -3,7 +3,10 @@
 
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include "finalsheet.h"
 #include <QString>
+#include <QJsonDocument>
+#include <QJsonArray>
 
 class SQLData {
 public:
@@ -16,6 +19,20 @@ public:
     void setLinkedParameter(const QString& host, int port, const QString& user,
                             const QString& password, const QString& dbName);
     bool isLinked();
+    QString vectorToJson(const QVector<QVariant>& vector);
+    QVector<QVariant> jsonToVector(const QString& jsonString);
+
+    //数据库 建表操作
+    void CreateStudentsTable();
+    void CreateCourseTable();
+
+    //数据库插入操作
+    bool insertStudentData(const FinalSheet::StudentData& student); //传入 学生 结构体
+
+    //读取
+    QVector<FinalSheet::StudentData> readStudentData();
+
+
 
 private:
     SQLData();

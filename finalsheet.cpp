@@ -44,8 +44,15 @@ void FinalSheet::splitTableOperation()
     // 确保学生列表非空
     if (m_students.empty()) return;
 
+    class1_students().clear();
+    class2_students().clear();
+
+
+
     for (auto& a : m_students) {
         // 使用引用避免不必要的复制
+        if(a.studentID.toString().size() < 12)
+            continue;
         if (a.studentID.toString().at(9) == '1') {
             // 1班
             m_class1_students.append(a);
@@ -53,7 +60,7 @@ void FinalSheet::splitTableOperation()
             // 2班
             m_class2_students.append(a);
         } else {
-            // 其他操作
+
         }
     }
 
