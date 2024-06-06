@@ -32,6 +32,7 @@ protected:
     void save_Iniconfig();
 
     void read_Iniconfig(bool &ret);
+    void update_dataview();
 
     void sortByID(bool &ret);
     void sortByTotalScore(bool &ret);

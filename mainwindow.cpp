@@ -902,6 +902,7 @@ void MainWindow::save_Iniconfig()
 
 }
 
+//读取配置
 void MainWindow::read_Iniconfig(bool &ret)
 {
 
@@ -988,6 +989,60 @@ void MainWindow::read_Iniconfig(bool &ret)
     }
 
     ret = true;
+}
+
+
+/**
+ * @brief MainWindow::update_dataview
+ * @warning 未验证的函数
+ */
+void MainWindow::update_dataview()
+{
+    //考勤信息初始化
+    if(table_attdendance == nullptr)
+    {
+        table_attdendance = new QStandardItemModel;
+        QStringList heardLabels;
+        heardLabels<<"学号1"<<"姓名1"<<"1考勤次数"<<"学号2"<<"姓名2"<<"2考勤次数";
+        table_attdendance->setHorizontalHeaderLabels(heardLabels);
+        operExcel->setAttdendanceViewModel(table_attdendance);
+        connect(table_attdendance,&QStandardItemModel::itemChanged,this,
+                &MainWindow::handleItemChanged_attendance);
+    }
+
+    QStringList heardLaber;
+    heardLaber<<"学号"<<"姓名";
+    if(table_experiment1 == nullptr){
+        table_experiment1 = new QStandardItemModel(this);
+        table_experiment1->setHorizontalHeaderLabels(heardLaber);
+
+    }
+    if(table_experiment2 == nullptr){
+        table_experiment2 = new QStandardItemModel(this);
+        table_experiment2->setHorizontalHeaderLabels(heardLaber);
+    }
+
+    if(table_homeWork1 == nullptr){
+        table_homeWork1 = new QStandardItemModel(this);
+        table_homeWork1->setHorizontalHeaderLabels(heardLaber);
+    }
+    if(table_homeWork2 == nullptr){
+        table_homeWork2 = new QStandardItemModel(this);
+        table_homeWork2->setHorizontalHeaderLabels(heardLaber);
+    }
+    operExcel->setHomeWorkViewModel(table_homeWork1,1);
+    operExcel->setHomeWorkViewModel(table_homeWork2,2);
+
+    operExcel->setClassTableViewModel(table_model1,1);
+    operExcel->setClassTableViewModel(table_model2,2);
+
+    operExcel->setExperimentViewModel(table_experiment1,1);
+    operExcel->setExperimentViewModel(table_experiment2,2);
+
+
+    ui->tableView_3->setModel(table_attdendance);
+    ui->tableView->setModel(table_model1);
+    ui->tableView_2->setModel(table_model2);
 }
 
 void MainWindow::sortByID(bool &ret)
@@ -1563,26 +1618,40 @@ void MainWindow::on_ac_download_triggered()
         showMessageBox("数据库未连接!");
         return;
     }
-    finalSheet->setStudentData(SQLData::instance().readStudentData());
-    finalSheet->splitTableOperation();
+    QMap <int,QVector<FinalSheet::StudentData>>studata_map(SQLData::instance().readStudentData());
+    finalSheet->setClass1Students(studata_map.value(1));
+    finalSheet->setClass2Students(studata_map.value(2));
+    finalSheet->setCourseData(SQLData::instance().readCourseData());
+
+    update_dataview();
 }
 
+/**
+ * @brief MainWindow::threadFunctionAddStudentsToSQL
+ *  子线程，创建表并且添加学生信息
+ */
 void MainWindow::threadFunctionAddStudentsToSQL()
 {
+    //检测表 是否存在 不存在则创建
+    SQLData::instance().CreateStudentsTable();
+    SQLData::instance().CreateCourseTable();
+
     if(!finalSheet->class1_students().empty()){
         for(const auto& stu1 : finalSheet->class1_students()){
-            if(!SQLData::instance().insertStudentData(stu1)){
+            if(!SQLData::instance().insertStudentData(stu1,1)){
                 emit addStuSQLFailed();
             }
         }
     }
-
     if(!finalSheet->class2_students().empty()){
         for(const auto& stu2 : finalSheet->class2_students()){
-            if(!SQLData::instance().insertStudentData(stu2)){
+            if(!SQLData::instance().insertStudentData(stu2,2)){
                 emit addStuSQLFailed();
             }
         }
+    }
+    if(!SQLData::instance().insertCourseData(finalSheet->getCourseData())){
+        emit addStuSQLFailed();
     }
     emit addStuSQLSuccessful();
 }

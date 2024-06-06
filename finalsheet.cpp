@@ -117,7 +117,7 @@ void FinalSheet::readclass1FromConfig()
 
 void FinalSheet::readclass2FromConfig()
 {
-        MySettings::instance().loadStudentData("class2",m_class2_students);
+    MySettings::instance().loadStudentData("class2",m_class2_students);
 }
 
 void FinalSheet::setCourseDataConfig()

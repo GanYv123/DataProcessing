@@ -7,6 +7,7 @@
 #include <QString>
 #include <QJsonDocument>
 #include <QJsonArray>
+#include <QMap>
 
 class SQLData {
 public:
@@ -27,11 +28,12 @@ public:
     void CreateCourseTable();
 
     //数据库插入操作
-    bool insertStudentData(const FinalSheet::StudentData& student); //传入 学生 结构体
+    bool insertStudentData(const FinalSheet::StudentData& student,int classid); //传入 学生 结构体
+    bool insertCourseData(const FinalSheet::CourseData& course);
 
     //读取
-    QVector<FinalSheet::StudentData> readStudentData();
-
+    QMap<int,QVector<FinalSheet::StudentData>> readStudentData();
+    FinalSheet::CourseData readCourseData();
 
 
 private:
