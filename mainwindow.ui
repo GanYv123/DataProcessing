@@ -171,6 +171,7 @@
     <addaction name="ac_hidden_configFile"/>
     <addaction name="ac_setConfigPath"/>
     <addaction name="ac_autoConfigTime"/>
+    <addaction name="ac_deleteTable"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -209,6 +210,7 @@
     <addaction name="separator"/>
     <addaction name="ac_update"/>
     <addaction name="ac_download"/>
+    <addaction name="ac_autoConfigTime_2"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_3"/>
@@ -670,6 +672,36 @@
    </property>
    <property name="toolTip">
     <string>读取数据</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="ac_deleteTable">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images2/delete_24dp.png</normaloff>:/images2/delete_24dp.png</iconset>
+   </property>
+   <property name="text">
+    <string>删除数据库表(debug)</string>
+   </property>
+   <property name="toolTip">
+    <string>删除数据库表(debug)</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="ac_autoConfigTime_2">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images2/update_24dp_FILL0_wght400_GRAD0_opsz24.png</normaloff>:/images2/update_24dp_FILL0_wght400_GRAD0_opsz24.png</iconset>
+   </property>
+   <property name="text">
+    <string>设置SQL自动保存时间</string>
+   </property>
+   <property name="toolTip">
+    <string>设置自动保存时间SQL</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>

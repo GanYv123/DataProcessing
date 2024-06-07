@@ -10,6 +10,8 @@
 #include "QActionGroup"
 #include <QTimer>
 #include <thread>
+#include <QStack>
+#include <QPair>
 
 //声明类
 class QLabel;
@@ -36,6 +38,10 @@ protected:
 
     void sortByID(bool &ret);
     void sortByTotalScore(bool &ret);
+
+public:
+    QStack<QPair<FinalSheet::StudentData,int>> changedDataStack; //记录 变化的数据 对象 和 班级
+
 
 private:
     QLabel *label_size,*label_tips;
@@ -88,6 +94,7 @@ private slots:
     void on_ac_Attendance_triggered();
 
     void onTimerTimeout();
+    void onTimerSQLTimeout();
 
     //模型项改变
     void handleItemChanged1(QStandardItem *item);
@@ -136,6 +143,10 @@ private slots:
 
     void on_ac_download_triggered();
 
+    void on_ac_deleteTable_triggered();
+
+    void on_ac_autoConfigTime_2_triggered();
+
 public:
     CustomDialog *customDialog = nullptr;
 
@@ -168,7 +179,7 @@ private:
     bool isopen = false; //判断是否打开文件
     QString selectedOption = "-1";//选择的时间
 
-    QTimer *timer;
+    QTimer *timer,*timerSQL;
 
     //functions
     void threadFunctionAddStudentsToSQL();

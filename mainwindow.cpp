@@ -33,8 +33,9 @@ MainWindow::MainWindow(QWidget *parent)
     operExcel = new OperExcel(this,finalSheet);
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::onTimerTimeout);
-    // 设置定时器时间间隔为 1 分钟 (60,000 毫秒)
-    timer->setInterval(60000); // 单位为毫秒
+
+    timerSQL = new QTimer(this);
+    connect(timerSQL, &QTimer::timeout, this, &MainWindow::onTimerSQLTimeout);
 
     initMainWindow();
     connect(this,&MainWindow::student_added,this,&MainWindow::slots_student_added);
@@ -396,6 +397,9 @@ void MainWindow::slots_student_added(QList<QVariant*> list) {
         t_stu.studentID = QVariant(*list.at(1));
         t_stu.sub_experiment.resize(stu_1.at(0).sub_experiment.size());
         t_stu.sub_homework.resize(stu_1.at(0).sub_homework.size());
+
+        changedDataStack.append({t_stu,1}); //记录更新
+
         stu_1.insert(0,t_stu); //插入位置 后期修改为可选择插入位置
         finalSheet->setClass1Students(stu_1);
 
@@ -426,6 +430,9 @@ void MainWindow::slots_student_added(QList<QVariant*> list) {
         t_stu.studentID = QVariant(*list.at(1));
         t_stu.sub_experiment.resize(stu_2.at(0).sub_experiment.size());
         t_stu.sub_homework.resize(stu_2.at(0).sub_homework.size());
+
+        changedDataStack.append({t_stu,2});
+
         stu_2.insert(0,t_stu);
         finalSheet->setClass2Students(stu_2);
 
@@ -504,6 +511,27 @@ void MainWindow::onTimerTimeout()
     }
 }
 
+//自动更新数据库
+void MainWindow::onTimerSQLTimeout()
+{
+    if(!SQLData::instance().isLinked()){
+        qDebug()<<"未连接数据库";
+        return;
+    }
+    // while(!changedDataStack.empty()){
+    //     //执行更新语句
+    //     QPair<FinalSheet::StudentData,int> pair = changedDataStack.pop();
+    //     SQLData::instance().updateSQl(pair.first,pair.second);
+    // }
+
+    QString sql = "TRUNCATE TABLE students";
+
+    if(SQLData::instance().executeUpdate(sql))
+        emit on_ac_update_triggered();
+
+    qDebug()<<"SQL 数据库 已更新！";
+}
+
 
 void MainWindow::handleItemChanged1(QStandardItem *item)
 {
@@ -543,6 +571,8 @@ void MainWindow::handleItemChanged1(QStandardItem *item)
     QVariant total = QVariant(static_cast<int>(std::round(t_total)));
     QStandardItem* t_item = table_model1->item(row,5);
     t_item->setText(total.toString());
+
+    changedDataStack.append({studentData,1}); //记录变化
 
     class1Students[row] = studentData;
 
@@ -597,6 +627,8 @@ void MainWindow::handleItemChanged2(QStandardItem *item)
 
     QStandardItem* t_item = table_model2->item(row,5);
     t_item->setText(total.toString());
+
+    changedDataStack.append({studentData,2}); //记录变化
 
     class2Students[row] = studentData;
 
@@ -863,7 +895,13 @@ void MainWindow::handleItemChanged_homeworkView2(QStandardItem *item)
 void MainWindow::showMessageBox(const QString &message)
 {//消息框
     QMessageBox msgBox;
-    msgBox.setStyleSheet("QLabel { color: red; font-weight: bold; letter-spacing: 2px; text-align: center; }");
+    msgBox.setStyleSheet("QLabel { color: red; font-weight: bold; letter-spacing: 2px; text-align: center; }"
+                         "QPushButton::pressed{"
+                         "       background-color: #444444;"
+                         "       border:0;"
+                         "       color:red;"
+                         "}"
+                         );
     msgBox.setText(message);
     msgBox.exec();
 }
@@ -910,51 +948,7 @@ void MainWindow::read_Iniconfig(bool &ret)
     finalSheet->readclass1FromConfig();
     finalSheet->readclass2FromConfig();
 
-    //考勤信息初始化
-    if(table_attdendance == nullptr)
-    {
-        table_attdendance = new QStandardItemModel;
-        QStringList heardLabels;
-        heardLabels<<"学号1"<<"姓名1"<<"1考勤次数"<<"学号2"<<"姓名2"<<"2考勤次数";
-        table_attdendance->setHorizontalHeaderLabels(heardLabels);
-        operExcel->setAttdendanceViewModel(table_attdendance);
-        connect(table_attdendance,&QStandardItemModel::itemChanged,this,
-                &MainWindow::handleItemChanged_attendance);
-    }
-
-    QStringList heardLaber;
-    heardLaber<<"学号"<<"姓名";
-    if(table_experiment1 == nullptr){
-        table_experiment1 = new QStandardItemModel(this);
-        table_experiment1->setHorizontalHeaderLabels(heardLaber);
-
-    }
-    if(table_experiment2 == nullptr){
-        table_experiment2 = new QStandardItemModel(this);
-        table_experiment2->setHorizontalHeaderLabels(heardLaber);
-    }
-
-    if(table_homeWork1 == nullptr){
-        table_homeWork1 = new QStandardItemModel(this);
-        table_homeWork1->setHorizontalHeaderLabels(heardLaber);
-    }
-    if(table_homeWork2 == nullptr){
-        table_homeWork2 = new QStandardItemModel(this);
-        table_homeWork2->setHorizontalHeaderLabels(heardLaber);
-    }
-    operExcel->setHomeWorkViewModel(table_homeWork1,1);
-    operExcel->setHomeWorkViewModel(table_homeWork2,2);
-
-    operExcel->setClassTableViewModel(table_model1,1);
-    operExcel->setClassTableViewModel(table_model2,2);
-
-    operExcel->setExperimentViewModel(table_experiment1,1);
-    operExcel->setExperimentViewModel(table_experiment2,2);
-
-
-    ui->tableView_3->setModel(table_attdendance);
-    ui->tableView->setModel(table_model1);
-    ui->tableView_2->setModel(table_model2);
+    update_dataview();
 
     finalSheet->readCourseDataConfig();
 
@@ -994,7 +988,7 @@ void MainWindow::read_Iniconfig(bool &ret)
 
 /**
  * @brief MainWindow::update_dataview
- * @warning 未验证的函数
+ * @warning 未验证的函数 更新视图
  */
 void MainWindow::update_dataview()
 {
@@ -1002,34 +996,34 @@ void MainWindow::update_dataview()
     if(table_attdendance == nullptr)
     {
         table_attdendance = new QStandardItemModel;
-        QStringList heardLabels;
-        heardLabels<<"学号1"<<"姓名1"<<"1考勤次数"<<"学号2"<<"姓名2"<<"2考勤次数";
-        table_attdendance->setHorizontalHeaderLabels(heardLabels);
-        operExcel->setAttdendanceViewModel(table_attdendance);
-        connect(table_attdendance,&QStandardItemModel::itemChanged,this,
-                &MainWindow::handleItemChanged_attendance);
     }
+
+    operExcel->setAttdendanceViewModel(table_attdendance);
+    connect(table_attdendance,&QStandardItemModel::itemChanged,this,
+            &MainWindow::handleItemChanged_attendance);
 
     QStringList heardLaber;
     heardLaber<<"学号"<<"姓名";
     if(table_experiment1 == nullptr){
         table_experiment1 = new QStandardItemModel(this);
-        table_experiment1->setHorizontalHeaderLabels(heardLaber);
-
     }
+    table_experiment1->setHorizontalHeaderLabels(heardLaber);
+
     if(table_experiment2 == nullptr){
         table_experiment2 = new QStandardItemModel(this);
-        table_experiment2->setHorizontalHeaderLabels(heardLaber);
     }
+    table_experiment2->setHorizontalHeaderLabels(heardLaber);
 
     if(table_homeWork1 == nullptr){
         table_homeWork1 = new QStandardItemModel(this);
-        table_homeWork1->setHorizontalHeaderLabels(heardLaber);
     }
+    table_homeWork1->setHorizontalHeaderLabels(heardLaber);
     if(table_homeWork2 == nullptr){
         table_homeWork2 = new QStandardItemModel(this);
-        table_homeWork2->setHorizontalHeaderLabels(heardLaber);
     }
+
+    table_homeWork2->setHorizontalHeaderLabels(heardLaber);
+
     operExcel->setHomeWorkViewModel(table_homeWork1,1);
     operExcel->setHomeWorkViewModel(table_homeWork2,2);
 
@@ -1039,6 +1033,14 @@ void MainWindow::update_dataview()
     operExcel->setExperimentViewModel(table_experiment1,1);
     operExcel->setExperimentViewModel(table_experiment2,2);
 
+    QStringList heardLabels;
+    heardLabels<<"学号"<<"姓名"<<"考勤"<<"作业"<<"实验"<<"总成绩"<<"备注";
+    table_model1->setHorizontalHeaderLabels(heardLabels);
+    table_model2->setHorizontalHeaderLabels(heardLabels);
+
+    QStringList heardLabels1;
+    heardLabels1<<"学号1"<<"姓名1"<<"1考勤次数"<<"学号2"<<"姓名2"<<"2考勤次数";
+    table_attdendance->setHorizontalHeaderLabels(heardLabels1);
 
     ui->tableView_3->setModel(table_attdendance);
     ui->tableView->setModel(table_model1);
@@ -1499,10 +1501,8 @@ void MainWindow::on_ac_autoConfigTime_triggered()
     // 创建一个对话框
     QDialog dialog(this);
     dialog.setWindowTitle("设置自动保存配置时间");
-
     // 创建布局
     QVBoxLayout layout;
-
     // 创建QComboBox控件
     QComboBox *comboBox = new QComboBox(&dialog);
     comboBox->addItem("不启动自动保存");
@@ -1613,17 +1613,32 @@ void MainWindow::on_ac_update_triggered()
 
 void MainWindow::on_ac_download_triggered()
 {
-    //读取数据库中的数据
-    if(!SQLData::instance().isLinked()){
-        showMessageBox("数据库未连接!");
+    if(!this->notConfig){
+        QMessageBox::StandardButton box;
+        box = QMessageBox::question(this, "提示", "覆盖原有的数据?", QMessageBox::Yes|QMessageBox::No);
+        //取消
+        if(box==QMessageBox::No)
+            return;
+        //确认
+        else if(box==QMessageBox::Yes)
+        {
+            //读取数据库中的数据
+            if(!SQLData::instance().isLinked()){
+                showMessageBox("数据库未连接!");
+                return;
+            }
+
+            QMap <int,QVector<FinalSheet::StudentData>>studata_map(SQLData::instance().readStudentData());
+            finalSheet->setClass1Students(studata_map.value(1));
+            finalSheet->setClass2Students(studata_map.value(2));
+            finalSheet->setCourseData(SQLData::instance().readCourseData());
+
+            update_dataview();
+            this->notConfig = false;
+        }
         return;
     }
-    QMap <int,QVector<FinalSheet::StudentData>>studata_map(SQLData::instance().readStudentData());
-    finalSheet->setClass1Students(studata_map.value(1));
-    finalSheet->setClass2Students(studata_map.value(2));
-    finalSheet->setCourseData(SQLData::instance().readCourseData());
 
-    update_dataview();
 }
 
 /**
@@ -1654,5 +1669,87 @@ void MainWindow::threadFunctionAddStudentsToSQL()
         emit addStuSQLFailed();
     }
     emit addStuSQLSuccessful();
+}
+
+/**
+ * @brief MainWindow::on_ac_deleteTable_triggered
+ * debug 后面 要删除的 函数
+ */
+void MainWindow::on_ac_deleteTable_triggered()
+{
+    QString deletetable = QString("DROP TABLE %1,%2").arg("students").arg("CourseData");
+    if(SQLData::instance().executeUpdate(deletetable)){
+        showMessageBox("successful");
+    }else{
+        showMessageBox("error");
+    }
+}
+
+void MainWindow::on_ac_autoConfigTime_2_triggered()
+{
+    // 创建一个对话框
+    QDialog dialog(this);
+    dialog.setWindowTitle("设置SQL自动保存配置时间");
+    // 创建布局
+    QVBoxLayout layout;
+    // 创建QComboBox控件
+    QComboBox *comboBox = new QComboBox(&dialog);
+    comboBox->addItem("不启动自动保存");
+    comboBox->addItem("30秒");
+    comboBox->addItem("1分钟");
+    comboBox->addItem("5分钟");
+    comboBox->addItem("10分钟");
+    comboBox->addItem("15分钟");
+    comboBox->addItem("30分钟");
+    comboBox->addItem("1小时");
+
+    // 创建确定和取消按钮
+    QPushButton *okButton = new QPushButton("确定", &dialog);
+    QPushButton *cancelButton = new QPushButton("取消", &dialog);
+
+    // 将控件添加到布局中
+    layout.addWidget(comboBox);
+    layout.addWidget(okButton);
+    layout.addWidget(cancelButton);
+
+    // 设置对话框布局
+    dialog.setLayout(&layout);
+
+    // 连接确定和取消按钮的信号槽
+    connect(okButton, &QPushButton::clicked, &dialog, &QDialog::accept);
+    connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
+
+    // 显示对话框并获取用户输入
+    if (dialog.exec() == QDialog::Accepted) {
+        selectedOption = comboBox->currentText();
+        if (selectedOption == "不启动自动保存") {
+            // 处理不启动自动保存的逻辑
+            QMessageBox::information(this, "选择的选项", "关闭自动保存");
+            // 停止定时器
+            timerSQL->stop();
+        } else {
+            // 处理选择的时间间隔
+            QMessageBox::information(this, "选择的选项", "您选择的自动保存时间间隔是: " + selectedOption);
+            // 启动定时器
+            if (selectedOption == "30秒") {
+                timerSQL->start(30 * 1000); // 30秒，单位为毫秒
+            } else if (selectedOption == "1分钟") {
+                timerSQL->start(60 * 1000); // 1分钟，单位为毫秒
+            } else if (selectedOption == "5分钟") {
+                timerSQL->start(5 * 60 * 1000); // 5分钟，单位为毫秒
+            } else if (selectedOption == "10分钟") {
+                timerSQL->start(10 * 60 * 1000); // 10分钟，单位为毫秒
+            } else if (selectedOption == "15分钟") {
+                timerSQL->start(15 * 60 * 1000); // 15分钟，单位为毫秒
+            } else if (selectedOption == "30分钟") {
+                timerSQL->start(30 * 60 * 1000); // 30分钟，单位为毫秒
+            } else if (selectedOption == "1小时") {
+                timerSQL->start(60 * 60 * 1000); // 1小时，单位为毫秒
+            } else {
+                // 默认情况下，启动定时器，并且使用默认间隔（例如 5 分钟）
+                timerSQL->start(5 * 60 * 1000);
+            }
+        }
+    }
 }
 

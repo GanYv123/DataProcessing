@@ -190,6 +190,46 @@ FinalSheet::CourseData SQLData::readCourseData() {
     return course;
 }
 
+bool SQLData::updateSQl(const FinalSheet::StudentData& student,int classid)
+{//更新
+    QSqlQuery query(db);
+
+    // 先尝试更新记录
+    query.prepare(
+        "UPDATE students SET "
+        "studentName = :studentName, "
+        "attendance = :attendance, "
+        "attendanceScore = :attendanceScore, "
+        "homework = :homework, "
+        "sub_homework = :sub_homework, "
+        "experiment = :experiment, "
+        "sub_experiment = :sub_experiment, "
+        "totalScore = :totalScore, "
+        "remark = :remark "
+        "WHERE studentID = :studentID OR studentName = :studentName");
+
+    query.bindValue(":studentID", student.studentID);
+    query.bindValue(":studentName", student.studentName);
+    query.bindValue(":attendance", student.attendance);
+    query.bindValue(":attendanceScore", student.attendanceScore);
+    query.bindValue(":homework", student.homework);
+    query.bindValue(":sub_homework", vectorToJson(student.sub_homework));
+    query.bindValue(":experiment", student.experiment);
+    query.bindValue(":sub_experiment", vectorToJson(student.sub_experiment));
+    query.bindValue(":totalScore", student.totalScore);
+    query.bindValue(":remark", student.remark);
+
+    if (query.exec()) {
+        if (query.numRowsAffected() == 0) { // 没有更新任何记录
+            return insertStudentData(student, classid); // 插入新记录
+        }
+        return true; // 更新成功
+    } else {
+        qDebug() << "Update failed: " << query.lastError();
+        return false;
+    }
+}
+
 
 
 

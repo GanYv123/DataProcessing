@@ -35,6 +35,9 @@ public:
     QMap<int,QVector<FinalSheet::StudentData>> readStudentData();
     FinalSheet::CourseData readCourseData();
 
+    //更新数据库
+    bool updateSQl(const FinalSheet::StudentData& student,int classid);
+
 
 private:
     SQLData();

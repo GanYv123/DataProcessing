@@ -33,6 +33,11 @@ int main(int argc, char *argv[])
                             "    color: #FFFFFF;"  // 菜单栏文字颜色
                             "    font-weight: bold;"
                             "}"
+                            "QPushButton::pressed{"
+                            "       background-color: #444444;"
+                            "       border:0;"
+                            "       color:red;"
+                            "}"
                             "QMenu {"
                             "    background-color: #444444;"  // 菜单项背景色
                             "    color: #FFD700;"  // 菜单项文字颜色
