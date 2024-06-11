@@ -128,6 +128,9 @@ void MainWindow::initMainWindow()
         QIcon icon(":/images2/visibility_off_24dp.png");
         ui->ac_hidden_configFile->setIcon(icon);
     }
+
+    setActionsContextMenu();
+
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event) //拖拽进入
@@ -402,24 +405,6 @@ void MainWindow::slots_student_added(QList<QVariant*> list) {
 
         stu_1.insert(0,t_stu); //插入位置 后期修改为可选择插入位置
         finalSheet->setClass1Students(stu_1);
-
-        // 暂时禁用信号和槽的连接
-        table_model1->blockSignals(true);
-        table_experiment1->blockSignals(true);
-        table_homeWork1->blockSignals(true);
-
-        // 删除所有行，但保留表头
-        table_model1->removeRows(0, table_model1->rowCount());
-        operExcel->setClassTableViewModel(table_model1, 1);
-        table_experiment1->removeRows(0, table_experiment1->rowCount());
-        operExcel->setExperimentViewModel(table_experiment1, 1);
-        table_homeWork1->removeRows(0, table_homeWork1->rowCount());
-        operExcel->setHomeWorkViewModel(table_homeWork1, 1);
-
-        // 恢复信号和槽的连接
-        table_model1->blockSignals(false);
-        table_experiment1->blockSignals(false);
-        table_homeWork1->blockSignals(false);
     }
 
     if(list.last()->toInt() == 2) {
@@ -435,34 +420,26 @@ void MainWindow::slots_student_added(QList<QVariant*> list) {
 
         stu_2.insert(0,t_stu);
         finalSheet->setClass2Students(stu_2);
-
-        // 暂时禁用信号和槽的连接
-        table_model2->blockSignals(true);
-        table_experiment2->blockSignals(true);
-        table_homeWork2->blockSignals(true);
-
-        // 删除所有行，但保留表头
-        table_model2->removeRows(0, table_model2->rowCount());
-        operExcel->setClassTableViewModel(table_model2, 2);
-        table_experiment2->removeRows(0, table_experiment2->rowCount());
-        operExcel->setExperimentViewModel(table_experiment2, 2);
-        table_homeWork2->removeRows(0, table_homeWork2->rowCount());
-        operExcel->setHomeWorkViewModel(table_homeWork2, 2);
-
-        // 恢复信号和槽的连接
-        table_model2->blockSignals(false);
-        table_experiment2->blockSignals(false);
-        table_homeWork2->blockSignals(false);
     }
 
-    // 暂时禁用信号和槽的连接
+    // 3. 禁用信号和槽的连接以防止多余的更新
+    table_model1->blockSignals(true);
+    table_experiment1->blockSignals(true);
+    table_homeWork1->blockSignals(true);
+    table_model2->blockSignals(true);
+    table_experiment2->blockSignals(true);
+    table_homeWork2->blockSignals(true);
     table_attdendance->blockSignals(true);
 
-    // 刷新考勤表
-    this->table_attdendance->removeColumns(0, table_attdendance->rowCount());
-    operExcel->setAttdendanceViewModel(table_attdendance);
+    update_dataview();
 
-    // 恢复信号和槽的连接
+    // 5. 恢复信号和槽的连接
+    table_model1->blockSignals(false);
+    table_experiment1->blockSignals(false);
+    table_homeWork1->blockSignals(false);
+    table_model2->blockSignals(false);
+    table_experiment2->blockSignals(false);
+    table_homeWork2->blockSignals(false);
     table_attdendance->blockSignals(false);
 }
 
@@ -1080,25 +1057,7 @@ void MainWindow::sortByID(bool &ret)
     table_homeWork2->blockSignals(true);
     table_attdendance->blockSignals(true);
 
-    // 4. 更新模型并刷新视图
-    // 删除所有行，但保留表头
-    table_model1->removeRows(0, table_model1->rowCount());
-    operExcel->setClassTableViewModel(table_model1, 1);
-    table_experiment1->removeRows(0, table_experiment1->rowCount());
-    operExcel->setExperimentViewModel(table_experiment1, 1);
-    table_homeWork1->removeRows(0, table_homeWork1->rowCount());
-    operExcel->setHomeWorkViewModel(table_homeWork1, 1);
-
-    table_model2->removeRows(0, table_model2->rowCount());
-    operExcel->setClassTableViewModel(table_model2, 2);
-    table_experiment2->removeRows(0, table_experiment2->rowCount());
-    operExcel->setExperimentViewModel(table_experiment2, 2);
-    table_homeWork2->removeRows(0, table_homeWork2->rowCount());
-    operExcel->setHomeWorkViewModel(table_homeWork2, 2);
-
-    // 刷新考勤表
-    table_attdendance->removeColumns(0, table_attdendance->rowCount());
-    operExcel->setAttdendanceViewModel(table_attdendance);
+    update_dataview();
 
     // 5. 恢复信号和槽的连接
     table_model1->blockSignals(false);
@@ -1137,25 +1096,7 @@ void MainWindow::sortByTotalScore(bool &ret)
     table_homeWork2->blockSignals(true);
     table_attdendance->blockSignals(true);
 
-    // 4. 更新模型并刷新视图
-    // 删除所有行，但保留表头
-    table_model1->removeRows(0, table_model1->rowCount());
-    operExcel->setClassTableViewModel(table_model1, 1);
-    table_experiment1->removeRows(0, table_experiment1->rowCount());
-    operExcel->setExperimentViewModel(table_experiment1, 1);
-    table_homeWork1->removeRows(0, table_homeWork1->rowCount());
-    operExcel->setHomeWorkViewModel(table_homeWork1, 1);
-
-    table_model2->removeRows(0, table_model2->rowCount());
-    operExcel->setClassTableViewModel(table_model2, 2);
-    table_experiment2->removeRows(0, table_experiment2->rowCount());
-    operExcel->setExperimentViewModel(table_experiment2, 2);
-    table_homeWork2->removeRows(0, table_homeWork2->rowCount());
-    operExcel->setHomeWorkViewModel(table_homeWork2, 2);
-
-    // 刷新考勤表
-    table_attdendance->removeColumns(0, table_attdendance->rowCount());
-    operExcel->setAttdendanceViewModel(table_attdendance);
+    update_dataview();
 
     // 5. 恢复信号和槽的连接
     table_model1->blockSignals(false);
@@ -1168,6 +1109,16 @@ void MainWindow::sortByTotalScore(bool &ret)
 
     ret = true;  // 设置返回值为 true，表示排序成功
 }
+
+/**
+ * @brief MainWindow::setActionsContextMenu
+ * 设置 右键菜单 右键菜单 选择设置添加行数和删除行数
+ */
+void MainWindow::setActionsContextMenu()
+{
+
+}
+
 
 
 //# end MainWindow.cpp
@@ -1243,6 +1194,12 @@ void MainWindow::on_ac_final_overall_triggered()
     {
         showMessageBox("请先导入文件");
         return;
+    }
+    if(ui->ac_final_overall->isChecked()){
+
+    }
+    else{
+
     }
 }
 
@@ -1354,24 +1311,6 @@ void MainWindow::deleteStudent(int classNumber, int rowIndex) {
             stu_1.remove(rowIndex);
             finalSheet->setClass1Students(stu_1);
 
-            // 暂时禁用信号和槽的连接
-            table_model1->blockSignals(true);
-            table_experiment1->blockSignals(true);
-            table_homeWork1->blockSignals(true);
-
-            // 删除所有行，但保留表头
-            table_model1->removeRows(0, table_model1->rowCount());
-            operExcel->setClassTableViewModel(table_model1, 1);
-            table_experiment1->removeRows(0, table_experiment1->rowCount());
-            operExcel->setExperimentViewModel(table_experiment1, 1);
-            table_homeWork1->removeRows(0, table_homeWork1->rowCount());
-            operExcel->setHomeWorkViewModel(table_homeWork1, 1);
-
-            // 恢复信号和槽的连接
-            table_model1->blockSignals(false);
-            table_experiment1->blockSignals(false);
-            table_homeWork1->blockSignals(false);
-
         } else {
             qDebug() << "Invalid row index for class 1.";
         }
@@ -1386,33 +1325,35 @@ void MainWindow::deleteStudent(int classNumber, int rowIndex) {
             table_experiment2->blockSignals(true);
             table_homeWork2->blockSignals(true);
 
-            // 删除所有行，但保留表头
-            table_model2->removeRows(0, table_model2->rowCount());
-            operExcel->setClassTableViewModel(table_model2, 2);
-            table_experiment2->removeRows(0, table_experiment2->rowCount());
-            operExcel->setExperimentViewModel(table_experiment2, 2);
-            table_homeWork2->removeRows(0, table_homeWork2->rowCount());
-            operExcel->setHomeWorkViewModel(table_homeWork2, 2);
-
-            // 恢复信号和槽的连接
-            table_model2->blockSignals(false);
-            table_experiment2->blockSignals(false);
-            table_homeWork2->blockSignals(false);
-
         }
     } else {
         qDebug() << "Invalid class number.";
     }
-    // 暂时禁用信号和槽的连接
+    // 3. 禁用信号和槽的连接以防止多余的更新
+    table_model1->blockSignals(true);
+    table_experiment1->blockSignals(true);
+    table_homeWork1->blockSignals(true);
+    table_model2->blockSignals(true);
+    table_experiment2->blockSignals(true);
+    table_homeWork2->blockSignals(true);
     table_attdendance->blockSignals(true);
 
-    // 刷新考勤表
-    operExcel->setAttdendanceViewModel(table_attdendance);
+    update_dataview();
 
-    // 恢复信号和槽的连接
+    // 5. 恢复信号和槽的连接
+    table_model1->blockSignals(false);
+    table_experiment1->blockSignals(false);
+    table_homeWork1->blockSignals(false);
+    table_model2->blockSignals(false);
+    table_experiment2->blockSignals(false);
+    table_homeWork2->blockSignals(false);
     table_attdendance->blockSignals(false);
 }
 
+/**
+ * @brief MainWindow::on_ac_deleteStu_triggered
+ * 学生 删除按钮 点击
+ */
 void MainWindow::on_ac_deleteStu_triggered() {
     if (this->path == "NullPath" && this->notConfig) {
         qWarning() << "未导入文件|配置";

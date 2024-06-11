@@ -39,6 +39,8 @@ protected:
     void sortByID(bool &ret);
     void sortByTotalScore(bool &ret);
 
+    void setActionsContextMenu();//设置右键菜单
+
 public:
     QStack<QPair<FinalSheet::StudentData,int>> changedDataStack; //记录 变化的数据 对象 和 班级
 
@@ -146,6 +148,7 @@ private slots:
     void on_ac_deleteTable_triggered();
 
     void on_ac_autoConfigTime_2_triggered();
+
 
 public:
     CustomDialog *customDialog = nullptr;
