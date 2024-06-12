@@ -27,7 +27,7 @@
    <property name="cursor">
     <cursorShape>PointingHandCursor</cursorShape>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="font">
@@ -92,6 +92,12 @@
           <property name="horizontalScrollMode">
            <enum>QAbstractItemView::ScrollPerItem</enum>
           </property>
+          <property name="gridStyle">
+           <enum>Qt::SolidLine</enum>
+          </property>
+          <property name="sortingEnabled">
+           <bool>false</bool>
+          </property>
          </widget>
         </item>
        </layout>
@@ -133,7 +139,7 @@
        <attribute name="title">
         <string>考勤信息总表</string>
        </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
          <widget class="QTableView" name="tableView_3">
           <property name="font">
@@ -720,6 +726,36 @@
    </property>
    <property name="toolTip">
     <string>设置自动保存时间SQL</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="ac_addcol">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images2/add_24dp_FILL0_wght400_GRAD0_opsz24.png</normaloff>:/images2/add_24dp_FILL0_wght400_GRAD0_opsz24.png</iconset>
+   </property>
+   <property name="text">
+    <string>增加列</string>
+   </property>
+   <property name="toolTip">
+    <string>增加列</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="ac_drop_col">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images2/remove_24dp_FILL0_wght400_GRAD0_opsz24.png</normaloff>:/images2/remove_24dp_FILL0_wght400_GRAD0_opsz24.png</iconset>
+   </property>
+   <property name="text">
+    <string>删除列</string>
+   </property>
+   <property name="toolTip">
+    <string>删除列</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>

@@ -485,19 +485,8 @@ void OperExcel::open_Excel(QString &path, bool &ret,QObject *parent)
         setAttendance();qDebug()<<"考勤成绩已导入";
         //计算总成绩
         countTotalScore();
-
-
-        //设置学生信息到tableview
-        QStandardItemModel* model1 =  m_parent_mainWindow->getClass1Model();
-        QStandardItemModel* model2 =  m_parent_mainWindow->getClass2Model();
-
-        qDebug()<<"一班 信息已导入";
-        setClassTableViewModel(model1,1);
-
-        qDebug()<<"二班 信息已导入";
-        setClassTableViewModel(model2,2);
-
     }
+
 }
 
 QStandardItemModel* OperExcel::getQStandardItemModelPoint()

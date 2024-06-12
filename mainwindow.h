@@ -149,6 +149,9 @@ private slots:
 
     void on_ac_autoConfigTime_2_triggered();
 
+    //右键菜单
+    void showHeaderContextMenu(const QPoint &pos);
+
 
 public:
     CustomDialog *customDialog = nullptr;

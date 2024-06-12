@@ -18,6 +18,7 @@
 #include "iostream"
 #include "mysettings.h"
 #include "sqldata.h"
+#include "QHeaderView"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -206,42 +207,7 @@ void MainWindow::handleFile(const QString &filePath)
         qInfo()<<"文件打开成功！";
         isopen = true;
         //考勤信息初始化
-        if(table_attdendance == nullptr)
-        {
-            table_attdendance = new QStandardItemModel;
-            QStringList heardLabels;
-            heardLabels<<"学号1"<<"姓名1"<<"1考勤次数"<<"学号2"<<"姓名2"<<"2考勤次数";
-            table_attdendance->setHorizontalHeaderLabels(heardLabels);
-            operExcel->setAttdendanceViewModel(table_attdendance);
-            connect(table_attdendance,&QStandardItemModel::itemChanged,this,
-                    &MainWindow::handleItemChanged_attendance);
-        }
-        ui->tableView_3->setModel(table_attdendance);
-
-        QStringList heardLaber;
-        heardLaber<<"学号"<<"姓名";
-        if(table_experiment1 == nullptr){
-            table_experiment1 = new QStandardItemModel(this);
-            table_experiment1->setHorizontalHeaderLabels(heardLaber);
-
-        }
-        if(table_experiment2 == nullptr){
-            table_experiment2 = new QStandardItemModel(this);
-            table_experiment2->setHorizontalHeaderLabels(heardLaber);
-        }
-        operExcel->setExperimentViewModel(table_experiment1,1);
-        operExcel->setExperimentViewModel(table_experiment2,2);
-
-        if(table_homeWork1 == nullptr){
-            table_homeWork1 = new QStandardItemModel(this);
-            table_homeWork1->setHorizontalHeaderLabels(heardLaber);
-        }
-        if(table_homeWork2 == nullptr){
-            table_homeWork2 = new QStandardItemModel(this);
-            table_homeWork2->setHorizontalHeaderLabels(heardLaber);
-        }
-        operExcel->setHomeWorkViewModel(table_homeWork1,1);
-        operExcel->setHomeWorkViewModel(table_homeWork2,2);
+        update_dataview();
 
     }else{
         this->label_tips->setText("文件未打开");
@@ -925,9 +891,10 @@ void MainWindow::read_Iniconfig(bool &ret)
     finalSheet->readclass1FromConfig();
     finalSheet->readclass2FromConfig();
 
-    update_dataview();
 
     finalSheet->readCourseDataConfig();
+
+    update_dataview();
 
     MySettings::instance().loadTimerData("chooseTime",selectedOption);
     if (selectedOption == "不启动自动保存") {
@@ -962,10 +929,9 @@ void MainWindow::read_Iniconfig(bool &ret)
     ret = true;
 }
 
-
 /**
  * @brief MainWindow::update_dataview
- * @warning 未验证的函数 更新视图
+ * @warning 更新视图
  */
 void MainWindow::update_dataview()
 {
@@ -979,8 +945,49 @@ void MainWindow::update_dataview()
     connect(table_attdendance,&QStandardItemModel::itemChanged,this,
             &MainWindow::handleItemChanged_attendance);
 
-    QStringList heardLaber;
+    QStringList heardLaber,_heardLaber;
     heardLaber<<"学号"<<"姓名";
+    _heardLaber = heardLaber;
+    try {
+        // 检查 finalSheet 是否为空指针
+        if (!finalSheet) {
+            throw std::runtime_error("finalSheet is a null pointer.");
+        }
+
+        // 检查 class1_students 容器是否为空或索引是否超出范围
+        const auto& students = finalSheet->class1_students();
+        if (students.size() <= 1) {
+            throw std::out_of_range("class1_students container size is too small.");
+        }
+
+        // 检查 sub_experiment 容器是否为空
+        const auto& subExperiments = students.at(0).sub_experiment;
+        if (subExperiments.isEmpty()) {
+            throw std::out_of_range("sub_experiment container is empty.");
+        }
+
+        // 遍历 sub_experiment 容器
+        for (qsizetype i = 1; i <= subExperiments.size(); ++i) {
+            heardLaber.append(QString("实验%1").arg(i));
+        }
+        for (qsizetype i = 1; i <= students.at(0).sub_homework.size(); ++i) {
+            _heardLaber.append(QString("作业%1").arg(i));
+        }
+
+    } catch (const std::out_of_range &e) {
+        qDebug() << "std::out_of_range caught:" << e.what();
+        // 处理索引越界异常
+    } catch (const std::runtime_error &e) {
+        qDebug() << "std::runtime_error caught:" << e.what();
+        // 处理空指针异常
+    } catch (const std::exception &e) {
+        qDebug() << "Standard exception caught:" << e.what();
+        // 处理其他标准异常
+    } catch (...) {
+        qDebug() << "Unknown exception caught.";
+        // 处理其他未知异常
+    }
+
     if(table_experiment1 == nullptr){
         table_experiment1 = new QStandardItemModel(this);
     }
@@ -991,15 +998,16 @@ void MainWindow::update_dataview()
     }
     table_experiment2->setHorizontalHeaderLabels(heardLaber);
 
+    //-----------------homework------------------------//
     if(table_homeWork1 == nullptr){
         table_homeWork1 = new QStandardItemModel(this);
     }
-    table_homeWork1->setHorizontalHeaderLabels(heardLaber);
+    table_homeWork1->setHorizontalHeaderLabels(_heardLaber);
     if(table_homeWork2 == nullptr){
         table_homeWork2 = new QStandardItemModel(this);
     }
 
-    table_homeWork2->setHorizontalHeaderLabels(heardLaber);
+    table_homeWork2->setHorizontalHeaderLabels(_heardLaber);
 
     operExcel->setHomeWorkViewModel(table_homeWork1,1);
     operExcel->setHomeWorkViewModel(table_homeWork2,2);
@@ -1011,7 +1019,11 @@ void MainWindow::update_dataview()
     operExcel->setExperimentViewModel(table_experiment2,2);
 
     QStringList heardLabels;
-    heardLabels<<"学号"<<"姓名"<<"考勤"<<"作业"<<"实验"<<"总成绩"<<"备注";
+    heardLabels<<"学号"<<"姓名"<<QString("考勤%%1").arg(finalSheet->getCourseData().rate_attendance.toString())
+                <<QString("作业%%1").arg(finalSheet->getCourseData().rate_homework.toString())
+                <<QString("实验%%1").arg(finalSheet->getCourseData().rate_experiment.toString())
+                <<"总成绩"<<"备注";
+
     table_model1->setHorizontalHeaderLabels(heardLabels);
     table_model2->setHorizontalHeaderLabels(heardLabels);
 
@@ -1116,12 +1128,45 @@ void MainWindow::sortByTotalScore(bool &ret)
  */
 void MainWindow::setActionsContextMenu()
 {
+    QHeaderView *horizontalHeader1 = ui->tableView->horizontalHeader();
+    QHeaderView *horizontalHeader2 = ui->tableView_2->horizontalHeader();
 
+    horizontalHeader1->setContextMenuPolicy(Qt::CustomContextMenu);
+    horizontalHeader2->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    connect(horizontalHeader1,&QHeaderView::customContextMenuRequested,
+            this,&MainWindow::showHeaderContextMenu);
+
+    connect(horizontalHeader2,&QHeaderView::customContextMenuRequested,
+            this,&MainWindow::showHeaderContextMenu);
 }
 
+/**
+ * @brief MainWindow::showHeaderContextMenu
+ * @param pos 参数表示在表头视图中的本地坐标（即相对于表头视图的坐标），
+ * 这用于确定右键点击事件发生的位置。
+ *
+ */
+void MainWindow::showHeaderContextMenu(const QPoint &pos)
+{
+    QHeaderView *header = qobject_cast<QHeaderView*>(sender());
+    if (!header)
+        return;
 
+    if(ui->tableView->model() == table_model1 ||
+        ui->tableView->model() == table_model2){
+        return;
+    }
 
-//# end MainWindow.cpp
+    // 创建右键菜单
+    QMenu contextMenu;
+    contextMenu.addAction(ui->ac_addcol);
+    contextMenu.addAction(ui->ac_drop_col);
+
+    // 显示菜单
+    contextMenu.exec(header->viewport()->mapToGlobal(pos));
+}
+
 void MainWindow::on_ac_homework_triggered()
 {//显示作业成绩 && 平时成绩
     if(path == "NullPath" &&  notConfig)
@@ -1579,6 +1624,19 @@ void MainWindow::on_ac_download_triggered()
         }
         return;
     }
+    //读取数据库中的数据
+    if(!SQLData::instance().isLinked()){
+        showMessageBox("数据库未连接!");
+        return;
+    }
+
+    QMap <int,QVector<FinalSheet::StudentData>>studata_map(SQLData::instance().readStudentData());
+    finalSheet->setClass1Students(studata_map.value(1));
+    finalSheet->setClass2Students(studata_map.value(2));
+    finalSheet->setCourseData(SQLData::instance().readCourseData());
+
+    update_dataview();
+    this->notConfig = false;
 
 }
 
