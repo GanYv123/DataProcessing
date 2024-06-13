@@ -383,3 +383,54 @@ void connectSQLDialog::connectToDatabase()
 
     QDialog::accept();
 }
+
+QSlider *CustomSlider::createSliderWithStyle(QWidget *parent)
+{
+    // 创建滑块控件
+    QSlider *slider = new QSlider(Qt::Horizontal, parent);
+    slider->setRange(30, 100); // 设置范围为 0 到 100
+    slider->setValue(this->windowOpacity() * 100); // 设置初始值为当前不透明度
+
+    // 设置滑块样式表
+    QString sliderStyle = R"(
+        QSlider::groove:horizontal {
+            border: 1px solid #bbb;
+            background: #fff;
+            height: 10px;
+            border-radius: 4px;
+        }
+        QSlider::sub-page:horizontal {
+            background: #66e;
+            border: 1px solid #777;
+            height: 10px;
+            border-radius: 4px;
+        }
+        QSlider::add-page:horizontal {
+            background: #fff;
+            border: 1px solid #777;
+            height: 10px;
+            border-radius: 4px;
+        }
+        QSlider::handle:horizontal {
+            background: #eee;
+            border: 1px solid #aaa;
+            width: 18px;
+            height: 18px;
+            margin-top: -5px;
+            margin-bottom: -5px;
+            border-radius: 9px;
+        }
+        QSlider::handle:horizontal:hover {
+            background: #ddd;
+            border: 1px solid #888;
+        }
+    )";
+
+    slider->setStyleSheet(sliderStyle);
+
+    return slider;
+}
+CustomSlider::CustomSlider(QWidget *parent) : QWidget(parent)
+{
+    // 构造函数的逻辑，例如初始化成员变量等
+}

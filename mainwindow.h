@@ -12,6 +12,8 @@
 #include <thread>
 #include <QStack>
 #include <QPair>
+#include "ui_finalscoremainwidget.h"
+#include "finalscoremainwidget.h"
 
 //声明类
 class QLabel;
@@ -21,7 +23,7 @@ class FinalSheet;
 
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
+namespace Ui { class MainWindow;}
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -40,6 +42,7 @@ protected:
     void sortByTotalScore(bool &ret);
 
     void setActionsContextMenu();//设置右键菜单
+    void setTableViewHeaderConnect();
 
 public:
     QStack<QPair<FinalSheet::StudentData,int>> changedDataStack; //记录 变化的数据 对象 和 班级
@@ -151,7 +154,12 @@ private slots:
 
     //右键菜单
     void showHeaderContextMenu(const QPoint &pos);
+    //双击跳转
+    void onHeaderDoubleClicked_tableview(int logicalIndex);
+    void onHeaderDoubleClicked_tableview_2(int logicalIndex);
 
+
+    void on_ac_setWindowOpacity_triggered();
 
 public:
     CustomDialog *customDialog = nullptr;
@@ -162,6 +170,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    FinalScoreMainWidget * mainwidget_finalScore = nullptr;
+
 
     OperExcel *operExcel = nullptr;
     QStandardItemModel *table_model1 = nullptr; //班级 1

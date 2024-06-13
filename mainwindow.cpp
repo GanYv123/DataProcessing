@@ -18,11 +18,13 @@
 #include "iostream"
 #include "mysettings.h"
 #include "sqldata.h"
+#include "QStyleOptionSlider"
 #include "QHeaderView"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow),finalSheet(new FinalSheet(this))
+    , mainwidget_finalScore(new FinalScoreMainWidget(this))
 {
     ui->setupUi(this);
 
@@ -130,7 +132,9 @@ void MainWindow::initMainWindow()
         ui->ac_hidden_configFile->setIcon(icon);
     }
 
-    setActionsContextMenu();
+    //信号连接
+    setActionsContextMenu(); //右键菜单
+    setTableViewHeaderConnect(); //双击
 
 }
 
@@ -1142,10 +1146,22 @@ void MainWindow::setActionsContextMenu()
 }
 
 /**
+ * @brief MainWindow::setTableViewHeaderConnect
+ * 用于 tableview 的 single & slot 的 双击 连接
+ */
+void MainWindow::setTableViewHeaderConnect()
+{
+    connect(ui->tableView->horizontalHeader(),&QHeaderView::sectionDoubleClicked,
+            this,&MainWindow::onHeaderDoubleClicked_tableview);
+
+    connect(ui->tableView_2->horizontalHeader(),&QHeaderView::sectionDoubleClicked,
+            this,&MainWindow::onHeaderDoubleClicked_tableview_2);
+}
+
+/**
  * @brief MainWindow::showHeaderContextMenu
  * @param pos 参数表示在表头视图中的本地坐标（即相对于表头视图的坐标），
  * 这用于确定右键点击事件发生的位置。
- *
  */
 void MainWindow::showHeaderContextMenu(const QPoint &pos)
 {
@@ -1158,6 +1174,15 @@ void MainWindow::showHeaderContextMenu(const QPoint &pos)
         return;
     }
 
+    // 获取被点击的表头索引
+    int logicalIndex = header->logicalIndexAt(pos);
+    int columnCount = header->model()->columnCount();
+
+    // 检查索引是否是第一个、第二个或最后一个表头
+    if (logicalIndex == 0 || logicalIndex == 1 || logicalIndex == columnCount - 1) {
+        return; // 如果是第一个、第二个或最后一个表头，不显示菜单
+    }
+
     // 创建右键菜单
     QMenu contextMenu;
     contextMenu.addAction(ui->ac_addcol);
@@ -1167,8 +1192,49 @@ void MainWindow::showHeaderContextMenu(const QPoint &pos)
     contextMenu.exec(header->viewport()->mapToGlobal(pos));
 }
 
+/**
+ * @brief MainWindow::onHeaderDoubleClicked
+ * 更具当前视图上的模型的不同实现 不同的项 双击之后的跳转
+ * @title 双击跳转函数
+ *
+ */
+void MainWindow::onHeaderDoubleClicked_tableview(int logicalIndex)
+{
+    QAbstractItemModel* model = ui->tableView->model();
+    if(model == table_model1){
+        qDebug()<<"tableview_1触发跳转 "<<logicalIndex;
+        switch (logicalIndex) {
+        case 2:
+            ui->tabWidget->setCurrentIndex(2);
+            ui->ac_toallSocre->setChecked(false);
+            break;
+        case 3:
+            ui->tableView->setModel(table_homeWork1);
+            ui->ac_homework->trigger();
+            break;
+        case 4:
+            ui->tableView->setModel(table_experiment1);
+            ui->ac_experimentScore->trigger();
+            break;
+        default:
+            break;
+        }
+    }
+}
+
+void MainWindow::onHeaderDoubleClicked_tableview_2(int logicalIndex)
+{
+    QAbstractItemModel* model = ui->tableView_2->model();
+    if(model == table_model2){
+        qDebug()<<"tableview_2触发跳转 "<<logicalIndex;
+    }
+}
+
 void MainWindow::on_ac_homework_triggered()
 {//显示作业成绩 && 平时成绩
+
+    ui->tabWidget->setCurrentIndex(0);
+
     if(path == "NullPath" &&  notConfig)
     {
         showMessageBox("请先导入文件");
@@ -1196,6 +1262,8 @@ void MainWindow::on_ac_homework_triggered()
 // 实验成绩
 void MainWindow::on_ac_experimentScore_triggered()
 {
+    ui->tabWidget->setCurrentIndex(0);
+
     if(path == "NullPath" &&  notConfig)
     {
         showMessageBox("请先导入文件");
@@ -1218,6 +1286,8 @@ void MainWindow::on_ac_experimentScore_triggered()
     connect(table_experiment2,&QStandardItemModel::itemChanged,this,
             &MainWindow::handleItemChanged_experimentView2);
 
+
+
 }
 
 //跳转回成绩汇总表
@@ -1228,24 +1298,21 @@ void MainWindow::on_ac_toallSocre_triggered()
         showMessageBox("请先导入文件");
         return;
     }
+    ui->tabWidget->setCurrentIndex(0);
     ui->tableView->setModel(table_model1);
     ui->tableView_2->setModel(table_model2);
 
 }
 
+/**
+ * @brief MainWindow::on_ac_final_overall_triggered
+ * 跳转 期末 详情 表
+ */
 void MainWindow::on_ac_final_overall_triggered()
 {
-    if(path == "NullPath" &&  notConfig)
-    {
-        showMessageBox("请先导入文件");
-        return;
-    }
-    if(ui->ac_final_overall->isChecked()){
-
-    }
-    else{
-
-    }
+    mainwidget_finalScore->show();
+    connect(mainwidget_finalScore,&FinalScoreMainWidget::destroyedWithSignal,this,&MainWindow::show);
+    this->hide();
 }
 
 
@@ -1752,3 +1819,33 @@ void MainWindow::on_ac_autoConfigTime_2_triggered()
     }
 }
 
+
+void MainWindow::on_ac_setWindowOpacity_triggered()
+{
+    // 创建一个 QDialog 作为滑块控件的容器
+    QDialog *dialog = new QDialog(this);
+    dialog->setWindowTitle("Set Window Opacity");
+
+    // 创建滑块控件
+    CustomSlider cslider;
+    QSlider *slider = cslider.createSliderWithStyle(dialog);
+
+    // 创建标签显示当前值
+    QLabel *label = new QLabel(QString::number(this->windowOpacity() * 100) + "%", dialog);
+
+    // 连接滑块值的变化信号到槽函数
+    connect(slider, &QSlider::valueChanged, this, [=](int value){
+        double opacity = value / 100.0;
+        this->setWindowOpacity(opacity);
+        label->setText(QString::number(value) + "%");
+    });
+
+    // 设置布局
+    QVBoxLayout *layout = new QVBoxLayout(dialog);
+    layout->addWidget(slider);
+    layout->addWidget(label);
+    dialog->setLayout(layout);
+
+    // 显示对话框
+    dialog->exec();
+}

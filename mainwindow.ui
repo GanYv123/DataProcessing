@@ -47,7 +47,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -79,6 +79,9 @@
             <bold>true</bold>
             <strikeout>false</strikeout>
            </font>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::StrongFocus</enum>
           </property>
           <property name="editTriggers">
            <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
@@ -196,6 +199,7 @@
     <addaction name="ac_setConfigPath"/>
     <addaction name="ac_autoConfigTime"/>
     <addaction name="ac_deleteTable"/>
+    <addaction name="ac_setWindowOpacity"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -250,6 +254,9 @@
      <bold>false</bold>
      <underline>false</underline>
     </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>ArrowCursor</cursorShape>
    </property>
    <property name="windowTitle">
     <string>toolBar</string>
@@ -756,6 +763,17 @@
    </property>
    <property name="toolTip">
     <string>删除列</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="ac_setWindowOpacity">
+   <property name="text">
+    <string>设置窗口不透明度</string>
+   </property>
+   <property name="toolTip">
+    <string>设置窗口不透明度</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>

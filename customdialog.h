@@ -13,6 +13,8 @@
 #include <QHBoxLayout>
 #include <QMessageBox>
 #include "finalsheet.h"
+#include <QStyleOptionSlider>
+#include <QSlider>
 
 class QComboBox;
 
@@ -149,6 +151,15 @@ private:
     QString m_dbName;
     QString connectionName;
 
+};
+
+class CustomSlider : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit CustomSlider(QWidget *parent = nullptr);
+    // 其他成员和方法
+    QSlider* createSliderWithStyle(QWidget *parent);
 };
 
 #endif // CUSTOMDIALOG_H

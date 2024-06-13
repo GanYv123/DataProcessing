@@ -9,6 +9,7 @@ CONFIG += c++17
 
 SOURCES += \
     customdialog.cpp \
+    finalscoremainwidget.cpp \
     finalsheet.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -18,6 +19,7 @@ SOURCES += \
 
 HEADERS += \
     customdialog.h \
+    finalscoremainwidget.h \
     finalsheet.h \
     mainwindow.h \
     mysettings.h \
@@ -25,6 +27,7 @@ HEADERS += \
     sqldata.h
 
 FORMS += \
+    finalscoremainwidget.ui \
     mainwindow.ui
 
 # Default rules for deployment.
