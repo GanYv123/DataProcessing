@@ -186,6 +186,7 @@
     <addaction name="ac_exportExcel"/>
     <addaction name="separator"/>
     <addaction name="separator"/>
+    <addaction name="ac_creatFiles"/>
     <addaction name="ac_export_template"/>
    </widget>
    <widget class="QMenu" name="menu_3">
@@ -321,7 +322,7 @@
   <action name="ac_creatFiles">
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/images/514.bmp</normaloff>:/images/514.bmp</iconset>
+     <normaloff>:/images2/add_24dp_FILL0_wght400_GRAD0_opsz24.png</normaloff>:/images2/add_24dp_FILL0_wght400_GRAD0_opsz24.png</iconset>
    </property>
    <property name="text">
     <string>新建文件</string>

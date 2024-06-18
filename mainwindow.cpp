@@ -254,14 +254,14 @@ void MainWindow::on_ac_openFiles_triggered() //打开文件
 }
 
 
-//增加try catch 日志记录功能
+/**
+ * @brief MainWindow::on_ac_creatFiles_triggered
+ * 新建文件，当点击时跳转 新建文件的Widget,在新建文件的 widget 里面创建课程信息到 finalsheet
+ */
 void MainWindow::on_ac_creatFiles_triggered() //demo function BETA 1
-{//新建文件 自己导入空文件 学生信息都空！
-    if(!operExcel)
-        operExcel = new OperExcel();
-    bool ret;
-    QString path = "./1.xlsx";
-
+{
+    dialog_newFileDialog = new NewFileDialog(this);
+    dialog_newFileDialog->show();
 }
 
 void MainWindow::on_ac_choose_school_year_triggered()

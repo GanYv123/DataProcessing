@@ -13,12 +13,15 @@ class FinalScoreMainWidget : public QMainWindow
     Q_OBJECT
 
 public:
-signals:
-    void destroyedWithSignal(); //界面关闭时触发的信号
-
-public:
     explicit FinalScoreMainWidget(QWidget *parent = nullptr);
     ~FinalScoreMainWidget();
+
+protected:
+    void initUI();
+
+public:
+signals:
+    void destroyedWithSignal(); //界面关闭时触发的信号
 
 private:
     Ui::FinalScoreMainWidget *ui;

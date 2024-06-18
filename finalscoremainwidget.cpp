@@ -2,18 +2,30 @@
 #include "ui_finalscoremainwidget.h"
 #include <QCloseEvent>
 
+/**
+ * @brief FinalScoreMainWidget::FinalScoreMainWidget
+ * 构造函数
+ * @param parent
+ */
 FinalScoreMainWidget::FinalScoreMainWidget(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::FinalScoreMainWidget)
 {
     ui->setupUi(this);
     connect(ui->ac_back,&QAction::triggered,parent,&QWidget::show);
+    initUI();
 }
 
 FinalScoreMainWidget::~FinalScoreMainWidget()
 {
     delete ui;
 }
+
+void FinalScoreMainWidget::initUI()
+{
+    this->resize(840,600);
+}
+
 
 void FinalScoreMainWidget::closeEvent(QCloseEvent *event)
 {

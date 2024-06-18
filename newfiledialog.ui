@@ -1,0 +1,1301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>NewFileDialog</class>
+ <widget class="QDialog" name="NewFileDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>729</width>
+    <height>579</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2" stretch="8,0">
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>课程信息</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QSplitter" name="splitter">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <widget class="QGroupBox" name="groupBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="baseSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>9</pointsize>
+           </font>
+          </property>
+          <property name="title">
+           <string>设置课程基本信息</string>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
+          <layout class="QFormLayout" name="formLayout">
+           <property name="sizeConstraint">
+            <enum>QLayout::SetMaximumSize</enum>
+           </property>
+           <property name="verticalSpacing">
+            <number>3</number>
+           </property>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>课程名称</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="lineEdit_courseName">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>-1</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLineEdit {
+    background-color: #fffbcc; /* 浅黄色背景 */
+    border: 2px solid #ff9900; /* 橙色边框 */
+    padding: 5px;
+    font-size: 14px;
+    color: #333333; /* 深色字体 */
+}
+
+QLineEdit:focus {
+    border: 2px solid #ff6600; /* 聚焦时边框变为深橙色 */
+    background-color: #fff3b0; /* 聚焦时背景变为更亮的浅黄色 */
+}
+</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_4">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>课程编号</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="lineEdit_courseID">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>-1</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLineEdit {
+    background-color: #fffbcc; /* 浅黄色背景 */
+    border: 2px solid #ff9900; /* 橙色边框 */
+    padding: 5px;
+    font-size: 14px;
+    color: #333333; /* 深色字体 */
+}
+
+QLineEdit:focus {
+    border: 2px solid #ff6600; /* 聚焦时边框变为深橙色 */
+    background-color: #fff3b0; /* 聚焦时背景变为更亮的浅黄色 */
+}
+</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_2">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>课程类型</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QComboBox" name="comboBox_courseType">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>14</pointsize>
+              </font>
+             </property>
+             <item>
+              <property name="text">
+               <string>学科基础</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="3" column="0" colspan="2">
+            <widget class="Line" name="line">
+             <property name="lineWidth">
+              <number>3</number>
+             </property>
+             <property name="midLineWidth">
+              <number>2</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_3">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>学时</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
+            <widget class="QSpinBox" name="spinBox_classHours">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>-1</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QSpinBox::up-button {
+    subcontrol-origin: border;
+    subcontrol-position: top right;
+    width: 16px;
+    image: url(:/images2/add_24dp_FILL0_wght400_GRAD0_opsz24.png); /* 设置增加按钮的图标 */
+}
+
+QSpinBox::down-button {
+    subcontrol-origin: border;
+    subcontrol-position: bottom right;
+    width: 16px;
+    image: url(:/images2/remove_24dp_FILL0_wght400_GRAD0_opsz24.png); /* 设置减少按钮的图标 */
+}
+
+QSpinBox::up-button:hover {
+    background-color: green; /* 悬停时背景颜色 */
+}
+
+QSpinBox::down-button:hover {
+    background-color: rgb(85, 170, 255); /* 悬停时背景颜色 */
+}
+QSpinBox {
+    background-color: #e6f7ff; /* 浅蓝色背景 */
+    border: 2px solid #00bfff; /* 天蓝色边框 */
+    padding: 5px;
+    font-size: 20px;
+    color: #333333; /* 深色字体 */
+}</string>
+             </property>
+             <property name="stepType">
+              <enum>QAbstractSpinBox::DefaultStepType</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_5">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>学分</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="QSpinBox" name="spinBox_Credit">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>-1</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QSpinBox::up-button {
+    subcontrol-origin: border;
+    subcontrol-position: top right;
+    width: 16px;
+    image: url(:/images2/add_24dp_FILL0_wght400_GRAD0_opsz24.png); /* 设置增加按钮的图标 */
+}
+
+QSpinBox::down-button {
+    subcontrol-origin: border;
+    subcontrol-position: bottom right;
+    width: 16px;
+    image: url(:/images2/remove_24dp_FILL0_wght400_GRAD0_opsz24.png); /* 设置减少按钮的图标 */
+}
+
+QSpinBox::up-button:hover {
+    background-color: green; /* 悬停时背景颜色 */
+}
+
+QSpinBox::down-button:hover {
+    background-color: rgb(85, 170, 255); /* 悬停时背景颜色 */
+}
+QSpinBox {
+    background-color: #e6f7ff; /* 浅蓝色背景 */
+    border: 2px solid #00bfff; /* 天蓝色边框 */
+    padding: 5px;
+    font-size: 20px;
+    color: #333333; /* 深色字体 */
+}</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0" colspan="2">
+            <widget class="Line" name="line_2">
+             <property name="lineWidth">
+              <number>3</number>
+             </property>
+             <property name="midLineWidth">
+              <number>2</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="0">
+            <widget class="QLabel" name="label_6">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>考试方式</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="1">
+            <widget class="QComboBox" name="comboBox_2">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>14</pointsize>
+              </font>
+             </property>
+             <item>
+              <property name="text">
+               <string>闭卷考试</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>开卷考试</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>大作业</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="8" column="0">
+            <widget class="QLabel" name="label_7">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>上课次数</string>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="1">
+            <widget class="QSpinBox" name="spinBox_classNum">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>-1</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QSpinBox::up-button {
+    subcontrol-origin: border;
+    subcontrol-position: top right;
+    width: 16px;
+    image: url(:/images2/add_24dp_FILL0_wght400_GRAD0_opsz24.png); /* 设置增加按钮的图标 */
+}
+
+QSpinBox::down-button {
+    subcontrol-origin: border;
+    subcontrol-position: bottom right;
+    width: 16px;
+    image: url(:/images2/remove_24dp_FILL0_wght400_GRAD0_opsz24.png); /* 设置减少按钮的图标 */
+}
+
+QSpinBox::up-button:hover {
+    background-color: green; /* 悬停时背景颜色 */
+}
+
+QSpinBox::down-button:hover {
+    background-color: rgb(85, 170, 255); /* 悬停时背景颜色 */
+}
+QSpinBox {
+    background-color: #e6f7ff; /* 浅蓝色背景 */
+    border: 2px solid #00bfff; /* 天蓝色边框 */
+    padding: 5px;
+    font-size: 20px;
+    color: #333333; /* 深色字体 */
+}</string>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="0" colspan="2">
+            <widget class="Line" name="line_4">
+             <property name="lineWidth">
+              <number>5</number>
+             </property>
+             <property name="midLineWidth">
+              <number>5</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="0">
+            <widget class="QLabel" name="label_13">
+             <property name="font">
+              <font>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>选择学年</string>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="1">
+            <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="8,2,8">
+             <item>
+              <widget class="QSpinBox" name="spinBox">
+               <property name="font">
+                <font>
+                 <pointsize>-1</pointsize>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QSpinBox::up-button {
+    subcontrol-origin: border;
+    subcontrol-position: top right;
+    width: 16px;
+    image: url(:/images2/add_24dp_FILL0_wght400_GRAD0_opsz24.png); /* 设置增加按钮的图标 */
+}
+
+QSpinBox::down-button {
+    subcontrol-origin: border;
+    subcontrol-position: bottom right;
+    width: 16px;
+    image: url(:/images2/remove_24dp_FILL0_wght400_GRAD0_opsz24.png); /* 设置减少按钮的图标 */
+}
+
+QSpinBox::up-button:hover {
+    background-color: green; /* 悬停时背景颜色 */
+}
+
+QSpinBox::down-button:hover {
+    background-color: rgb(85, 170, 255); /* 悬停时背景颜色 */
+}
+QSpinBox {
+    background-color: #e6f7ff; /* 浅蓝色背景 */
+    border: 2px solid #00bfff; /* 天蓝色边框 */
+    padding: 5px;
+    font-size: 20px;
+    color: #333333; /* 深色字体 */
+}</string>
+               </property>
+               <property name="minimum">
+                <number>2000</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="Line" name="line_3">
+               <property name="frameShadow">
+                <enum>QFrame::Plain</enum>
+               </property>
+               <property name="lineWidth">
+                <number>5</number>
+               </property>
+               <property name="midLineWidth">
+                <number>5</number>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="spinBox_2">
+               <property name="font">
+                <font>
+                 <pointsize>-1</pointsize>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QSpinBox::up-button {
+    subcontrol-origin: border;
+    subcontrol-position: top right;
+    width: 16px;
+    image: url(:/images2/add_24dp_FILL0_wght400_GRAD0_opsz24.png); /* 设置增加按钮的图标 */
+}
+
+QSpinBox::down-button {
+    subcontrol-origin: border;
+    subcontrol-position: bottom right;
+    width: 16px;
+    image: url(:/images2/remove_24dp_FILL0_wght400_GRAD0_opsz24.png); /* 设置减少按钮的图标 */
+}
+
+QSpinBox::up-button:hover {
+    background-color: green; /* 悬停时背景颜色 */
+}
+
+QSpinBox::down-button:hover {
+    background-color: rgb(85, 170, 255); /* 悬停时背景颜色 */
+}
+QSpinBox {
+    background-color: #e6f7ff; /* 浅蓝色背景 */
+    border: 2px solid #00bfff; /* 天蓝色边框 */
+    padding: 5px;
+    font-size: 20px;
+    color: #333333; /* 深色字体 */
+}</string>
+               </property>
+               <property name="minimum">
+                <number>2001</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="13" column="0" colspan="2">
+            <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="2,2">
+             <item>
+              <widget class="QRadioButton" name="radioButton_2">
+               <property name="font">
+                <font>
+                 <pointsize>13</pointsize>
+                 <bold>true</bold>
+                 <underline>false</underline>
+                 <strikeout>false</strikeout>
+                </font>
+               </property>
+               <property name="text">
+                <string>第一学期</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioButton">
+               <property name="font">
+                <font>
+                 <pointsize>13</pointsize>
+                 <bold>true</bold>
+                 <underline>false</underline>
+                 <strikeout>false</strikeout>
+                </font>
+               </property>
+               <property name="text">
+                <string>第二学期</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QGroupBox" name="groupBox_2">
+          <property name="font">
+           <font>
+            <pointsize>9</pointsize>
+           </font>
+          </property>
+          <property name="title">
+           <string>设置教师和考核详情</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,0,0,4">
+           <item>
+            <widget class="QGroupBox" name="groupBox_6">
+             <property name="title">
+              <string>班级信息</string>
+             </property>
+             <layout class="QFormLayout" name="formLayout_2">
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_14">
+                <property name="font">
+                 <font>
+                  <pointsize>13</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>专业名称</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLineEdit" name="lineEdit">
+                <property name="styleSheet">
+                 <string notr="true">QLineEdit {
+    background-color: #fffbcc; /* 浅黄色背景 */
+    border: 2px solid #ff9900; /* 橙色边框 */
+    padding: 5px;
+    font-size: 14px;
+    color: #333333; /* 深色字体 */
+}
+
+QLineEdit:focus {
+    border: 2px solid #ff6600; /* 聚焦时边框变为深橙色 */
+    background-color: #fff3b0; /* 聚焦时背景变为更亮的浅黄色 */
+}
+</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_4">
+             <property name="font">
+              <font>
+               <pointsize>9</pointsize>
+              </font>
+             </property>
+             <property name="title">
+              <string>过程性考核比例</string>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,2,1,2,1,2">
+              <item>
+               <widget class="QLabel" name="label_8">
+                <property name="font">
+                 <font>
+                  <pointsize>13</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>考勤</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="spinBox_attendance">
+                <property name="font">
+                 <font>
+                  <pointsize>-1</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QSpinBox::up-button {
+    subcontrol-origin: border;
+    subcontrol-position: top right;
+    width: 16px;
+    image: url(:/images2/add_24dp_FILL0_wght400_GRAD0_opsz24.png); /* 设置增加按钮的图标 */
+}
+
+QSpinBox::down-button {
+    subcontrol-origin: border;
+    subcontrol-position: bottom right;
+    width: 16px;
+    image: url(:/images2/remove_24dp_FILL0_wght400_GRAD0_opsz24.png); /* 设置减少按钮的图标 */
+}
+
+QSpinBox::up-button:hover {
+    background-color: green; /* 悬停时背景颜色 */
+}
+
+QSpinBox::down-button:hover {
+    background-color: rgb(85, 170, 255); /* 悬停时背景颜色 */
+}
+QSpinBox {
+    background-color: #e6f7ff; /* 浅蓝色背景 */
+    border: 2px solid #00bfff; /* 天蓝色边框 */
+    padding: 5px;
+    font-size: 20px;
+    color: #333333; /* 深色字体 */
+}</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_9">
+                <property name="font">
+                 <font>
+                  <pointsize>13</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>作业</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="spinBox_homework">
+                <property name="font">
+                 <font>
+                  <pointsize>-1</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QSpinBox::up-button {
+    subcontrol-origin: border;
+    subcontrol-position: top right;
+    width: 16px;
+    image: url(:/images2/add_24dp_FILL0_wght400_GRAD0_opsz24.png); /* 设置增加按钮的图标 */
+}
+
+QSpinBox::down-button {
+    subcontrol-origin: border;
+    subcontrol-position: bottom right;
+    width: 16px;
+    image: url(:/images2/remove_24dp_FILL0_wght400_GRAD0_opsz24.png); /* 设置减少按钮的图标 */
+}
+
+QSpinBox::up-button:hover {
+    background-color: green; /* 悬停时背景颜色 */
+}
+
+QSpinBox::down-button:hover {
+    background-color: rgb(85, 170, 255); /* 悬停时背景颜色 */
+}
+QSpinBox {
+    background-color: #e6f7ff; /* 浅蓝色背景 */
+    border: 2px solid #00bfff; /* 天蓝色边框 */
+    padding: 5px;
+    font-size: 20px;
+    color: #333333; /* 深色字体 */
+}</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_10">
+                <property name="font">
+                 <font>
+                  <pointsize>13</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>实验</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="spinBox_experiment">
+                <property name="font">
+                 <font>
+                  <pointsize>-1</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QSpinBox::up-button {
+    subcontrol-origin: border;
+    subcontrol-position: top right;
+    width: 16px;
+    image: url(:/images2/add_24dp_FILL0_wght400_GRAD0_opsz24.png); /* 设置增加按钮的图标 */
+}
+
+QSpinBox::down-button {
+    subcontrol-origin: border;
+    subcontrol-position: bottom right;
+    width: 16px;
+    image: url(:/images2/remove_24dp_FILL0_wght400_GRAD0_opsz24.png); /* 设置减少按钮的图标 */
+}
+
+QSpinBox::up-button:hover {
+    background-color: green; /* 悬停时背景颜色 */
+}
+
+QSpinBox::down-button:hover {
+    background-color: rgb(85, 170, 255); /* 悬停时背景颜色 */
+}
+QSpinBox {
+    background-color: #e6f7ff; /* 浅蓝色背景 */
+    border: 2px solid #00bfff; /* 天蓝色边框 */
+    padding: 5px;
+    font-size: 20px;
+    color: #333333; /* 深色字体 */
+}</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_5">
+             <property name="font">
+              <font>
+               <pointsize>9</pointsize>
+              </font>
+             </property>
+             <property name="title">
+              <string>总评比例</string>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="2,3,1,2,3">
+              <item>
+               <widget class="QLabel" name="label_11">
+                <property name="font">
+                 <font>
+                  <pointsize>13</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>过程考核</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="spinBox_7">
+                <property name="font">
+                 <font>
+                  <pointsize>-1</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QSpinBox::up-button {
+    subcontrol-origin: border;
+    subcontrol-position: top right;
+    width: 16px;
+    image: url(:/images2/add_24dp_FILL0_wght400_GRAD0_opsz24.png); /* 设置增加按钮的图标 */
+}
+
+QSpinBox::down-button {
+    subcontrol-origin: border;
+    subcontrol-position: bottom right;
+    width: 16px;
+    image: url(:/images2/remove_24dp_FILL0_wght400_GRAD0_opsz24.png); /* 设置减少按钮的图标 */
+}
+
+QSpinBox::up-button:hover {
+    background-color: green; /* 悬停时背景颜色 */
+}
+
+QSpinBox::down-button:hover {
+    background-color: rgb(85, 170, 255); /* 悬停时背景颜色 */
+}
+QSpinBox {
+    background-color: #e6f7ff; /* 浅蓝色背景 */
+    border: 2px solid #00bfff; /* 天蓝色边框 */
+    padding: 5px;
+    font-size: 20px;
+    color: #333333; /* 深色字体 */
+}</string>
+                </property>
+                <property name="maximum">
+                 <number>10</number>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_12">
+                <property name="font">
+                 <font>
+                  <pointsize>13</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>期末考试</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="spinBox_8">
+                <property name="font">
+                 <font>
+                  <pointsize>-1</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QSpinBox::up-button {
+    subcontrol-origin: border;
+    subcontrol-position: top right;
+    width: 16px;
+    image: url(:/images2/add_24dp_FILL0_wght400_GRAD0_opsz24.png); /* 设置增加按钮的图标 */
+}
+
+QSpinBox::down-button {
+    subcontrol-origin: border;
+    subcontrol-position: bottom right;
+    width: 16px;
+    image: url(:/images2/remove_24dp_FILL0_wght400_GRAD0_opsz24.png); /* 设置减少按钮的图标 */
+}
+
+QSpinBox::up-button:hover {
+    background-color: green; /* 悬停时背景颜色 */
+}
+
+QSpinBox::down-button:hover {
+    background-color: rgb(85, 170, 255); /* 悬停时背景颜色 */
+}
+QSpinBox {
+    background-color: #e6f7ff; /* 浅蓝色背景 */
+    border: 2px solid #00bfff; /* 天蓝色边框 */
+    padding: 5px;
+    font-size: 20px;
+    color: #333333; /* 深色字体 */
+}</string>
+                </property>
+                <property name="maximum">
+                 <number>10</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_3">
+             <property name="font">
+              <font>
+               <pointsize>9</pointsize>
+              </font>
+             </property>
+             <property name="title">
+              <string>教师</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_4">
+              <item>
+               <widget class="QListWidget" name="listWidget_teacher">
+                <property name="font">
+                 <font>
+                  <pointsize>-1</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QListWidget {
+    background-color: #f0f8ff; /* 背景颜色 */
+    border: 2px solid #87cefa; /* 边框颜色 */
+    padding: 5px;
+    font-size: 14px;
+    color: #333333; /* 字体颜色 */
+}
+
+QListWidget::item {
+    background-color: #ffffff; /* 项目项背景颜色 */
+    border: 1px solid #dcdcdc; /* 项目项边框颜色 */
+    padding: 5px;
+    margin: 2px;
+}
+
+QListWidget::item:selected {
+    background-color: #87cefa; /* 选中项背景颜色 */
+    color: #ffffff; /* 选中项字体颜色 */
+}
+
+QListWidget::item:hover {
+    background-color: #b0e0e6; /* 悬停项背景颜色 */
+}
+
+QListWidget::item:selected:hover {
+    background-color: #4682b4; /* 选中且悬停项背景颜色 */
+}
+
+QScrollBar:vertical {
+    border: 1px solid #87cefa;
+    background: #f0f8ff;
+    width: 15px;
+    margin: 22px 0 22px 0;
+}
+
+QScrollBar::handle:vertical {
+    background: #87cefa;
+    min-height: 20px;
+    border-radius: 5px;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    background: #87cefa; /* 更改按钮背景颜色 */
+    border: 1px solid #87cefa;
+    height: 20px;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:vertical {
+    subcontrol-position: bottom;
+}
+
+QScrollBar::sub-line:vertical {
+    subcontrol-position: top;
+}
+
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+    border: 1px solid #87cefa;
+    width: 3px;
+    height: 3px;
+    background: #EE1196; /* 更改箭头背景颜色 */
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}
+</string>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>教师1 : </string>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>14</pointsize>
+                  </font>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>教师2 : </string>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>14</pointsize>
+                  </font>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="frame_2">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,1,1">
+                 <item>
+                  <spacer name="horizontalSpacer_2">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_3">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="bt_addTeacher">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>添加</string>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="icons.qrc">
+                     <normaloff>:/images2/person_add_24dp.png</normaloff>:/images2/person_add_24dp.png</iconset>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="bt_delTeacher">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>删除</string>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="icons.qrc">
+                     <normaloff>:/images2/cancel_24dp_FILL0_wght400_GRAD0_opsz24.png</normaloff>:/images2/cancel_24dp_FILL0_wght400_GRAD0_opsz24.png</iconset>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout" stretch="16,5">
+      <property name="spacing">
+       <number>10</number>
+      </property>
+      <property name="topMargin">
+       <number>7</number>
+      </property>
+      <property name="bottomMargin">
+       <number>3</number>
+      </property>
+      <item>
+       <widget class="QTextEdit" name="textEdit_bottom">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="frame_button">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QPushButton" name="bt_check">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="sizeIncrement">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>检查数据</string>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="bt_ok">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="sizeIncrement">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>确认</string>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="icons.qrc"/>
+ </resources>
+ <connections/>
+</ui>

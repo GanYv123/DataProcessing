@@ -14,6 +14,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     mysettings.cpp \
+    newfiledialog.cpp \
     operexcel.cpp \
     sqldata.cpp
 
@@ -23,12 +24,14 @@ HEADERS += \
     finalsheet.h \
     mainwindow.h \
     mysettings.h \
+    newfiledialog.h \
     operexcel.h \
     sqldata.h
 
 FORMS += \
     finalscoremainwidget.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    newfiledialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

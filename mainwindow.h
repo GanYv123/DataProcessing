@@ -14,6 +14,7 @@
 #include <QPair>
 #include "ui_finalscoremainwidget.h"
 #include "finalscoremainwidget.h"
+#include "newfiledialog.h"
 
 //声明类
 class QLabel;
@@ -171,6 +172,7 @@ public:
 private:
     Ui::MainWindow *ui;
     FinalScoreMainWidget * mainwidget_finalScore = nullptr;
+    NewFileDialog *dialog_newFileDialog = nullptr;
 
 
     OperExcel *operExcel = nullptr;
