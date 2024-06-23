@@ -298,7 +298,7 @@ void OperExcel::loadHomeworkByClassSheet()
                     if(conversionOk) {
                         //qDebug() <<i<<"  "<<j<< "Numeric value:" << numericValue;
                         //将合法数据写入内部数据中
-                        classDatas1[index].sub_homework.append(t_var);
+                        classDatas1[index].sub_homework.append(numericValue);
                     } else {
                         qDebug() <<i<<"  "<<j<< "Not a numeric value:" << t_var.toString();
                     }
@@ -322,7 +322,7 @@ void OperExcel::loadHomeworkByClassSheet()
                     if(conversionOk) {
                         //qDebug() <<i<<"  "<<j<< "Numeric value:" << numericValue;
                         //将合法数据写入内部数据中
-                        classDatas2[index].sub_homework.append(t_var);
+                        classDatas2[index].sub_homework.append(numericValue);
                     } else {
                         qDebug() <<i<<"  "<<j<< "Not a numeric value:" << t_var.toString();
                     }

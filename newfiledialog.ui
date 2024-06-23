@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>729</width>
-    <height>579</height>
+    <height>635</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -268,6 +268,9 @@ QSpinBox {
     color: #333333; /* 深色字体 */
 }</string>
              </property>
+             <property name="singleStep">
+              <number>2</number>
+             </property>
              <property name="stepType">
               <enum>QAbstractSpinBox::DefaultStepType</enum>
              </property>
@@ -527,6 +530,9 @@ QSpinBox {
                <property name="minimum">
                 <number>2000</number>
                </property>
+               <property name="maximum">
+                <number>9999</number>
+               </property>
               </widget>
              </item>
              <item>
@@ -585,14 +591,17 @@ QSpinBox {
                <property name="minimum">
                 <number>2001</number>
                </property>
+               <property name="maximum">
+                <number>9999</number>
+               </property>
               </widget>
              </item>
             </layout>
            </item>
            <item row="13" column="0" colspan="2">
-            <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="2,2">
+            <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,0">
              <item>
-              <widget class="QRadioButton" name="radioButton_2">
+              <widget class="QRadioButton" name="radioButton">
                <property name="font">
                 <font>
                  <pointsize>13</pointsize>
@@ -604,10 +613,13 @@ QSpinBox {
                <property name="text">
                 <string>第一学期</string>
                </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
               </widget>
              </item>
              <item>
-              <widget class="QRadioButton" name="radioButton">
+              <widget class="QRadioButton" name="radioButton_2">
                <property name="font">
                 <font>
                  <pointsize>13</pointsize>
@@ -669,6 +681,88 @@ QLineEdit:focus {
     background-color: #fff3b0; /* 聚焦时背景变为更亮的浅黄色 */
 }
 </string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_15">
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>缺勤扣分%xx</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QSlider" name="horizontalSlider">
+                <property name="styleSheet">
+                 <string notr="true">QSlider::groove:horizontal {
+    border: 1px solid #999999;
+    background: #d3d3d3;
+    height: 8px;
+    border-radius: 4px;
+}
+
+QSlider::handle:horizontal {
+    background: #ffffff;
+    border: 1px solid #5c5c5c;
+    width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    margin: -5px 0; /* 让手柄在槽内居中 */
+}
+
+QSlider::handle:horizontal:hover {
+    background: #b2b2b2;
+    border: 1px solid #999999;
+}
+
+QSlider::sub-page:horizontal {
+    background: #66ccff;
+    border: 1px solid #4da6ff;
+    height: 8px;
+    border-radius: 4px;
+}
+
+QSlider::add-page:horizontal {
+    background: #d3d3d3;
+    border: 1px solid #d3d3d3;
+    height: 8px;
+    border-radius: 4px;
+}
+
+QSlider::tick-mark {
+    background: #000000;
+}
+
+QSlider::tick-mark:horizontal {
+    width: 1px;
+    height: 8px;
+}
+
+QSlider::tick-mark:horizontal:sub-page {
+    background: #66ccff;
+}
+
+QSlider::tick-mark:horizontal:add-page {
+    background: #d3d3d3;
+}
+</string>
+                </property>
+                <property name="maximum">
+                 <number>20</number>
+                </property>
+                <property name="value">
+                 <number>6</number>
+                </property>
+                <property name="tracking">
+                 <bool>true</bool>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
                 </property>
                </widget>
               </item>
@@ -735,6 +829,9 @@ QSpinBox {
     color: #333333; /* 深色字体 */
 }</string>
                 </property>
+                <property name="maximum">
+                 <number>9</number>
+                </property>
                </widget>
               </item>
               <item>
@@ -786,6 +883,9 @@ QSpinBox {
     color: #333333; /* 深色字体 */
 }</string>
                 </property>
+                <property name="maximum">
+                 <number>9</number>
+                </property>
                </widget>
               </item>
               <item>
@@ -836,6 +936,9 @@ QSpinBox {
     font-size: 20px;
     color: #333333; /* 深色字体 */
 }</string>
+                </property>
+                <property name="maximum">
+                 <number>9</number>
                 </property>
                </widget>
               </item>
@@ -1165,6 +1268,147 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                </widget>
               </item>
              </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="">
+      <attribute name="title">
+       <string>学生班级信息</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,1">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_8" stretch="5,4">
+         <item>
+          <widget class="QGroupBox" name="groupBox_9">
+           <property name="title">
+            <string>基本信息</string>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <item>
+             <widget class="QLabel" name="label_markdown">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>13</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="cursor">
+               <cursorShape>ArrowCursor</cursorShape>
+              </property>
+              <property name="layoutDirection">
+               <enum>Qt::RightToLeft</enum>
+              </property>
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;table border=&quot;0&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;&quot; cellspacing=&quot;2&quot; cellpadding=&quot;0&quot;&gt;&lt;tr&gt;&lt;td&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;姓  名:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/td&gt;&lt;td&gt;&lt;p&gt;zxy&lt;/p&gt;&lt;/td&gt;&lt;td rowspan=&quot;4&quot;&gt;&lt;p&gt;&lt;img src=&quot;:/images/f1.ico&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;学  号:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/td&gt;&lt;td&gt;&lt;p&gt;202105030141&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;专   业:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/td&gt;&lt;td&gt;&lt;p&gt;通信工程&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;入学年 :&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td&gt;&lt;p&gt;2021&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::RichText</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QWidget" name="widget_Droglabel" native="true">
+           <property name="styleSheet">
+            <string notr="true">border: 3px solid #000000;</string>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_9">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QSplitter" name="splitter_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <widget class="QGroupBox" name="groupBox_7">
+          <property name="title">
+           <string>班级1</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_10">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QListWidget" name="listWidget">
+             <item>
+              <property name="text">
+               <string>赵旭阳 141</string>
+              </property>
+              <property name="icon">
+               <iconset resource="icons.qrc">
+                <normaloff>:/images/f1.ico</normaloff>:/images/f1.ico</iconset>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>王二 140</string>
+              </property>
+              <property name="icon">
+               <iconset resource="icons.qrc">
+                <normaloff>:/images/f2.ico</normaloff>:/images/f2.ico</iconset>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QGroupBox" name="groupBox_8">
+          <property name="title">
+           <string>班级2</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_9">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QListWidget" name="listWidget_2">
+             <item>
+              <property name="text">
+               <string>New Item</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>New Item</string>
+              </property>
+             </item>
             </widget>
            </item>
           </layout>

@@ -260,7 +260,9 @@ void MainWindow::on_ac_openFiles_triggered() //打开文件
  */
 void MainWindow::on_ac_creatFiles_triggered() //demo function BETA 1
 {
+
     dialog_newFileDialog = new NewFileDialog(this);
+    connect(dialog_newFileDialog,&NewFileDialog::sendCourseData,this,&MainWindow::getCourseDataForSignal);
     dialog_newFileDialog->show();
 }
 
@@ -279,12 +281,12 @@ void MainWindow::on_ac_choose_school_year_triggered()
  * @brief MainWindow::on_tableView_doubleClicked
  * @param index
  */
-void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
-{
-    //禁用函数
-    Q_UNUSED(index);
-    return;
-}
+// void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
+// {
+//     //禁用函数
+//     Q_UNUSED(index);
+//     return;
+// }
 
 
 void MainWindow::on_ac_saveFiles_triggered()
@@ -1848,4 +1850,16 @@ void MainWindow::on_ac_setWindowOpacity_triggered()
 
     // 显示对话框
     dialog->exec();
+}
+
+/**
+ * @brief MainWindow::getCourseDataForSignal
+ * 得到 新建文件ui传来的 模板的 信息
+ * @param courseData
+ */
+void MainWindow::getCourseDataForSignal(const FinalSheet::CourseData courseData) const
+{
+    finalSheet->setCourseData(courseData);
+    qDebug()<<"模板设置成功!";
+    this->label_tips->setText("设置课程信息成功！");
 }

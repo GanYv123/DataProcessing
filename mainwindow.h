@@ -85,7 +85,7 @@ private slots:
 
     void on_ac_choose_school_year_triggered();
 
-    void on_tableView_doubleClicked(const QModelIndex &index);
+    //void on_tableView_doubleClicked(const QModelIndex &index);
 
     void on_ac_saveFiles_triggered();
 
@@ -161,6 +161,9 @@ private slots:
 
 
     void on_ac_setWindowOpacity_triggered();
+
+    //获取 新建文件传来的 课程 模板数据
+    void getCourseDataForSignal(const FinalSheet::CourseData courseData)const;
 
 public:
     CustomDialog *customDialog = nullptr;
