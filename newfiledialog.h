@@ -10,6 +10,7 @@
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QMimeData>
+#include <operexcel.h>
 
 namespace Ui {
 class NewFileDialog;
@@ -21,6 +22,9 @@ class NewFileDialog : public QDialog
 protected:
     void mySetStyleSheet();
     void connectSignalANDSlot();
+
+    OperExcel *operExcel = nullptr;
+
 
 public:
     explicit NewFileDialog(QWidget *parent = nullptr);
@@ -43,6 +47,15 @@ public:
         QVariant schoolYears = QVariant();
     };
 
+    struct studentInfors
+    {
+        QVariant name = QVariant();
+        QVariant Id = QVariant();
+        QVariant icon = QVariant();
+        QVariant course = QVariant();
+        QVariant classId = QVariant();
+    };
+
     CourseData getCourseData() const;
     void setCourseData(const CourseData &newCourseData);
 
@@ -63,7 +76,10 @@ private slots:
     void on_horizontalSlider_valueChanged(int value);
 
     //更新详情信息的界面
-    void updateStudentInfo(const QString &name, const QString &studentID, const QString &major, const QString &enrollmentDate);
+    void updateStudentInfo(const QString &name, const QString &studentID,
+                           const QString &major, const QString &enrollmentDate,
+                           const QString &iconPath);
+
 
     void on_listWidget_itemClicked(QListWidgetItem *item);
 

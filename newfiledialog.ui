@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>729</width>
-    <height>635</height>
+    <height>658</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -1276,7 +1276,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="widget">
       <attribute name="title">
        <string>学生班级信息</string>
       </attribute>
@@ -1364,13 +1364,16 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
            </property>
            <item>
             <widget class="QListWidget" name="listWidget">
+             <property name="flow">
+              <enum>QListView::TopToBottom</enum>
+             </property>
              <item>
               <property name="text">
                <string>赵旭阳 141</string>
               </property>
               <property name="icon">
                <iconset resource="icons.qrc">
-                <normaloff>:/images/f1.ico</normaloff>:/images/f1.ico</iconset>
+                <normaloff>:/images2/k1.png</normaloff>:/images2/k1.png</iconset>
               </property>
              </item>
              <item>

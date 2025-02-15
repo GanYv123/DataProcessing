@@ -551,6 +551,59 @@ void OperExcel::export_Excel(QString &path, bool &ret, QObject *parent)
 
 }
 
+/**
+ * @brief OperExcel::getStudentNameAndId
+ * @param path 文件路径
+ * @param ret 判断是否读取成功
+ * @param parent 父类对象指针
+ * @return  返回学生 学号 及其 他的 姓名.班级.专业 头像图片路径(若存在)
+ */
+
+
+QMap<QString, QList<QVariant>> OperExcel::getStudentNameAndId(const QString &path, bool &ret, QObject *parent)
+{
+    QMap<QString, QList<QVariant>> stuInfors;
+    QVariant Id = QVariant();
+
+    QVariant course = QVariant();
+    QVariant classId = QVariant();
+    QVariant name = QVariant();
+
+    if(m_xlsx == nullptr){
+        m_xlsx = new Document(path,parent);
+    }
+    ret = m_xlsx->load();
+    if(ret)//打开成功则将数据保存 stuInfors
+    {
+
+        if(m_xlsx->selectSheet("Sheet1")){
+            int col,row;
+            col = m_xlsx->dimension().columnCount();
+            row = m_xlsx->dimension().rowCount();
+
+            QVariant t_studentId,t_studentName;
+
+
+            for(int i = 1;i <= row;++ i){
+                QList<QVariant> infors;
+                t_studentName = m_xlsx->read(i,1);
+                t_studentId = m_xlsx->read(i,2);
+                Id = t_studentId;
+                name = t_studentName;
+                classId  = QVariant(t_studentId.toString().at(9));
+
+                infors.append(name);
+                infors.append(classId);
+                stuInfors.insert(Id.toString(),infors);
+            }
+
+        }
+
+    }
+
+    return stuInfors;
+}
+
 QVariantMap *OperExcel::get_course_information()
 {//返回课程的信息
     return this->course_information;

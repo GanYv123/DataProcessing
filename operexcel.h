@@ -31,6 +31,7 @@ public:
     QStandardItemModel* getQStandardItemModelPoint();
     void save_Excel(QString &path,bool& ret,QObject *parent = nullptr);
     void export_Excel(QString &path,bool& ret,QObject *parent = nullptr);
+    QMap<QString,QList<QVariant>> getStudentNameAndId(const QString &path,bool &ret,QObject *parent = nullptr);
 
 
     QVariantMap* get_course_information();

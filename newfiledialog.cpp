@@ -4,6 +4,7 @@
 #include "QTimer"
 #include "QFileDialog"
 #include "QUrl"
+#include "QStandardPaths"
 
 
 NewFileDialog::NewFileDialog(QWidget *parent)
@@ -281,34 +282,44 @@ void NewFileDialog::on_horizontalSlider_valueChanged(int value)
     ui->label_15->setText(QString("缺勤扣分%1").arg(value, 2, 10, QLatin1Char('0')));
 }
 
-void NewFileDialog::updateStudentInfo(const QString &name, const QString &studentID, const QString &major, const QString &enrollmentDate)
+void NewFileDialog::updateStudentInfo(const QString &name, const QString &studentID,
+                                      const QString &major, const QString &enrollmentDate,
+                                      const QString &iconPath)
 {
     // 构造新的 HTML 内容来更新 QLabel
     QString htmlText = QString("<html>"
-                               "<table>"
+                               "<head/>"
+                               "<body>"
+                               "<table border=\"0\" style=\"margin:0px;\" cellspacing=\"2\" cellpadding=\"0\">"
                                "<tr>"
-                               "<td><b>姓名:</b></td>"
-                               "<td>%1</td>"
-                               "<td rowspan='4'><img src=':/images/avatar.png' width='100' height='100'></td>"
+                               "<td><p><span style=\"font-weight:700;\">姓名:</span></p><p><br/></p></td>"
+                               "<td><p>%1</p></td>"
+                               "<td rowspan=\"4\" style=\"text-align:center; vertical-align:middle;\">"
+                               "<img src=\"%5\" style=\"width:100px; height:100px; object-fit:contain;\"/>"
+                               "</td>"
                                "</tr>"
                                "<tr>"
-                               "<td><b>学号:</b></td>"
-                               "<td>%2</td>"
+                               "<td><p><span style=\"font-weight:700;\">学号:</span></p><p><br/></p></td>"
+                               "<td><p>%2</p></td>"
                                "</tr>"
                                "<tr>"
-                               "<td><b>专业:</b></td>"
-                               "<td>%3</td>"
+                               "<td><p><span style=\"font-weight:700;\">专业:</span></p><p><br/></p></td>"
+                               "<td><p>%3</p></td>"
                                "</tr>"
                                "<tr>"
-                               "<td><b>入学时间:</b></td>"
-                               "<td>%4</td>"
+                               "<td><p><span style=\"font-weight:700;\">入学年:</span></p></td>"
+                               "<td><p>%4</p><p><br/></p></td>"
                                "</tr>"
                                "</table>"
-                               "</html>").arg(name).arg(studentID).arg(major).arg(enrollmentDate);
+                               "</body>"
+                               "</html>").arg(name).arg(studentID).arg(major).arg(enrollmentDate).arg(iconPath);
 
     // 更新 QLabel 的文本内容
     ui->label_markdown->setText(htmlText);
 }
+
+
+
 
 
 /**
@@ -318,8 +329,10 @@ void NewFileDialog::updateStudentInfo(const QString &name, const QString &studen
  */
 void NewFileDialog::on_listWidget_itemClicked(QListWidgetItem *item)
 {
-    qDebug()<<"一班学生信息:"<<item->text();
+    qDebug() << "一班学生信息:" << item->text();
+    updateStudentInfo(item->text(), "", "", "", "");
 }
+
 /**
  * @brief NewFileDialog::on_listWidget_itemClicked
  * 班级2学生信息item 被点击
@@ -328,13 +341,29 @@ void NewFileDialog::on_listWidget_itemClicked(QListWidgetItem *item)
 
 void NewFileDialog::on_listWidget_2_itemClicked(QListWidgetItem *item)
 {
-        qDebug()<<"二班学生信息:"<<item->text();
+    qDebug()<<"二班学生信息:"<<item->text();
+    updateStudentInfo(item->text(), "", "", "","");
 }
 
 void NewFileDialog::handle_sendFilePath(QString filePath)
 {
     filePath_stuInfors = filePath;
     qDebug()<<"获取到文件地址"<<filePath_stuInfors;
+    //获取到文件则读取表
+    bool ret = false;
+    QMap<QString, QList<QVariant>> stus_IdName = operExcel->getStudentNameAndId(filePath_stuInfors,ret,this);
+    if(ret){
+        for (auto it = stus_IdName.begin(); it != stus_IdName.end(); ++it)
+        {
+            QList<QVariant> nameAndClass_id = it.value();
+            qDebug() << it.key() << nameAndClass_id.at(0) << nameAndClass_id.at(1);
+        }
+
+
+    }else{
+        qDebug()<<"读取错误！";
+    }
+
 }
 
 //-----------------------------自定义label
@@ -369,7 +398,11 @@ void DragDropLabel::dragEnterEvent(QDragEnterEvent *event)
                 qDebug() << "PDF file detected.";
 
                 event->acceptProposedAction();
-            } else {
+            } else if(suffix == "ini") {
+                qDebug()<<"导入的是配置文件:";
+                 event->acceptProposedAction();
+            }
+            else {
 
                 // TODO: 处理其他不支持的文件类型的逻辑
                 event->ignore();
@@ -400,6 +433,9 @@ void DragDropLabel::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
         double_clicked_label();
+    }else if (event->button() == Qt::RightButton){
+        qDebug()<<"右键 双击! 打开数据库连接 导入数据";
+        //调用 连接数据库的 对话框
     }
 }
 
@@ -415,7 +451,8 @@ void DragDropLabel::updateLabelText()
     // 初始文本，显示拖拽文件的提示信息
     setText("<p style='font-size:14px;'>从文件中批量导入学生信息</p>"
             "<p>将文件拖拽到此处上传</p>"
-            "<p style='font-size:15px;'>双击打开文件选择窗口</p>");
+            "<p style='font-size:15px;'>左键双击打开文件选择窗口</p>"
+            "<p style='font-size:15px;'>右键双击连接数据库</p>");
 }
 /**
  * @brief DragDropLabel::double_clicked_label
@@ -423,5 +460,8 @@ void DragDropLabel::updateLabelText()
  */
 void DragDropLabel::double_clicked_label()
 {
-    qDebug()<<"双击!";
+    qDebug()<<"双击!打开文件选择对话框";
+    QString filePath = QFileDialog::getOpenFileName(this, tr("Open File"),"",tr("Images (*.xlsx *.pdf *.txt *.csv)"));
+    if(!filePath.isEmpty())
+        emit sendFilePath(filePath);
 }
