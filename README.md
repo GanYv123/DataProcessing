@@ -1,4 +1,4 @@
-# 主工作分支
+# DataProcessing
 
 ## 软件简介
 
@@ -18,8 +18,10 @@
 
 ### 系统要求
 
-- 操作系统：Windows、macOS 或 Linux
-- 依赖库：需要安装 Qt boost qxlsx 框架和其他相关依赖库
+- 主要构建环境：Windows + Qt / MSVC，使用 C++17。
+- Qt 模块：Core、Gui、Widgets、Sql；使用 Boost 头文件和仓库自带的 QXlsx。
+- `DataProcessing.pro` 中的 Boost 路径需按本机安装位置调整（Windows 配置当前指向 `D:/OPLIB/boost_1_85_0`）。
+- 工程包含 Linux 配置分支；其他平台的依赖、路径及部署需按实际环境检查，本文不保证跨平台直接构建。
 
 ### 安装步骤
 
@@ -27,17 +29,9 @@
     ```bash
     git clone https://github.com/GanYv123/DataProcessing.git
     ```
-2. 安装依赖库：
-    ```bash
-    cd yourrepository
-    # 安装依赖库的命令，例如使用 conan 或者其他包管理工具
-    ```
-3. 编译并运行软件：
-    ```bash
-    qmake
-    make
-    ./yourapplication
-    ```
+2. 安装 Qt、匹配的 C++17 编译器及 Boost，并检查 `DataProcessing.pro` 中的依赖路径。QXlsx 已包含在仓库中。
+3. 在 Qt Creator 中打开 `DataProcessing.pro`，选择匹配的 Kit，点击构建后运行。Windows 构建配置使用 MSVC 编译选项，建议选择 MSVC Kit。
+4. 如使用已发布的程序，可查看 [Releases](https://github.com/GanYv123/DataProcessing/releases)；具体包格式以该页面实际提供的文件为准。
 
 ## 使用手册
 
@@ -51,7 +45,7 @@
 2. 在弹出的文件选择对话框中，选择要导入的 Excel 文件，然后点击“打开”。
 3. 提供直接拖拽文件到界面打开
 4. 提供直接通过配置文件导入信息
-5. 后面会添加数据库的连接
+5. 数据库连接相关实现见 `sqldata.*` 和 `mainwindow.cpp`；使用前需配置实际数据库连接参数。
 
 ### 3. 导出数据
 
@@ -77,7 +71,7 @@
 
 ## 许可证
 
-该项目使用 [MIT 许可证](LICENSE)。
+仓库当前未提供独立的 `LICENSE` 文件，开源许可尚未明确。第三方依赖的许可请参考对应目录。
 
 ## 联系信息
 
